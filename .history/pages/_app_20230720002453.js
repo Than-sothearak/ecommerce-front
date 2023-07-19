@@ -4,6 +4,7 @@ import {CartContextProvider }from "@/components/CartContext";
 
 const GlobalStyle = createGlobalStyle`
 
+
 body{
   background-color: #f0f0f0;
   padding:0;

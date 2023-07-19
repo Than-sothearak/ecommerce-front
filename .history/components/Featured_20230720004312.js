@@ -41,7 +41,7 @@ const ButtonWrapper = styled.div`
   font-family: "Poppins", sans-serif;
 `;
 
-const ButtonStyle = styled.button`
+const ButtonLink = styled(Link)`
   border: 0;
   padding: 15px 20px;
   border-radius: 5px;
@@ -56,7 +56,7 @@ const ButtonStyle = styled.button`
   background-color: ${primary};
 `;
 
-const ButtonLink = styled(Link)`
+const ButtonStyle = styled.button`
   border: 1px solid ${primary};
   padding: 15px 20px;
   border-radius: 5px;
@@ -68,9 +68,9 @@ const ButtonLink = styled(Link)`
   background-color: transparent;
 `;
 const Featured = ({ product }) => {
-  const {addProductToCart}= useContext(CartContext);
+  const {setCartProducts}= useContext(CartContext);
   function addToCart () {
-    addProductToCart(product._id)
+    setCartProducts(prev =>[...prev, product._id] )
   }
   return (
     <Background>

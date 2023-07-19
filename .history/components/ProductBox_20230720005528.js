@@ -50,18 +50,18 @@ const Price = styled.div`
 `;
 
 const ButtonStyle = styled.button`
-  border: 1px solid ${primary};
-  padding: 5px 10px;
+  border: 0;
+  padding: 15px 20px;
   border-radius: 5px;
   cursor: pointer;
   align-items: center;
   text-decoration: none;
   font-size: 14px;
-  color: ${primary};
+  color: white;
   display: flex;
   align-items: center;
   gap: 5px;
-  background-color: transparent;
+  background-color: ${primary};
 `;
 const ProductBox = ({ _id, title, description, price, images }) => {
   const url = '/product/'+_id; 

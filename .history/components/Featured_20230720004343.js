@@ -68,9 +68,9 @@ const ButtonLink = styled(Link)`
   background-color: transparent;
 `;
 const Featured = ({ product }) => {
-  const {addProductToCart}= useContext(CartContext);
+  const {setCartProducts}= useContext(CartContext);
   function addToCart () {
-    addProductToCart(product._id)
+    setCartProducts(prev =>[...prev, product._id] )
   }
   return (
     <Background>

@@ -50,8 +50,8 @@ const Price = styled.div`
 `;
 
 const ButtonStyle = styled.button`
-  border: 1px solid ${primary};
-  padding: 5px 10px;
+  border: 0;
+  padding: 15px 20px;
   border-radius: 5px;
   cursor: pointer;
   align-items: center;

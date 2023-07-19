@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 import { primary } from "@/lib/colors";
 import Link from "next/link";
 import { BsCartDash } from "react-icons/bs";
-import {CartContext} from "@/components/CartContext";
+import CartContext from "./CartContext";
 
 const Background = styled.div`
   background-color: #222;
@@ -12,7 +12,7 @@ const Background = styled.div`
   padding: 50px 0;
 `;
 
-const Title = styled.h1`
+const Titile = styled.h1`
   margin: 0;
   font-weight: normal;
 `;
@@ -41,7 +41,7 @@ const ButtonWrapper = styled.div`
   font-family: "Poppins", sans-serif;
 `;
 
-const ButtonStyle = styled.button`
+const ButtonLink = styled(Link)`
   border: 0;
   padding: 15px 20px;
   border-radius: 5px;
@@ -56,7 +56,7 @@ const ButtonStyle = styled.button`
   background-color: ${primary};
 `;
 
-const ButtonLink = styled(Link)`
+const ButtonStyle = styled.button`
   border: 1px solid ${primary};
   padding: 15px 20px;
   border-radius: 5px;
@@ -68,9 +68,9 @@ const ButtonLink = styled(Link)`
   background-color: transparent;
 `;
 const Featured = ({ product }) => {
-  const {addProductToCart}= useContext(CartContext);
+  const {setCartProducts}= useContext(CartContext)
   function addToCart () {
-    addProductToCart(product._id)
+    setCartProducts(prev =>[...prev, product._id] )
   }
   return (
     <Background>
@@ -78,16 +78,15 @@ const Featured = ({ product }) => {
         <Wrapper>
           <Column>
             <div>
-              <Title>{product.title}</Title>
+              <Titile>{product.title}</Titile>
               <Desc>{product.description}</Desc>
 
               <ButtonWrapper>
-                <ButtonLink href={"/products/"+product._id}>Read more
+                <ButtonStyle>Read more</ButtonStyle>
+                <ButtonLink href={"/products/"+product._id} onClick={addToCart}>
+                  <BsCartDash size={17} />
+                  <div>Add to cart</div>
                 </ButtonLink>
-                <ButtonStyle onClick={addToCart}>
-                <BsCartDash size={17} />
-                  <div type='button'>Add to cart</div>
-                </ButtonStyle>
               </ButtonWrapper>
             </div>
           </Column>
