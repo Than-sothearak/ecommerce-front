@@ -34,7 +34,7 @@ const Column = styled.div`
 `;
 const ButtonWrapper = styled.div`
   display: flex;
-
+  font-size: 20px;
   gap: 10px;
   padding-top: 10px;
   font-family: "Poppins", sans-serif;
@@ -47,7 +47,8 @@ const ButtonLink = styled(Link)`
   cursor: pointer;
   align-items: center;
   text-decoration: none;
-  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+
   color: white;
   display: flex;
   align-items: center;
@@ -62,6 +63,7 @@ const ButtonStyle = styled.button`
   cursor: pointer;
   align-items: center;
   text-decoration: none;
+  
 
   color: white;
   background-color: transparent;
@@ -79,8 +81,10 @@ const Featured = ({ product }) => {
               <ButtonWrapper>
                 <ButtonStyle>Read more</ButtonStyle>
                 <ButtonLink href={"/products/" + product._id}>
-                  <BsCartDash size={17} />
-                  <div>Add to cart</div>
+                  <BsCartDash size={17}/>
+                  <div>
+                    Add to cart
+                  </div>
                 </ButtonLink>
               </ButtonWrapper>
             </div>

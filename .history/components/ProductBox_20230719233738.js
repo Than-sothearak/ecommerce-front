@@ -61,7 +61,6 @@ const ButtonLink = styled(Link)`
   align-items: center;
   gap: 5px;
   background-color: transparent;
-  margin-top: 4px;
 `;
 const ProductBox = ({ _id, title, description, price, images }) => {
   const url = '/product/'+_id; 

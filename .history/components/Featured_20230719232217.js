@@ -47,7 +47,7 @@ const ButtonLink = styled(Link)`
   cursor: pointer;
   align-items: center;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 20px;
   color: white;
   display: flex;
   align-items: center;

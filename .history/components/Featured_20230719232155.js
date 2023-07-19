@@ -34,7 +34,7 @@ const Column = styled.div`
 `;
 const ButtonWrapper = styled.div`
   display: flex;
-
+  font-size: 16px;
   gap: 10px;
   padding-top: 10px;
   font-family: "Poppins", sans-serif;
@@ -47,7 +47,7 @@ const ButtonLink = styled(Link)`
   cursor: pointer;
   align-items: center;
   text-decoration: none;
-  font-size: 14px;
+
   color: white;
   display: flex;
   align-items: center;

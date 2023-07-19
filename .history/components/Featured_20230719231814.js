@@ -34,35 +34,34 @@ const Column = styled.div`
 `;
 const ButtonWrapper = styled.div`
   display: flex;
-
   gap: 10px;
   padding-top: 10px;
-  font-family: "Poppins", sans-serif;
 `;
 
 const ButtonLink = styled(Link)`
   border: 0;
-  padding: 15px 20px;
+  padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
   align-items: center;
   text-decoration: none;
-  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
   color: white;
   display: flex;
-  align-items: center;
   gap: 5px;
   background-color: ${primary};
 `;
 
 const ButtonStyle = styled.button`
   border: 1px solid ${primary};
-  padding: 15px 20px;
+  padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
   align-items: center;
   text-decoration: none;
-
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
   color: white;
   background-color: transparent;
 `;
@@ -79,8 +78,10 @@ const Featured = ({ product }) => {
               <ButtonWrapper>
                 <ButtonStyle>Read more</ButtonStyle>
                 <ButtonLink href={"/products/" + product._id}>
-                  <BsCartDash size={17} />
-                  <div>Add to cart</div>
+                  <BsCartDash />
+                  <div>
+                    Add to cart
+                  </div>
                 </ButtonLink>
               </ButtonWrapper>
             </div>

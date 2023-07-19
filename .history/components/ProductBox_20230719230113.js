@@ -1,6 +1,5 @@
 import { styled } from "styled-components";
 import Link from "next/link";
-import { primary } from "@/lib/colors";
 
 const ProductWrapper = styled.div``;
 
@@ -46,23 +45,6 @@ const Price = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
 `;
-
-const ButtonLink = styled(Link)`
-  border: 1.5px solid ${primary};
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  align-items: center;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 14px;
-  color: ${primary};
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background-color: transparent;
-  margin-top: 4px;
-`;
 const ProductBox = ({ _id, title, description, price, images }) => {
   const url = '/product/'+_id; 
   return (
@@ -74,9 +56,9 @@ const ProductBox = ({ _id, title, description, price, images }) => {
         <Title href={url}>{title}</Title>
         <PriceRow>
           <Price>${price}</Price>
-          <ButtonLink href={url}>
+          <button>
             Add to cart
-          </ButtonLink>
+          </button>
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>

@@ -7,7 +7,6 @@ const ProductGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 28px;
-  margin-bottom: 40px;
   
 `;
 const Title = styled.h2`
