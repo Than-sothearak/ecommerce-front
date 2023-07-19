@@ -17,6 +17,7 @@ export const ButtonStyle = css`
     css`
       background-color: #fff;
       color: #000;
+      text-decoration: none;
     `}
   ${(props) =>
     props.white &&
@@ -26,6 +27,7 @@ export const ButtonStyle = css`
       color: #000;
       border: 1px solid #fff;
       color: white;
+      text-decoration: none;
     `}
   ${(props) =>
     props.primary &&
