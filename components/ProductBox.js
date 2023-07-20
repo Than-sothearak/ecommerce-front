@@ -34,30 +34,31 @@ const Title = styled.div`
   text-overflow: ellipsis;
 `;
 const ProductInfoBox = styled.div`
-  margin-top: 5px;
+  margin-top: 12px;
 `;
 
 const PriceRow = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 2px;
+  margin-top: 8px;
   align-items: center;
 `;
 
 const Price = styled.div`
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
 `;
 
 const ButtonStyle = styled.button`
   border: 1px solid ${primary};
-  padding: 5px 10px;
+  padding: 12px 20px;
   border-radius: 5px;
   cursor: pointer;
   align-items: center;
   text-decoration: none;
   font-size: 14px;
   color: ${primary};
+  font-weight: bold;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -65,11 +66,8 @@ const ButtonStyle = styled.button`
 `;
 const ProductBox = ({ _id, title, description, price, images }) => {
   const url = '/product/'+_id; 
-  const {addProductToCart} = useContext(CartContext);
-  function addToCart() {
-    addProductToCart(_id)
-  }
-  
+  const {addProduct} = useContext(CartContext);
+
   
   return (
     <ProductWrapper>
@@ -80,7 +78,7 @@ const ProductBox = ({ _id, title, description, price, images }) => {
         <Title href={url}>{title}</Title>
         <PriceRow>
           <Price>${price}</Price>
-          <ButtonStyle onClick={addToCart}>
+          <ButtonStyle onClick={() => addProduct(_id)}>
             Add to cart
           </ButtonStyle>
         </PriceRow>

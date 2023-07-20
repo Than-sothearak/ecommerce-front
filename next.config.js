@@ -4,8 +4,11 @@ const nextConfig = {
     appDir: true,
   },
   compiler: {
-    styledComponents: true,
+    displayName: false,
+     styledComponents: true,
   },
+   
+    
 }
 
 module.exports = nextConfig
