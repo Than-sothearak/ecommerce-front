@@ -224,7 +224,7 @@ const CartPage = () => {
           {cartProducts?.length > 0 && (
             <Box>
               <h2>Order information</h2>
-              <form method="post" action="/api/checkout">
+              <form>
               <Input
                 type="text"
                 placeholder="Name"

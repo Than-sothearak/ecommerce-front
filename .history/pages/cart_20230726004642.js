@@ -224,7 +224,6 @@ const CartPage = () => {
           {cartProducts?.length > 0 && (
             <Box>
               <h2>Order information</h2>
-              <form method="post" action="/api/checkout">
               <Input
                 type="text"
                 placeholder="Name"
@@ -277,7 +276,6 @@ const CartPage = () => {
               <ButtonStyle type="submit">
                 Continue to payment
               </ButtonStyle>
-              </form>
             </Box>
           )}
         </ColumnsWrapper>

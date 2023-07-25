@@ -138,21 +138,6 @@ const CartPage = () => {
     removeProduct(id);
   }
 
-  async function goToPayment() {
-    const response = await axios.post("/api/checkout", {
-      name,
-      email,
-      city,
-      postalCode,
-      streetAddress,
-      country,
-      cartProducts,
-    });
-    if (response.data.url) {
-      window.location = response.data.url;
-    }
-  }
-
   let total = 0;
   for (const productId of cartProducts) {
     const price = products.find((p) => p._id == productId)?.price || 0;
@@ -211,11 +196,11 @@ const CartPage = () => {
                     </tr>
                   ))}
                   <tr>
-                    <td></td>
-                    <td>Total</td>
-                    <td>
-                      <h2>${total}</h2>
-                    </td>
+                  <td></td>
+                  <td>Total</td>
+                  <td>
+                    <h2>${total}</h2>
+                  </td>
                   </tr>
                 </tbody>
               </Table>
@@ -224,7 +209,6 @@ const CartPage = () => {
           {cartProducts?.length > 0 && (
             <Box>
               <h2>Order information</h2>
-              <form method="post" action="/api/checkout">
               <Input
                 type="text"
                 placeholder="Name"
@@ -269,15 +253,7 @@ const CartPage = () => {
                 name="country"
                 onChange={(ev) => setCountry(ev.target.value)}
               />
-              <input
-                type="hidden"
-                name="products"
-                value={cartProducts.join(",")}
-              />
-              <ButtonStyle type="submit">
-                Continue to payment
-              </ButtonStyle>
-              </form>
+              <ButtonStyle onClick={""}>Continue to payment</ButtonStyle>
             </Box>
           )}
         </ColumnsWrapper>

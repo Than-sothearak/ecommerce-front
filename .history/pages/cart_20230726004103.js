@@ -109,7 +109,7 @@ const CartPage = () => {
   const [streetAddress, setStreetAddress] = useState("");
   const [country, setCountry] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
-
+  
   useEffect(() => {
     if (cartProducts?.length > 0) {
       axios.post("/api/cart", { ids: cartProducts }).then((res) => {
@@ -139,13 +139,8 @@ const CartPage = () => {
   }
 
   async function goToPayment() {
-    const response = await axios.post("/api/checkout", {
-      name,
-      email,
-      city,
-      postalCode,
-      streetAddress,
-      country,
+    const response = await axios.post('/api/checkout', {
+      name,email,city,postalCode,streetAddress,country,
       cartProducts,
     });
     if (response.data.url) {
@@ -211,11 +206,11 @@ const CartPage = () => {
                     </tr>
                   ))}
                   <tr>
-                    <td></td>
-                    <td>Total</td>
-                    <td>
-                      <h2>${total}</h2>
-                    </td>
+                  <td></td>
+                  <td>Total</td>
+                  <td>
+                    <h2>${total}</h2>
+                  </td>
                   </tr>
                 </tbody>
               </Table>
@@ -224,7 +219,6 @@ const CartPage = () => {
           {cartProducts?.length > 0 && (
             <Box>
               <h2>Order information</h2>
-              <form method="post" action="/api/checkout">
               <Input
                 type="text"
                 placeholder="Name"
@@ -269,15 +263,7 @@ const CartPage = () => {
                 name="country"
                 onChange={(ev) => setCountry(ev.target.value)}
               />
-              <input
-                type="hidden"
-                name="products"
-                value={cartProducts.join(",")}
-              />
-              <ButtonStyle type="submit">
-                Continue to payment
-              </ButtonStyle>
-              </form>
+              <ButtonStyle onClick={goToPayment}>Continue to payment</ButtonStyle>
             </Box>
           )}
         </ColumnsWrapper>
