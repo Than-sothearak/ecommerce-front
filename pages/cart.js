@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/components/CartContext";
 import axios from "axios";
 import Table from "@/components/Table";
-
+import {MdDone} from 'react-icons/md'
 const ColumnsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -93,10 +93,30 @@ const ButtonStylePlus = styled.button`
   background-color: transparent;
 `;
 
+const TextOrderH1 = styled.h1`
+color: green;
+text-align:center; `;
+
+const TextOrderP = styled.p`
+text-align:center; `;
+
+const Icon = styled.div`
+width: 100px;
+height: 100px;
+margin: 0 auto;
+align-items: center;
+font-size: 72px;
+color: white;
+display: flex;
+justify-content: center;
+background-color: green;
+border-radius: 100%;
+`
+
+
 const CartPage = () => {
   const {
     cartProducts,
-    setCartProducts,
     addProduct,
     removeProduct,
     clearCart,
@@ -159,6 +179,22 @@ const CartPage = () => {
     total += price;
   }
 
+  if (isSuccess) {
+    return (
+      <>
+        <Header />
+        <Center>
+          <ColumnsWrapper>
+            <Box>
+              <Icon><MdDone /></Icon>
+              <TextOrderH1>ORDERED SUCCUSSFULLY</TextOrderH1>
+              <TextOrderP>We will email you when your order will be sent.</TextOrderP>
+            </Box>
+          </ColumnsWrapper>
+        </Center>
+      </>
+    );
+  }
   return (
     <>
       <Header />
@@ -224,8 +260,9 @@ const CartPage = () => {
           {cartProducts?.length > 0 && (
             <Box>
               <h2>Order information</h2>
-              <form method="post" action="/api/checkout">
+
               <Input
+                required
                 type="text"
                 placeholder="Name"
                 value={name}
@@ -233,6 +270,7 @@ const CartPage = () => {
                 onChange={(ev) => setName(ev.target.value)}
               />
               <Input
+                required
                 type="text"
                 placeholder="Email"
                 value={email}
@@ -241,6 +279,7 @@ const CartPage = () => {
               />
               <CityHolder>
                 <Input
+                  required
                   type="text"
                   placeholder="City"
                   value={city}
@@ -248,6 +287,7 @@ const CartPage = () => {
                   onChange={(ev) => setCity(ev.target.value)}
                 />
                 <Input
+                  required
                   type="text"
                   placeholder="Postal Code"
                   value={postalCode}
@@ -256,6 +296,7 @@ const CartPage = () => {
                 />
               </CityHolder>
               <Input
+                required
                 type="text"
                 placeholder="Street Address"
                 value={streetAddress}
@@ -263,21 +304,16 @@ const CartPage = () => {
                 onChange={(ev) => setStreetAddress(ev.target.value)}
               />
               <Input
+                required
                 type="text"
                 placeholder="Country"
                 value={country}
                 name="country"
                 onChange={(ev) => setCountry(ev.target.value)}
               />
-              <input
-                type="hidden"
-                name="products"
-                value={cartProducts.join(",")}
-              />
-              <ButtonStyle type="submit">
+              <ButtonStyle onClick={goToPayment}>
                 Continue to payment
               </ButtonStyle>
-              </form>
             </Box>
           )}
         </ColumnsWrapper>
