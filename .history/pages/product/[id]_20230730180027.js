@@ -34,7 +34,7 @@ const ListItems = styled.li`
  font-size: 14px;
  margin: 5px;
 `
-export default function SingleProductPage({ product, }) {
+export default function SingleProductPage({ product, categories }) {
   const { addProduct } = useContext(CartContext);
   const productProperty = Object.entries(product.properties);
   const listItems = productProperty.map((data, index) => (
@@ -76,10 +76,11 @@ export async function getServerSideProps(context) {
   await mongooseConnect();
   const { id } = context.query;
   const product = await Product.findById(id);
+  const categories = await Category.find({}, null, { sort: { _id: -1 } });
   return {
     props: {
       product: JSON.parse(JSON.stringify(product)),
-      
+      categories: JSON.parse(JSON.stringify(categories)),
     },
   };
 }
