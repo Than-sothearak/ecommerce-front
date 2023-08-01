@@ -12,7 +12,6 @@ const StyledHeader = styled.header`
 const Logo = styled(Link)`
   color: #fff;
   text-decoration: none;
-  position: relative;
   z-index: 3;
 `;
 const Wrapper = styled.div`
@@ -30,13 +29,11 @@ const StyledNav = styled.nav`
     display: none;
   `}
   gap: 15px;
-  position: fixed;
-  top: 0;
+  position: relative;
   bottom: 0;
   left: 0;
   right: 0;
   padding: 70px 20px 20px;
-  background-color: #222;
   @media screen and (min-width: 768px) {
     display: flex;
     position: static;
@@ -68,24 +65,23 @@ const NavButton = styled.button`
 
 export default function Header() {
   const { cartProducts } = useContext(CartContext);
-  const [mobileNavActive,setMobileNavActive] = useState(false);
+  const [mobileNavActive, setMobileNavActive] = useState(false);
   return (
     <StyledHeader>
       <Center>
         <Wrapper>
           <Logo href={"/"}>Ecommerce</Logo>
-          <StyledNav  mobileNavActive={mobileNavActive}>
+          <StyledNav mobileNavActive={mobileNavActive}>
             <NavLink href={"/"}>Home</NavLink>
             <NavLink href={"/products"}>All products</NavLink>
             <NavLink href={"/categories"}>Categories</NavLink>
             <NavLink href={"/account"}>Account</NavLink>
             <NavLink href={"/cart"}>Cart ({cartProducts?.length})</NavLink>
           </StyledNav>
-          
-            <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
-              <BarsIcon />
-            </NavButton>
-         
+
+          <NavButton onClick={() => setMobileNavActive((prev) => !prev)}>
+            <BarsIcon />
+          </NavButton>
         </Wrapper>
       </Center>
     </StyledHeader>

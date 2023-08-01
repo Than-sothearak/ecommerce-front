@@ -1,31 +1,56 @@
 import { styled } from "styled-components";
 import Link from "next/link";
-import { primary } from "@/lib/colors";
+import Button from "./Button";
 import { useContext } from "react";
 import { CartContext } from "./CartContext";
 
-const ProductWrapper = styled.div``;
+const ProductWrapper = styled.div`
+width: 170px;
+padding-top: 10px;
+background-color: #fff;
+transition: 0.3s all ease-out;
+&:hover {
+   transition: 0.2s all ease-in;
+   transform: scale(1.1);
+  
+ }
+
+box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;border-radius: 12px;
+
+@media screen and (max-width: 280px) {
+    width: 260px;
+  }
+ 
+  @media screen and (min-width: 768px) {
+    width: 240px;
+  }
+  
+  @media screen and (min-width: 1024px) {
+    width: 300px;
+
+  }
+  
+`;
 
 const WhiteBox = styled(Link)`
   background-color: #fff;
-  padding: 20px;
   height: 160px;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  margin-top: 20px;
+  border-radius: 12px 12px 0 0;
+  margin-top: 1cap;
   cursor: pointer;
   img {
     max-width: 100%;
     max-height: 140px;
   }
 
-
+ 
 `;
 const Title = styled.div`
-  width: 248px;
+  width: 100%;
   color: inherit;
   text-decoration: none;
   font-weight: normal;
@@ -34,55 +59,39 @@ const Title = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  @media screen and (min-width: 748px) {
-    width: 260px;
-    
-  }
-
-  @media screen and (min-width: 978px) {
-    width: 220px;
-  }
-
-  @media screen and (min-width: 1024px) {
-    width: 220px;
-  }
-  @media screen and (min-width: 1278px) {
-    width: 280px;
-   
-  }
 `;
 const ProductInfoBox = styled.div`
-  margin-top: 12px;
+    color: #2d3436;
+  padding: 10px;
+
 `;
 
 const PriceRow = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
+  
   align-items: center;
 `;
 
 const Price = styled.div`
   font-size: 2rem;
   font-weight: bold;
+  @media screen and (max-width: 438px) {
+    font-size: 1.5rem;
+  }
 `;
 
-const ButtonStyle = styled.button`
-  border: 1px solid ${primary};
-  padding: 12px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  align-items: center;
-  text-decoration: none;
-  font-size: 14px;
-  color: ${primary};
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background-color: transparent;
-`;
+const TextBtn = styled.div`
+font-size: 16px;
+font-weight:400;
+
+@media screen and (max-width: 1024px) {
+   display: block;
+   text-align: center;
+   display: none;
+    
+  }
+`
 const ProductBox = ({ _id, title, description, price, images }) => {
   const {addProduct} = useContext(CartContext);
   const url = '/product/'+_id;
@@ -96,9 +105,9 @@ const ProductBox = ({ _id, title, description, price, images }) => {
         <Title href={url}>{title}</Title>
         <PriceRow>
           <Price>${price}</Price>
-          <ButtonStyle onClick={() => addProduct(_id)}>
-            Add to cart
-          </ButtonStyle>
+          <Button onClick={() => addProduct(_id)}>
+          <TextBtn type='button'>Add to cart</TextBtn>
+          </Button>
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>

@@ -3,13 +3,13 @@ import Header from "@/components/Header";
 import Title from "@/components/Title";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Products";
-import { Category } from "@/models/Category";
 import styled from "styled-components";
 import WhiteBox from "@/components/WhiteBox";
 import ProductImages from "@/components/ProductImages";
 import Button from "@/components/Button";
 import { useContext } from "react";
 import { CartContext } from "@/components/CartContext";
+import { BsCartDash } from "react-icons/bs";
 
 const ColWrapper = styled.div`
   display: grid;
@@ -34,6 +34,11 @@ const ListItems = styled.li`
  font-size: 14px;
  margin: 5px;
 `
+const Container = styled.div`
+`
+const ProductDetial = styled.div`
+padding: 20px;
+box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;`
 export default function SingleProductPage({ product, }) {
   const { addProduct } = useContext(CartContext);
   const productProperty = Object.entries(product.properties);
@@ -50,10 +55,12 @@ export default function SingleProductPage({ product, }) {
           <WhiteBox>
             <ProductImages images={product.images} />
           </WhiteBox>
-          <div>
-            <Title>{product.title}</Title>
+          <Container>
+          <Title>{product.title}</Title>
+          <ProductDetial>
+            
             <p>{product.description}</p>
-            <h4>Product detial:</h4>
+            <h4>Product detail:</h4>
             {listItems}
             <PriceRow>
               <div>
@@ -61,11 +68,13 @@ export default function SingleProductPage({ product, }) {
               </div>
               <div>
                 <Button primary onClick={() => addProduct(product._id)}>
-                  Add to cart
+             
                 </Button>
               </div>
             </PriceRow>
-          </div>
+          </ProductDetial>
+          </Container>
+      
         </ColWrapper>
       </Center>
     </>

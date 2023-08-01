@@ -22,16 +22,17 @@ export function CartContextProvider({ children }) {
   }
   
   function removeProduct(productId) {
-    setCartProducts((prev) => {
+    setCartProducts(prev => {
       const pos = prev.indexOf(productId);
       if (pos !== -1) {
-        return prev.filter((value, index) => index !== pos);
+        return prev.filter((value,index) => index !== pos);
       }
       return prev;
     });
   }
   function clearCart() {
     ls.removeItem("cart");
+    ls.clear
     setCartProducts([]);
   }
   return (
