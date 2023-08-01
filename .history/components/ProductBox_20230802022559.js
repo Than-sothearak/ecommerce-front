@@ -5,9 +5,15 @@ import { useContext } from "react";
 import { CartContext } from "./CartContext";
 
 const ProductWrapper = styled.div`
-width: 160px;
+width: 170px;
 padding-top: 10px;
 background-color: #fff;
+transition: 0.3s all ease-out;
+&:hover {
+   transition: 0.2s all ease-in;
+   transform: scale(1.1);
+  
+ }
 
 box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;border-radius: 12px;
 
@@ -15,16 +21,16 @@ box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 
     width: 260px;
   }
 
-  @media screen and (min-width: 540px) {
-    width: 220px;
+  @media screen and (min-width: 418px) {
+    width: 140px;
   }
-
+ 
   @media screen and (min-width: 768px) {
     width: 220px;
   }
   
   @media screen and (min-width: 1024px) {
-    width: 290px;
+    width: 280px;
 
   }
   
