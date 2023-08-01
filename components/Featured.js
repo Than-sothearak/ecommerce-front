@@ -4,8 +4,8 @@ import { styled } from "styled-components";
 import { primary } from "@/lib/colors";
 import Link from "next/link";
 import { BsCartDash } from "react-icons/bs";
-import {CartContext} from "@/components/CartContext";
-import Image from 'next/image'
+import { CartContext } from "@/components/CartContext";
+import Button from "./Button";
 
 const Background = styled.div`
   background-color: #222;
@@ -26,7 +26,7 @@ const ColumnsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 40px;
-  img{
+  img {
     max-width: 100%;
     max-height: 340px;
     display: block;
@@ -40,7 +40,7 @@ const ColumnsWrapper = styled.div`
     div:nth-child(1) {
       order: 0;
     }
-    img{
+    img {
       max-width: 100%;
     }
   }
@@ -82,28 +82,27 @@ const ButtonLink = styled(Link)`
   color: white;
   background-color: transparent;
   @media screen and (max-width: 678px) {
-   font-size: 12px;
-   padding: 0 10px;
-   text-align: center;
-   display: flex;
-    
+    font-size: 12px;
+    padding: 0 10px;
+    text-align: center;
+    display: flex;
   }
 `;
 
 const TextBtn = styled.div`
-font-size: 16px;
+  font-size: 16px;
+  font-weight: normal;
 
-@media screen and (max-width: 678px) {
-   display: block;
-   text-align: center;
-   display: none;
-    
+  @media screen and (max-width: 678px) {
+    display: block;
+    text-align: center;
+    display: none;
   }
-`
+`;
 const Featured = ({ product }) => {
-  const {addProduct}= useContext(CartContext);
-  function addToCart () {
-    addProduct(product._id)
+  const { addProduct } = useContext(CartContext);
+  function addToCart() {
+    addProduct(product?._id);
   }
   return (
     <Background>
@@ -111,21 +110,21 @@ const Featured = ({ product }) => {
         <ColumnsWrapper>
           <Column>
             <div>
-              <Title>{product.title}</Title>
-              <Desc>{product.description}</Desc>
+              <Title>{product?.title}</Title>
+              <Desc>{product?.description}</Desc>
 
               <ButtonWrapper>
-                <ButtonLink href={"/product/"+product._id}>Read more
+                <ButtonLink href={"/product/" + product?._id}>
+                  Read more
                 </ButtonLink>
-                <ButtonStyle onClick={addToCart}>
-                <BsCartDash size={17} />
-                  <TextBtn type='button'>Add to cart</TextBtn>
-                </ButtonStyle>
+                <Button onClick={addToCart}>
+                  <TextBtn type="button">Add to cart</TextBtn>
+                </Button>
               </ButtonWrapper>
             </div>
           </Column>
           <Column>
-            <img src={product.images[0]}/>
+            <img src={product?.images[0]} />
           </Column>
         </ColumnsWrapper>
       </Center>

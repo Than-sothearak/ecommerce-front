@@ -7,6 +7,10 @@ import { CartContext } from "@/components/CartContext";
 import axios from "axios";
 import Table from "@/components/Table";
 import { MdDone } from "react-icons/md";
+import { MdOutlineShoppingCartCheckout } from "react-icons/md";
+import Link from "next/link";
+import { primary } from "@/lib/colors";
+
 const ColumnsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -116,6 +120,20 @@ const Icon = styled.div`
   background-color: green;
   border-radius: 100%;
 `;
+const CartEmptyConatainer = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+`;
+const ButtonDiv = styled.div`
+  margin: 20px;
+`;
+const Button = styled(Link)`
+  background-color: ${primary};
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+`;
 
 const CartPage = () => {
   const { cartProducts, addProduct, removeProduct, clearCart } =
@@ -128,7 +146,7 @@ const CartPage = () => {
   const [streetAddress, setStreetAddress] = useState("");
   const [country, setCountry] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
-
+  console.log(cartProducts);
   useEffect(() => {
     if (cartProducts?.length > 0) {
       axios.post("/api/cart", { ids: cartProducts }).then((res) => {
@@ -158,8 +176,8 @@ const CartPage = () => {
   }
 
   async function goToPayment() {
-    if (name == '' || email == '' || city == '' || country == '') {
-      alert('Please fill in the field')
+    if (name == "" || email == "" || city == "" || country == "") {
+      alert("Please fill in the field");
     } else {
       const response = await axios.post("/api/checkout", {
         name,
@@ -174,7 +192,6 @@ const CartPage = () => {
         window.location = response.data.url;
       }
     }
-    
   }
 
   let total = 0;
@@ -210,7 +227,19 @@ const CartPage = () => {
         <ColumnsWrapper>
           <Box>
             <h2>Cart</h2>
-            {!cartProducts?.length > 0 && <div>Your cart is empty</div>}
+            {!cartProducts?.length > 0 && (
+              <CartEmptyConatainer>
+                <div>
+                <h1> Your cart is empty</h1>
+                  <MdOutlineShoppingCartCheckout size={200} />
+
+                  <ButtonDiv>
+               
+                    <Button href={"/products"}>Continue shopping</Button>
+                  </ButtonDiv>
+                </div>
+              </CartEmptyConatainer>
+            )}
             {products?.length > 0 && (
               <Table>
                 <thead>
