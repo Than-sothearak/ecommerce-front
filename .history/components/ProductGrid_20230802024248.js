@@ -6,7 +6,7 @@ const StyledProductGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 25px;
   z-index: 5;
-   position: static;
+  
   margin-bottom: 40px;
 
   @media screen and (max-width: 280px) {
@@ -15,7 +15,7 @@ const StyledProductGrid = styled.div`
   }
 
   @media screen and (min-width: 640px) {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     
   }
 

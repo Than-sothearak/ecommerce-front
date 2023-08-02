@@ -24,7 +24,7 @@ box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 
   }
   
   @media screen and (min-width: 1024px) {
-    width: 290px;
+    width: 280px;
 
   }
   

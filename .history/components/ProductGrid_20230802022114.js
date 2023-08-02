@@ -19,7 +19,7 @@ const StyledProductGrid = styled.div`
     
   }
 
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 788px) {
     grid-template-columns: 1fr 1fr 1fr;
   }
   

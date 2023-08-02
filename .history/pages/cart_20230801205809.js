@@ -276,7 +276,9 @@ const CartPage = () => {
                         </ButtonStylePlus>
                       </td>
                       <td>
-                      ${cartProducts.filter(id => id === product._id).length * product.price}
+                        $
+                        {cartProducts?.filter((id) => id === product._id)
+                          .length * product.price}
                       </td>
                     </tr>
                   ))}

@@ -2,12 +2,12 @@ import { styled } from "styled-components";
 import ProductBox from "./ProductBox";
 import {RevealWrapper} from "next-reveal";
 const StyledProductGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   gap: 25px;
   z-index: 5;
-   position: static;
-  margin-bottom: 40px;
+
 
   @media screen and (max-width: 280px) {
     grid-template-columns: 1fr;
@@ -15,7 +15,7 @@ const StyledProductGrid = styled.div`
   }
 
   @media screen and (min-width: 640px) {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     
   }
 

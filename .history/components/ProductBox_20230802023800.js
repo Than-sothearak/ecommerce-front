@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { CartContext } from "./CartContext";
 
 const ProductWrapper = styled.div`
-width: 160px;
+width: 190px;
 padding-top: 10px;
 background-color: #fff;
 
@@ -16,7 +16,7 @@ box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 
   }
 
   @media screen and (min-width: 540px) {
-    width: 220px;
+    width: 240px;
   }
 
   @media screen and (min-width: 768px) {
@@ -24,7 +24,7 @@ box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 
   }
   
   @media screen and (min-width: 1024px) {
-    width: 290px;
+    width: 280px;
 
   }
   

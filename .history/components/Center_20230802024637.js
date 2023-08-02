@@ -4,7 +4,7 @@ const StyledDiv = styled.div`
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 10px;
-  @media screen and (min-width: 312px) {
+  /* @media screen and (min-width: 312px) {
     padding: 0 20px;
   }
 
@@ -19,7 +19,7 @@ const StyledDiv = styled.div`
   
   @media screen and (min-width: 1024px) {
     padding: 10;
-  }
+  } */
 
 `;
 

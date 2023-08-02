@@ -11,7 +11,7 @@ export default function Home({product, newProduct}) {
     <div>
       <Header />
       <FeaturedSlider />
-      <Featured product={product}/>
+      {/* <Featured product={product}/> */}
       
       <NewProduct newProduct={newProduct}/>
     </div>
@@ -19,7 +19,7 @@ export default function Home({product, newProduct}) {
 }
 
 export async function getServerSideProps() {
-  const featuredProductId = '64c8be79d9fedba29e73e0b9'
+  const featuredProductId = '64b2e197ea7a1c8d83e4b65a'
   await mongooseConnect();
   const newProduct = await Product.find({}, null, {sort: {'_id':-1}, limit:10 });
   const featuredProduct = await Product.findById(featuredProductId);
