@@ -7,7 +7,7 @@ const Image = styled.img`
   `;
 const BigImage = styled.img`
   max-width: 100%;
-  max-height: 200px;
+  max-height: 380px;
 `;
 const ImageButtons = styled.div`
     display: flex;
@@ -22,7 +22,7 @@ const ImageButton = styled.div`
     ` : `
       border-color: transparent;
     `}
-    height: 40px;
+    height: 80px;
     padding: 2px;
     cursor: pointer;
     border-radius: 5px;

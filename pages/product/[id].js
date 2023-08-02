@@ -9,10 +9,14 @@ import ProductImages from "@/components/ProductImages";
 import Button from "@/components/Button";
 import { useContext } from "react";
 import { CartContext } from "@/components/CartContext";
-import { BsCartDash } from "react-icons/bs";
+import { AiOutlineHeart } from "react-icons/ai";
+import { LiaWarehouseSolid } from "react-icons/lia";
+import { AiFillGift } from "react-icons/ai";
+import Link from "next/link";
 
 const ColWrapper = styled.div`
   display: grid;
+
   grid-template-columns: 1fr;
   @media screen and (min-width: 768px) {
     grid-template-columns: 0.8fr 1.2fr;
@@ -27,26 +31,72 @@ const PriceRow = styled.div`
   align-items: center;
 `;
 const Price = styled.span`
-  font-size: 1.4rem;
+  font-size: 2rem;
+  font-weight: 500;
 `;
 
 const ListItems = styled.li`
- font-size: 14px;
- margin: 5px;
-`
+  font-size: 14px;
+`;
 const Container = styled.div`
-`
+  font-family: "Open Sans", sans-serif;
+`;
 const ProductDetial = styled.div`
-padding: 20px;
-box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;`
-export default function SingleProductPage({ product, }) {
+  color: #474746;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+`;
+const Icon = styled.div`
+  width: 28px;
+  bottom: 10px;
+  float: right;
+  display: flex;
+  justify-content: end;
+`;
+const Hr = styled.div`
+  margin: 20px 0;
+  width: 100%;
+`;
+const LinkText = styled(Link)`
+  text-decoration-line: underline;
+`;
+const AddToList = styled.div`
+  flex: 0.5;
+  text-align: center;
+  border-color: #f1f1f2;
+  text-align: center;
+  border-right-style: solid;
+  border-right-width: 1px;
+`;
+const QuickProductDetial = styled.div`
+width: 100%;
+  list-style-type: none;
+  color: #474746;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    @media screen and (min-width: 768px) {
+      width: 50%;
+  }
+`;
+export default function SingleProductPage({ product }) {
   const { addProduct } = useContext(CartContext);
   const productProperty = Object.entries(product.properties);
   const listItems = productProperty.map((data, index) => (
     <ListItems key={index}>
-      {data[0]}: <strong>{data[1]}</strong>
+        <ul className="flex">
+          <li className="w-36"> <strong> {data[0]}</strong></li>
+          <li className="w-80 text-start"><span> {data[1]}</span></li>
+        </ul>
+        
     </ListItems>
   ));
+ 
   return (
     <>
       <Header />
@@ -56,26 +106,63 @@ export default function SingleProductPage({ product, }) {
             <ProductImages images={product.images} />
           </WhiteBox>
           <Container>
-          <Title>{product.title}</Title>
-          <ProductDetial>
-            
-            <p>{product.description}</p>
-            <h4>Product detail:</h4>
-            {listItems}
-            <PriceRow>
-              <div>
-                <Price>${product.price}</Price>
+            <ProductDetial>
+              <Icon>
+                <AiOutlineHeart size={30} />
+              </Icon>
+              <Title>{product.title}</Title>
+              <p className="mt-5">{product.description}</p>
+              <Hr>
+                <hr></hr>
+              </Hr>
+              <div className="flex gap-2 items-center ">
+                <LiaWarehouseSolid size={22} />
+                <p>Currently out of stock</p>
               </div>
-              <div>
-                <Button primary onClick={() => addProduct(product._id)}>
-             
-                </Button>
+              <Hr>
+                <hr></hr>
+              </Hr>
+              <div className="flex justify-around px-10 my-5">
+                <AddToList className="flex items-center gap-5 border-double">
+                  <AiOutlineHeart size={22} />
+                  <LinkText href={"/"}>Add to list</LinkText>
+                </AddToList>
+                <div className="flex items-center gap-5">
+                  <AiFillGift size={22} />
+                  <LinkText href={"/"}>Add to registry</LinkText>
+                </div>
               </div>
-            </PriceRow>
-          </ProductDetial>
+              <PriceRow>
+                <div>
+                  <Price>${product.price}</Price>
+                </div>
+                <div>
+                  <Button primary onClick={() => addProduct(product._id)}>
+                    Add to cart
+                  </Button>
+                </div>
+              </PriceRow>
+            </ProductDetial>
           </Container>
-      
         </ColWrapper>
+        <div>
+        <h1 className="text-2xl mb-2">
+        Quick highlights
+        </h1>
+        <QuickProductDetial>
+          <div className="inline-grid grid-cols-2 gap-4 sm:grid-cols-2">
+          {listItems.filter(item => {
+             if (item) {
+              return (
+                <div>
+                 {item}
+                </div>
+              )
+             }
+          })}
+          </div>
+        </QuickProductDetial>
+        </div>
       </Center>
     </>
   );
@@ -88,7 +175,6 @@ export async function getServerSideProps(context) {
   return {
     props: {
       product: JSON.parse(JSON.stringify(product)),
-      
     },
   };
 }

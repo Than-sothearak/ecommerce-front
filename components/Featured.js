@@ -9,7 +9,7 @@ import Button from "./Button";
 
 const Background = styled.div`
   background-color: #222;
-  color: #fff;
+  color: #0984e3;
   padding: 50px 0;
 `;
 
