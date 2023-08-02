@@ -146,7 +146,6 @@ const CartPage = () => {
   const [streetAddress, setStreetAddress] = useState("");
   const [country, setCountry] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
-  console.log(cartProducts);
   useEffect(() => {
     if (cartProducts?.length > 0) {
       axios.post("/api/cart", { ids: cartProducts }).then((res) => {

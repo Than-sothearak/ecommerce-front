@@ -1,6 +1,7 @@
 import styled, {css} from "styled-components";
 import {primary} from "@/lib/colors";
 import { BsCart4 } from "react-icons/bs";
+
 export const ButtonStyle = css`
    
   padding: 8px 12px;

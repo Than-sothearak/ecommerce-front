@@ -5,7 +5,7 @@ import {Order} from "@/models/Order";
 import { mongooseConnect } from '@/lib/mongoose';
 
 
-const endpointSecret = "whsec_ad76dc1aba205c6a637903dae44bc99b79c50631e0a3db1eac9c55e9b31b5647";
+const endpointSecret = "whsec_ad76dc1aba205c6a637903dae44bc99b79c50631e0a3db1eac9c55e9b31b5647'";
 
 export default async function handeler (req,res) {
   await mongooseConnect();
@@ -23,6 +23,7 @@ export default async function handeler (req,res) {
   switch (event.type) {
     case 'checkout.session.completed':
       const data = event.data.object;
+      console.log(data)
       const orderId = data.metadata.orderId;
       const paid = data.payment_status === 'paid';
       if (orderId && paid) {
@@ -43,5 +44,3 @@ export const config = {
   api: {bodyParser:false,}
 };
 
-// bright-thrift-cajole-lean
-// acct_1NYlNqEU3Hf4XRSO
