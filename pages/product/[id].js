@@ -19,7 +19,7 @@ const ColWrapper = styled.div`
 
   grid-template-columns: 1fr;
   @media screen and (min-width: 768px) {
-    grid-template-columns: 0.8fr 1.2fr;
+    grid-template-columns: 0.8fr 1fr;
   }
   gap: 40px;
   margin: 40px 0;
@@ -64,12 +64,16 @@ const LinkText = styled(Link)`
   text-decoration-line: underline;
 `;
 const AddToList = styled.div`
-  flex: 0.5;
+  width: 50%;
   text-align: center;
   border-color: #f1f1f2;
   text-align: center;
   border-right-style: solid;
   border-right-width: 1px;
+  @media screen and (min-width: 768px) {
+    flex: 0.5;
+  }
+
 `;
 const QuickProductDetial = styled.div`
 width: 100%;
@@ -122,8 +126,8 @@ export default function SingleProductPage({ product }) {
               <Hr>
                 <hr></hr>
               </Hr>
-              <div className="flex justify-around px-10 my-5">
-                <AddToList className="flex items-center gap-5 border-double">
+              <div className="flex justify-center my-5">
+                <AddToList className="flex items-center gap-5">
                   <AiOutlineHeart size={22} />
                   <LinkText href={"/"}>Add to list</LinkText>
                 </AddToList>

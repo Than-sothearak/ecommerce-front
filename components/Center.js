@@ -9,8 +9,6 @@ const StyledDiv = styled.div`
   @media screen and (min-width: 312px) {
     padding: 0 20px;
   }
-
-
   @media screen and (min-width: 640px) {
     padding: 0 40px;
   }

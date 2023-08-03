@@ -5,13 +5,14 @@ import { useContext } from "react";
 import { CartContext } from "./CartContext";
 
 const ProductWrapper = styled.div`
-width: 160px;
+width: 100%;
+height: auto;
 padding-top: 10px;
 background-color: #fff;
 
 box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;border-radius: 12px;
 
-@media screen and (max-width: 280px) {
+/* @media screen and (max-width: 280px) {
     width: 260px;
   }
 
@@ -26,7 +27,7 @@ box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 
   @media screen and (min-width: 1024px) {
     width: 290px;
 
-  }
+  } */
   
 `;
 
@@ -48,19 +49,19 @@ const WhiteBox = styled(Link)`
  
 `;
 const Title = styled.div`
-  width: 100%;
+  
   color: inherit;
   text-decoration: none;
   font-weight: normal;
   font-size: 0.9rem;
   margin: 0;
-  white-space: nowrap;
+  white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 const ProductInfoBox = styled.div`
     color: #2d3436;
-  padding: 10px;
+    padding: 10px;
 
 `;
 
