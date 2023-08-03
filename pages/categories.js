@@ -87,7 +87,6 @@ export async function getServerSideProps() {
   await mongooseConnect();
   const categories = await Category.find();
   const mainCategories = categories.filter((c) => !c.parent);
-  console.log(mainCategories);
   const categoriesProducts = {};
   for (let mainCat of mainCategories) {
     const mainCatId = mainCat._id.toString();
