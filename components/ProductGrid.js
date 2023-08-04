@@ -26,7 +26,7 @@ const StyledProductGrid = styled.div`
   @media screen and (min-width: 1280px) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
    
-  } */
+  } 
 `;
 export default function ProductGrid ({products}) {
     return (

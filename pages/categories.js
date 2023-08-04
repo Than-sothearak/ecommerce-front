@@ -8,6 +8,7 @@ import { Product } from "@/models/Products";
 import React from "react";
 import { styled } from "styled-components";
 import Link from "next/link";
+import Title from "@/components/Title";
 
 const CategoryGrid = styled.div`
   display: grid;
@@ -20,7 +21,7 @@ const CategoryGrid = styled.div`
 
 const CategoryTitle = styled.div`
   display:flex;
-  margin-top: 10px;
+  margin-top: 14px;
   margin-bottom: 0;
   align-items: center;
   gap: 10px;
@@ -49,23 +50,23 @@ const ShowAllSquare = styled(Link)`
   
 `;
 
-const categories = ({ mainCategories, categoriesProducts }) => {
+const categories = ({ mainCategories, categoriesProducts}) => {
   return (
     <>
       <Header />
       <Center>
         {mainCategories.map(cat => (
-          <CategoryWrapper>
+          <CategoryWrapper key={cat._id}>
             <CategoryTitle>
-              <h2>{cat.name}</h2>
+              <Title>{cat.name}</Title>
               <div>
                 <Link href={'/category/'+cat._id}>Show all</Link>
               </div>
             </CategoryTitle>
             <CategoryGrid>
-              {categoriesProducts[cat._id].map((p,index) => (
-                <RevealWrapper delay={index*50}>
-                  <ProductBox {...p} />
+              {categoriesProducts[cat._id].map((product,index) => (
+                <RevealWrapper key={product._id} delay={index*50}>
+                  <ProductBox {...product} />
                 </RevealWrapper>
               ))}
               <RevealWrapper delay={categoriesProducts[cat._id].length*50}>
@@ -87,19 +88,21 @@ export async function getServerSideProps() {
   await mongooseConnect();
   const categories = await Category.find();
   const mainCategories = categories.filter((c) => !c.parent);
+  
   const categoriesProducts = {};
   for (let mainCat of mainCategories) {
     const mainCatId = mainCat._id.toString();
-    const childIds = categories
-      .filter((c) => c?.parent?.toString() === mainCatId)
-      .map((c) => c._id.toString());
+    const categoriseHaveParent = categories.filter((c) => c?.parent?.toString() === mainCatId)
+    
+    const childIds = categoriseHaveParent.map((c) => c._id.toString());
     const categoriesIds = [mainCatId, ...childIds];
     const products = await Product.find({ category: categoriesIds }, null, {
-      limit: 10,
-      sort: { _id: 1 },
+      limit: 3,
+      sort: { _id: -1 },
     });
     categoriesProducts[mainCatId] = products;
   }
+  console.log(categoriesProducts)
   return {
     props: {
       mainCategories: JSON.parse(JSON.stringify(mainCategories)),
