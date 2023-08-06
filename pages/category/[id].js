@@ -46,17 +46,16 @@ export default function CategoryPage({
   childCategory,
   products: originalProducts,
 }) {
-  const defaultSorting = "_id-desc";
   const defaultFilterValues = category.properties.map((p) => ({
     name: p.name,
     value: "all",
   }));
+
+  const [ sort, setSort] = useState('all')
   const [products, setProducts] = useState(originalProducts);
   const [filtersValues, setFiltersValues] = useState(defaultFilterValues);
-  const [sort, setSort] = useState(defaultSorting);
-  const [loadingProducts, setLoadingProducts] = useState(false);
   const [filtersChanged, setFiltersChanged] = useState(false);
-
+  
   function handleFilterChange(filterName, filterValue) {
     setFiltersValues((prev) => {
       return prev.map((p) => ({
@@ -70,10 +69,11 @@ export default function CategoryPage({
     if (!filtersChanged) {
       return;
     }
-    setLoadingProducts(true);
     const catIds = [category._id, ...(childCategory?.map((c) => c._id) || [])];
     const params = new URLSearchParams();
+    
     params.set("categories", catIds.join(","));
+    params.set("sort", sort)
     filtersValues.forEach((f) => {
       if (f.value !== "all") {
         params.set(f.name, f.value);
@@ -82,9 +82,16 @@ export default function CategoryPage({
     const url = `/api/productsfilter?` + params.toString();
     axios.get(url).then((res) => {
       setProducts(res.data);
-      setLoadingProducts(false);
     });
-  }, [filtersValues]);
+  }, [filtersValues, sort]);
+
+  function handleChange (value) {
+   
+    setSort(value);
+    setFiltersChanged(true);
+  
+  }
+
   return (
     <>
       <Header />
@@ -113,7 +120,16 @@ export default function CategoryPage({
                   ))}
                 </select>
               </Filter>
+             
             ))}
+          <Filter>
+            <h1>sort by</h1>
+            <select onChange={e => handleChange(e.target.value)}>
+              <option>Default</option>
+              <option value="lowest">Low price</option>
+              <option value="highest">High price</option>
+            </select>
+          </Filter>
           </FilterWrapper>
         </FilterContainer>
 

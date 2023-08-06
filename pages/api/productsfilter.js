@@ -3,8 +3,9 @@ import { Product } from "@/models/Products";
 
 export default async function handler (req, res) {
     await mongooseConnect();
-    const {categories, ...filters} = req.query;
- 
+    const {categories, sort, ...filters} = req.query;
+    console.log(test)
+    const [sortOrder] = sort.split();
     const productsQuery = {
       category:categories.split(','),
     };
@@ -14,9 +15,13 @@ export default async function handler (req, res) {
         productsQuery['properties.'+filterName] = filters[filterName];
       })
    
-      console.log(Object.keys(filters))
     }
    
-    console.log(Object.keys(filters))
-    res.json(await Product.find(productsQuery));
+    res.json(await Product.find(
+      productsQuery,
+      null,
+      {
+        sort: {price:sortOrder === 'highest'? -1 : 1}
+      })
+      );
 }
