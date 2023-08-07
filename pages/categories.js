@@ -93,9 +93,9 @@ export async function getServerSideProps() {
   for (let mainCat of mainCategories) {
     const mainCatId = mainCat._id.toString();
     const categoriseHaveParent = categories.filter((c) => c?.parent?.toString() === mainCatId)
-    
     const childIds = categoriseHaveParent.map((c) => c._id.toString());
     const categoriesIds = [mainCatId, ...childIds];
+    
     const products = await Product.find({ category: categoriesIds }, null, {
       limit: 3,
       sort: { _id: -1 },
