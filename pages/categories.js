@@ -4,11 +4,11 @@ import ProductBox from "@/components/ProductBox";
 import {RevealWrapper} from "next-reveal";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Category } from "@/models/Category";
-import { Product } from "@/models/Products";
-import React from "react";
+
 import { styled } from "styled-components";
 import Link from "next/link";
 import Title from "@/components/Title";
+import { Product } from "@/models/Products";
 
 const CategoryGrid = styled.div`
   display: grid;
@@ -50,7 +50,7 @@ const ShowAllSquare = styled(Link)`
   
 `;
 
-const categories = ({ mainCategories, categoriesProducts}) => {
+const categories = ({ mainCategories, productOfCategories}) => {
   return (
     <>
       <Header />
@@ -64,12 +64,12 @@ const categories = ({ mainCategories, categoriesProducts}) => {
               </div>
             </CategoryTitle>
             <CategoryGrid>
-              {categoriesProducts[cat._id].map((product,index) => (
+              {productOfCategories[cat._id].map((product,index) => (
                 <RevealWrapper key={product._id} delay={index*50}>
                   <ProductBox {...product} />
                 </RevealWrapper>
               ))}
-              <RevealWrapper delay={categoriesProducts[cat._id].length*50}>
+              <RevealWrapper delay={productOfCategories[cat._id].length*50}>
                 <ShowAllSquare href={'/category/'+cat._id}>
                   Show all &rarr;
                 </ShowAllSquare>
@@ -89,24 +89,29 @@ export async function getServerSideProps() {
   const categories = await Category.find();
   const mainCategories = categories.filter((c) => !c.parent);
   
-  const categoriesProducts = {};
+  const productOfCategories = {};
+
   for (let mainCat of mainCategories) {
     const mainCatId = mainCat._id.toString();
-    const categoriseHaveParent = categories.filter((c) => c?.parent?.toString() === mainCatId)
-    const childIds = categoriseHaveParent.map((c) => c._id.toString());
-    const categoriesIds = [mainCatId, ...childIds];
     
-    const products = await Product.find({ category: categoriesIds }, null, {
-      limit: 3,
+    // get or filter all child category object
+    const categoriesHaveParent = categories.filter(c => c?.parent?.toString() === mainCatId)
+    
+    // get the id of child category
+    const childIds = categoriesHaveParent.map(c => c._id.toString())
+    const categoriesIds = [mainCatId, ...childIds]
+    
+    const products = await Product.find({category: categoriesIds}, null, {
+   limit: 3,
       sort: { _id: -1 },
-    });
-    categoriesProducts[mainCatId] = products;
+    })
+    productOfCategories[mainCatId] = products;
   }
-  console.log(categoriesProducts)
   return {
     props: {
       mainCategories: JSON.parse(JSON.stringify(mainCategories)),
-      categoriesProducts: JSON.parse(JSON.stringify(categoriesProducts)),
+      productOfCategories: JSON.parse(JSON.stringify(productOfCategories))
     },
   };
+
 }
