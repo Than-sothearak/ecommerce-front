@@ -1,10 +1,13 @@
 import { createContext, useEffect, useState } from "react";
+import toast from 'react-hot-toast';
 
 export const CartContext = createContext({});
 
 export function CartContextProvider({ children }) {
   const ls = typeof window !== "undefined" ? window.localStorage : null;
   const [cartProducts, setCartProducts] = useState([]);
+  const notify = () => toast('Here is your toast.');
+  console.log({cartProducts})
   useEffect(() => {
     if (cartProducts?.length > 0) {
       ls?.setItem("cart", JSON.stringify(cartProducts));
@@ -19,6 +22,7 @@ export function CartContextProvider({ children }) {
   
   function addProduct(productId) {
     setCartProducts((prev) => [...prev, productId]);
+    toast.success('Added to cart!');
   }
   
   function removeProduct(productId) {
@@ -26,8 +30,21 @@ export function CartContextProvider({ children }) {
       const pos = prev.indexOf(productId);
       if (pos !== -1) {
         return prev.filter((value,index) => index !== pos);
+      
       }
       return prev;
+
+    });
+    toast.success(`Item removed`, {
+      style: {
+        border: '1px solid #713200',
+        padding: '16px',
+        color: '#eb4d4b',
+      },
+      iconTheme: {
+        primary: '#ff7979',
+        secondary: '#FFFAEE',
+      },
     });
   }
   function clearCart() {
@@ -38,6 +55,7 @@ export function CartContextProvider({ children }) {
     <CartContext.Provider
       value={{
         cartProducts,
+        notify,
         setCartProducts,
         addProduct,
         removeProduct,

@@ -91,6 +91,7 @@ font-weight:400;
     
   }
 `
+
 const ProductBox = ({ _id, title, description, price, images }) => {
   const {addProduct} = useContext(CartContext);
   const url = '/product/'+_id;

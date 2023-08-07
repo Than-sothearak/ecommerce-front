@@ -123,11 +123,13 @@ export default function CategoryPage({
              
             ))}
           <Filter>
-            <h1>sort by</h1>
+            <h1>Sort by:</h1>
             <select onChange={e => handleChange(e.target.value)}>
               <option>Default</option>
               <option value="lowest">Low price</option>
               <option value="highest">High price</option>
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
             </select>
           </Filter>
           </FilterWrapper>

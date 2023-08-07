@@ -229,11 +229,10 @@ const CartPage = () => {
             {!cartProducts?.length > 0 && (
               <CartEmptyConatainer>
                 <div>
-                <h1> Your cart is empty</h1>
+                  <h1> Your cart is empty</h1>
                   <MdOutlineShoppingCartCheckout size={200} />
 
                   <ButtonDiv>
-               
                     <Button href={"/products"}>Continue shopping</Button>
                   </ButtonDiv>
                 </div>
@@ -276,7 +275,9 @@ const CartPage = () => {
                         </ButtonStylePlus>
                       </td>
                       <td>
-                      ${cartProducts.filter(id => id === product._id).length * product.price}
+                        $
+                        {cartProducts.filter((id) => id === product._id)
+                          .length * product.price}
                       </td>
                     </tr>
                   ))}

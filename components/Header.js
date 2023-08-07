@@ -9,7 +9,7 @@ import { BsCart } from "react-icons/bs";
 import { BiUser } from "react-icons/bi";
 import {BiSearchAlt2} from "react-icons/bi";
 import { AiFillCloseSquare } from 'react-icons/ai'
-
+import toast, { Toaster } from "react-hot-toast";
 const StyledHeader = styled.header`
   letter-spacing: 0.5px;
   background-color: #0984e3;
@@ -197,6 +197,10 @@ export default function Header() {
   const [mobileNavActive, setMobileNavActive] = useState(false);
   return (
     <StyledHeader>
+      <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
       <Center>
         <Wrapper>
           <Logo href={"/"} mobilenavactive={mobileNavActive}>Ecommerce</Logo>

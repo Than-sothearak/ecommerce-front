@@ -20,7 +20,6 @@ export default function ProductsPage({ allProducts }) {
         <CategoryTitle>
           <Title>All Products</Title>
         </CategoryTitle>
-
         <ProductGrid products={allProducts} />
       </Center>
     </>
