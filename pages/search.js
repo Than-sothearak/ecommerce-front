@@ -1,16 +1,21 @@
 import Link from "next/link";
 import styled from "styled-components";
 import Center from "@/components/Center";
-import { useContext } from "react";
-import { CartContext } from "./CartContext";
-import BarsIcon from "./icons/Bars";
+import { useContext, useEffect } from "react";
+import { CartContext } from "@/components/CartContext";
+import BarsIcon from "@/components/icons/Bars";
 import { useState } from "react";
 import { BsCart } from "react-icons/bs";
 import { BiUser } from "react-icons/bi";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { AiFillCloseSquare } from "react-icons/ai";
-import toast, { Toaster } from "react-hot-toast";
-import SearchPage from "@/pages/search";
+import { Toaster } from "react-hot-toast";
+import {RevealWrapper} from "next-reveal";
+import axios from "axios";
+import ProductGrid from "@/components/ProductGrid";
+import ProductBox from "@/components/ProductBox";
+import Title from "@/components/Title";
+
 const StyledHeader = styled.header`
   letter-spacing: 0.5px;
   background-color: #0984e3;
@@ -167,7 +172,7 @@ const SearchbarBox = styled.div`
     justify-content: space-between;
   }
 `;
-const SearchBox = styled(Link)`
+const SearchBox = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -185,16 +190,31 @@ const SearchIcon = styled.div`
   width: 30px;
   height: auto;
   color: gray;
+  cursor: pointer;
 `;
 
 export default function Header() {
   const { cartProducts } = useContext(CartContext);
   const [mobileNavActive, setMobileNavActive] = useState(false);
-  const [input, setInput] = useState("");
+  const [phrase, setPharase] = useState("");
+  const [products, setProducts] = useState([]);
 
   function handleChange(e) {
-    setInput(e);
+    setPharase(e);
   }
+  function search () {
+    if (phrase.length > 2) {
+      axios.get('/api/productsearch?phrase=' + encodeURIComponent(phrase)).
+      then(res => {
+        setProducts(res.data);
+      })
+    } else if (phrase.length === 0) {
+      setProducts([])
+    }
+  }
+  useEffect(()=> {
+    search ();
+  },[phrase])
 
   return (
     <>
@@ -206,7 +226,7 @@ export default function Header() {
               Ecommerce
             </Logo>
             <SearchbarBox mobilenavactive={mobileNavActive}>
-              <SearchBox href={'/search'}>
+              <SearchBox>
                 <SearchInput
                   placeholder="Search products..."
                   onChange={(e) => handleChange(e.target.value)}
@@ -215,7 +235,9 @@ export default function Header() {
                   name="fname"
                 ></SearchInput>
                 <SearchIcon>
-                  <BiSearchAlt2 className="text-black text-2xl" />
+                  <BiSearchAlt2 
+                  onClick={search}
+                  className="text-black text-2xl" />
                 </SearchIcon>
               </SearchBox>
             </SearchbarBox>
@@ -250,6 +272,12 @@ export default function Header() {
           </Wrapper>
         </Center>
       </StyledHeader>
+      <Center>
+        <div>
+          <h1 className="mt-5 text-gray">{`Result query:(${products.length})`}</h1>
+        <ProductGrid products={products}/>
+        </div>
+      </Center>
     </>
   );
 }

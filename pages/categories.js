@@ -4,7 +4,6 @@ import ProductBox from "@/components/ProductBox";
 import {RevealWrapper} from "next-reveal";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Category } from "@/models/Category";
-
 import { styled } from "styled-components";
 import Link from "next/link";
 import Title from "@/components/Title";
