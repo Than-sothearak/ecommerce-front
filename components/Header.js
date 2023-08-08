@@ -10,10 +10,11 @@ import { BiUser } from "react-icons/bi";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { AiFillCloseSquare } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
-import SearchPage from "@/pages/search";
+import { primary } from "@/lib/colors";
+
 const StyledHeader = styled.header`
   letter-spacing: 0.5px;
-  background-color: #0984e3;
+  background-color: #222;
 `;
 const Logo = styled(Link)`
   ${(props) =>
@@ -44,6 +45,8 @@ const StyledNav = styled.nav`
       : `
     display: none;
   `}
+
+
   width: 100%;
   align-items: center;
   position: relative;
@@ -65,6 +68,9 @@ const NavLink = styled(Link)`
   color: #fff;
   text-decoration: none;
   padding: 10px 0;
+  &:hover {
+    color: ${primary}
+  }
 
   @media screen and (min-width: 1024px) {
     padding: 0;
@@ -110,6 +116,7 @@ const NavCart = styled(Link)`
   display: flex;
   align-items: center;
   position: relative;
+  
 `;
 const NavAcc = styled(Link)`
   display: block;
@@ -190,7 +197,6 @@ const SearchIcon = styled.div`
 export default function Header() {
   const { cartProducts } = useContext(CartContext);
   const [mobileNavActive, setMobileNavActive] = useState(false);
-  const [input, setInput] = useState("");
 
   function handleChange(e) {
     setInput(e);

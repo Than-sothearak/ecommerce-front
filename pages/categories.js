@@ -8,6 +8,7 @@ import { styled } from "styled-components";
 import Link from "next/link";
 import Title from "@/components/Title";
 import { Product } from "@/models/Products";
+import Footer from "@/components/Footer";
 
 const CategoryGrid = styled.div`
   display: grid;
@@ -77,6 +78,7 @@ const categories = ({ mainCategories, productOfCategories}) => {
           </CategoryWrapper>
         ))}
       </Center>
+      <Footer />
     </>
   );
 };

@@ -10,6 +10,7 @@ import { MdDone } from "react-icons/md";
 import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 import Link from "next/link";
 import { primary } from "@/lib/colors";
+import Footer from "@/components/Footer";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -216,6 +217,7 @@ const CartPage = () => {
             </Box>
           </ColumnsWrapper>
         </Center>
+        <Footer />
       </>
     );
   }
@@ -352,6 +354,7 @@ const CartPage = () => {
           )}
         </ColumnsWrapper>
       </Center>
+      <Footer />
     </>
   );
 };

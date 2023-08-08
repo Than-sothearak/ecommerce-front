@@ -4,25 +4,36 @@ import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Products";
 import NewProduct from "@/components/NewProduct";
 import FeaturedSlider from "@/components/FeaturedSlider";
+import Footer from "@/components/Footer";
+import { styled } from "styled-components";
+
+const Container = styled.div`
+
+`
+
 export default function Home({ product, newProduct }) {
   return (
-    <div>
+    <Container>
       <Header />
       <FeaturedSlider />
       <Featured product={product} />
       <NewProduct newProduct={newProduct} />
-    </div>
+      <Footer />
+    </Container>
   );
 }
 
 export async function getServerSideProps() {
-  const featuredProductId = "64c9f7be157603b2bc8e018d";
   await mongooseConnect();
   const newProduct = await Product.find({}, null, {
     sort: { _id: -1 },
-    limit: 10,
+    limit: 8,
   });
-  const featuredProduct = await Product.findById(featuredProductId);
+  const featuredProduct = await Product.find({}, null, {
+    sort: { price: -1 },
+    limit: 1,
+  });
+  console.log(featuredProduct)
   return {
     props: {
       product: JSON.parse(JSON.stringify(featuredProduct)),

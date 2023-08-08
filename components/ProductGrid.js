@@ -4,9 +4,10 @@ import {RevealWrapper} from "next-reveal";
 const StyledProductGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 25px;
   z-index: 5;
-   position: static;
+  gap: 20px;
+  padding-top: 10px;
+  position: static;
   margin-bottom: 40px;
 
    @media screen and (max-width: 280px) {
@@ -17,7 +18,6 @@ const StyledProductGrid = styled.div`
     grid-template-columns: 1fr 1fr;
     
   }
-
 
   @media screen and (min-width: 768px) {
     grid-template-columns: 1fr 1fr;

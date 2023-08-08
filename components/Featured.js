@@ -3,7 +3,6 @@ import Center from "./Center";
 import { styled } from "styled-components";
 import { primary } from "@/lib/colors";
 import Link from "next/link";
-import { BsCartDash } from "react-icons/bs";
 import { CartContext } from "@/components/CartContext";
 import Button from "./Button";
 
@@ -15,11 +14,13 @@ const Background = styled.div`
 
 const Title = styled.h1`
   margin: 0;
-  font-weight: normal;
+  font-weight: bold;
+  font-size: 2rem;
 `;
 const Desc = styled.p`
+  margin-top: 10px;
   color: #aaa;
-  font-size: 0.8rem;
+  font-size: 1rem;
 `;
 
 const ColumnsWrapper = styled.div`
@@ -57,21 +58,6 @@ const ButtonWrapper = styled.div`
   font-family: "Poppins", sans-serif;
 `;
 
-const ButtonStyle = styled.button`
-  border: 0;
-  padding: 15px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  align-items: center;
-  text-decoration: none;
-  font-size: 1px;
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background-color: ${primary};
-`;
-
 const ButtonLink = styled(Link)`
   border: 1px solid ${primary};
   padding: 15px 20px;
@@ -102,7 +88,7 @@ const TextBtn = styled.div`
 const Featured = ({ product }) => {
   const { addProduct } = useContext(CartContext);
   function addToCart() {
-    addProduct(product?._id);
+    addProduct(product?._id, product.title);
   }
   return (
     <Background>
@@ -110,8 +96,8 @@ const Featured = ({ product }) => {
         <ColumnsWrapper>
           <Column>
             <div>
-              <Title>{product?.title}</Title>
-              <Desc>{product?.description}</Desc>
+              <Title>{product[0].title}</Title>
+              <Desc>{product[0].description}</Desc>
 
               <ButtonWrapper>
                 <ButtonLink href={"/product/" + product?._id}>
@@ -124,7 +110,7 @@ const Featured = ({ product }) => {
             </div>
           </Column>
           <Column>
-            <img src={product?.images[0]} />
+            <img src={product[0].images?.[0]} />
           </Column>
         </ColumnsWrapper>
       </Center>

@@ -15,6 +15,7 @@ import axios from "axios";
 import ProductGrid from "@/components/ProductGrid";
 import ProductBox from "@/components/ProductBox";
 import Title from "@/components/Title";
+import Footer from "@/components/Footer";
 
 const StyledHeader = styled.header`
   letter-spacing: 0.5px;
@@ -278,6 +279,7 @@ export default function Header() {
         <ProductGrid products={products}/>
         </div>
       </Center>
+      <Footer />
     </>
   );
 }

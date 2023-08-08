@@ -5,8 +5,7 @@ import {CartContextProvider }from "@/components/CartContext";
 const GlobalStyle = createGlobalStyle`
 
 body{
-  padding:0;
-  margin:auto;
+  
   font-family: 'Roboto', sans-serif;
 }
 `;

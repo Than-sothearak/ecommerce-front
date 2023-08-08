@@ -7,11 +7,9 @@ import { CartContext } from "./CartContext";
 const ProductWrapper = styled.div`
 width: 100%;
 height: auto;
-padding-top: 10px;
-background-color: #fff;
+padding: 20px;
 
-box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;border-radius: 12px;
-
+box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 /* @media screen and (max-width: 280px) {
     width: 260px;
   }
@@ -105,7 +103,7 @@ const ProductBox = ({ _id, title, description, price, images }) => {
         <Title href={url}>{title}</Title>
         <PriceRow>
           <Price>${price}</Price>
-          <Button onClick={() => addProduct(_id)}>
+          <Button onClick={() => addProduct(_id, title)}>
           <TextBtn type='button'>Add to cart</TextBtn>
           </Button>
         </PriceRow>

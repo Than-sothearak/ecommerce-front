@@ -10,12 +10,12 @@ export const ButtonStyle = css`
   align-items: center;
   text-decoration: none;
   font-size: 14px;
-  color: ${primary};
+  color: white;
   font-weight: bold;
   display: flex;
   align-items: center;
   gap: 5px;
-  background-color: white;
+  background-color: ${primary};
   transition: 0.3s all ease-out;
   &:hover {
    transition: 0.3s all ease-in;

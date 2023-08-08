@@ -20,9 +20,9 @@ export function CartContextProvider({ children }) {
     }
   }, []);
   
-  function addProduct(productId) {
+  function addProduct(productId, title) {
     setCartProducts((prev) => [...prev, productId]);
-    toast.success('Added to cart!');
+    toast.success(`${title} Added to cart`);
   }
   
   function removeProduct(productId) {

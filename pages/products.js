@@ -1,4 +1,5 @@
 import Center from "@/components/Center";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ProductGrid from "@/components/ProductGrid";
 import Title from "@/components/Title";
@@ -22,6 +23,7 @@ export default function ProductsPage({ allProducts }) {
         </CategoryTitle>
         <ProductGrid products={allProducts} />
       </Center>
+      <Footer />
     </>
   );
 }
