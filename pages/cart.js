@@ -20,6 +20,7 @@ const ColumnsWrapper = styled.div`
   }
   gap: 40px;
   margin-top: 40px;
+  margin-bottom: 80px;
 `;
 
 const Box = styled.div`

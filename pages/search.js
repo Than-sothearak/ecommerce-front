@@ -19,7 +19,7 @@ import Footer from "@/components/Footer";
 
 const StyledHeader = styled.header`
   letter-spacing: 0.5px;
-  background-color: #0984e3;
+  background-color: #222;
 `;
 const Logo = styled(Link)`
   ${(props) =>

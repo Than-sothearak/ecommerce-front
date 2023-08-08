@@ -87,8 +87,9 @@ const TextBtn = styled.div`
 `;
 const Featured = ({ product }) => {
   const { addProduct } = useContext(CartContext);
+  const featuredProduct = product[0]
   function addToCart() {
-    addProduct(product?._id, product.title);
+    addProduct(featuredProduct._id, featuredProduct.title);
   }
   return (
     <Background>
@@ -96,11 +97,11 @@ const Featured = ({ product }) => {
         <ColumnsWrapper>
           <Column>
             <div>
-              <Title>{product[0].title}</Title>
-              <Desc>{product[0].description}</Desc>
+              <Title>{featuredProduct.title}</Title>
+              <Desc>{featuredProduct.description}</Desc>
 
               <ButtonWrapper>
-                <ButtonLink href={"/product/" + product?._id}>
+                <ButtonLink href={"/product/" + featuredProduct._id}>
                   Read more
                 </ButtonLink>
                 <Button onClick={addToCart}>
@@ -110,7 +111,7 @@ const Featured = ({ product }) => {
             </div>
           </Column>
           <Column>
-            <img src={product[0].images?.[0]} />
+            <img src={featuredProduct.images?.[0]} />
           </Column>
         </ColumnsWrapper>
       </Center>
