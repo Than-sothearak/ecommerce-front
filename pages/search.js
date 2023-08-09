@@ -194,7 +194,7 @@ const SearchIcon = styled.div`
   cursor: pointer;
 `;
 
-export default function Header() {
+export default function SearchPage() {
   const { cartProducts } = useContext(CartContext);
   const [mobileNavActive, setMobileNavActive] = useState(false);
   const [phrase, setPharase] = useState("");

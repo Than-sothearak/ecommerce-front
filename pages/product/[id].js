@@ -13,10 +13,10 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { LiaWarehouseSolid } from "react-icons/lia";
 import { AiFillGift } from "react-icons/ai";
 import Link from "next/link";
+import Footer from "@/components/Footer";
 
 const ColWrapper = styled.div`
   display: grid;
-
   grid-template-columns: 1fr;
   @media screen and (min-width: 768px) {
     grid-template-columns: 0.8fr 1fr;
@@ -76,7 +76,7 @@ const AddToList = styled.div`
 
 `;
 const QuickProductDetial = styled.div`
-width: 100%;
+  width: 100%;
   list-style-type: none;
   color: #474746;
   padding: 20px;
@@ -141,7 +141,7 @@ export default function SingleProductPage({ product }) {
                   <Price>${product.price}</Price>
                 </div>
                 <div>
-                  <Button primary onClick={() => addProduct(product._id)}>
+                  <Button primary onClick={() => addProduct(product._id, product.title)}>
                     Add to cart
                   </Button>
                 </div>
@@ -168,6 +168,7 @@ export default function SingleProductPage({ product }) {
         </QuickProductDetial>
         </div>
       </Center>
+      <Footer />
     </>
   );
 }

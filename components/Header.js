@@ -9,7 +9,7 @@ import { BsCart } from "react-icons/bs";
 import { BiUser } from "react-icons/bi";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { AiFillCloseSquare } from "react-icons/ai";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { primary } from "@/lib/colors";
 
 const StyledHeader = styled.header`
@@ -46,7 +46,6 @@ const StyledNav = styled.nav`
     display: none;
   `}
 
-
   width: 100%;
   align-items: center;
   position: relative;
@@ -69,7 +68,7 @@ const NavLink = styled(Link)`
   text-decoration: none;
   padding: 10px 0;
   &:hover {
-    color: ${primary}
+    color: ${primary};
   }
 
   @media screen and (min-width: 1024px) {
@@ -116,7 +115,6 @@ const NavCart = styled(Link)`
   display: flex;
   align-items: center;
   position: relative;
-  
 `;
 const NavAcc = styled(Link)`
   display: block;
@@ -194,7 +192,35 @@ const SearchIcon = styled.div`
   color: gray;
 `;
 
-export default function Header() {
+const Dropdown = styled.ul`
+  list-style: none;
+  margin: 0 auto;
+  border-left: 2px solid #3ca0e7;
+  display: inline-block;
+  padding: 0 30px;
+  position: relative;
+  text-decoration: none;
+  text-align: center;
+  &:hover {
+    color: #3ca0e7;
+  }
+  li {     
+      background: white;
+  }
+
+ 
+`;
+
+const NavLinkA = styled(Link)`
+ color: white;
+ &:hover {
+  color: #3ca0e7;
+ }
+
+
+`
+
+export default function Header({ mainCategories }) {
   const { cartProducts } = useContext(CartContext);
   const [mobileNavActive, setMobileNavActive] = useState(false);
 
@@ -212,7 +238,7 @@ export default function Header() {
               Ecommerce
             </Logo>
             <SearchbarBox mobilenavactive={mobileNavActive}>
-              <SearchBox href={'/search'}>
+              <SearchBox href={"/search"}>
                 <SearchInput
                   placeholder="Search products..."
                   onChange={(e) => handleChange(e.target.value)}
@@ -229,8 +255,17 @@ export default function Header() {
               <NavLink href={"/"}>Home</NavLink>
               <NavLink href={"/products"}>All products</NavLink>
               <NavLink href={"/categories"}>Categories</NavLink>
-            </StyledNav>
 
+              <Dropdown>
+                {mainCategories?.map((c) => (
+                  <li key={c._id}>
+                    <NavLinkA href={`/category/${c._id}`}>
+                      {c.name}
+                    </NavLinkA>
+                  </li>
+                ))}
+              </Dropdown>
+            </StyledNav>
             <NavAccountBox mobilenavactive={mobileNavActive}>
               <NavAcc href={"/account"}>
                 <BiUser size={24} />

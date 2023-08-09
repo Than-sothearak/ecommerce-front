@@ -1,9 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import toast from 'react-hot-toast';
-
 export const CartContext = createContext({});
 
-export function CartContextProvider({ children }) {
+export function CartContextProvider({ children}) {
   const ls = typeof window !== "undefined" ? window.localStorage : null;
   const [cartProducts, setCartProducts] = useState([]);
   const notify = () => toast('Here is your toast.');

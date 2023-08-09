@@ -6,17 +6,25 @@ import NewProduct from "@/components/NewProduct";
 import FeaturedSlider from "@/components/FeaturedSlider";
 import Footer from "@/components/Footer";
 import { styled } from "styled-components";
+import { Category } from "@/models/Category";
+import HeaderNew from "@/components/HeaderNew";
 
 const Container = styled.div`
 
 `
 
-export default function Home({ product, newProduct }) {
+export default function Home({ products, newProduct, mainCategories,categories }) {
+
   return (
     <Container>
-      <Header />
+      {/* <Header mainCategories={mainCategories}/> */}
+      <HeaderNew 
+      categories={categories} 
+      mainCategories={mainCategories}
+      products={products}
+      />
       <FeaturedSlider />
-      <Featured product={product} />
+      <Featured product={products} />
       <NewProduct newProduct={newProduct} />
       <Footer />
     </Container>
@@ -33,11 +41,14 @@ export async function getServerSideProps() {
     sort: { price: -1 },
     limit: 1,
   });
-  console.log(featuredProduct)
+  const categories = await Category.find()
+  const mainCategories = categories.filter(c => !c.parent)
   return {
     props: {
-      product: JSON.parse(JSON.stringify(featuredProduct)),
+      products: JSON.parse(JSON.stringify(featuredProduct)),
       newProduct: JSON.parse(JSON.stringify(newProduct)),
+      categories: JSON.parse(JSON.stringify(categories)),
+      mainCategories: JSON.parse(JSON.stringify(mainCategories))
     },
   };
 }

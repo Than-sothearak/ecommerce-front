@@ -9,6 +9,7 @@ import Link from "next/link";
 const FooterWrapper = styled.div`
   background-color: #222;
   padding: 30px;
+  margin-top: 80px;
 `;
 const FooterContainer = styled.div`
   display: flex;
