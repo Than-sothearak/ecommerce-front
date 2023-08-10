@@ -4,10 +4,9 @@ import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Products";
 import NewProduct from "@/components/NewProduct";
 import FeaturedSlider from "@/components/FeaturedSlider";
-import Footer from "@/components/Footer";
 import { styled } from "styled-components";
 import { Category } from "@/models/Category";
-import HeaderNew from "@/components/Navbar";
+
 
 const Container = styled.div`
 
@@ -17,11 +16,7 @@ export default function Home({ products, newProduct,categories }) {
 
   return (
     <Container>
-      {/* <Header mainCategories={mainCategories}/> */}
-      {/* <HeaderNew 
-       categories={categories}
-      /> */}
-      <FeaturedSlider />
+      {/* <FeaturedSlider /> */}
       <Featured product={products} />
       <NewProduct newProduct={newProduct} />
     </Container>

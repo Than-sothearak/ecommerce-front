@@ -10,6 +10,7 @@ const FooterWrapper = styled.div`
   background-color: #222;
   padding: 30px;
   margin-top: 80px;
+  font-size: 0.9rem;
 `;
 const FooterContainer = styled.div`
   display: flex;
@@ -20,14 +21,13 @@ const FooterContainer = styled.div`
   margin-bottom: 100px;
   margin-top: 30px;
   h1 {
-    font-size: 18px;
+  
     margin-top: 10px;
   }
   ul {
     padding-top: 20px;
     color: #747d8c;
     cursor: pointer;
-    font-size: medium;
   }
   li {
     &:hover {
@@ -81,7 +81,7 @@ const Footer = () => {
           <FooterContainer>
             <LogoWrapper>
               <img src={imgUrl} />
-              <p>WE PROVIDE WHAT WE LOVE</p>
+              <p className="text-sm">WE PROVIDE WHAT WE LOVE</p>
             </LogoWrapper>
             <InfoWrapper>
               <h1>Information:</h1>
@@ -148,7 +148,7 @@ const Footer = () => {
       </FooterWrapper>
       <FooterButtom>
         <Center>
-          <p>© 2023, e-commerce-front. All Rights Reserved.</p>
+          <p className="text-sm">© 2023, e-commerce-front. All Rights Reserved.</p>
         </Center>
       </FooterButtom>
     </>

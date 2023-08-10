@@ -1,6 +1,5 @@
 import Center from '@/components/Center'
-import Footer from '@/components/Footer'
-import Header from '@/components/Header'
+import { useSession } from 'next-auth/react'
 import React from 'react'
 import { styled } from 'styled-components'
 
@@ -9,15 +8,15 @@ width: 100%;
 height: 300px;
 `
 const Account = () => {
+  const session = useSession();
+  console.log(session)
   return (
     <>
-    <Header />
     <Center>
      <PageWrapper>
       <h1>Profile page</h1>
      </PageWrapper>
     </Center>
-    <Footer />
     </>
   )
 }

@@ -15,6 +15,7 @@ import { primary } from "@/lib/colors";
 const StyledHeader = styled.header`
   letter-spacing: 0.5px;
   background-color: #222;
+  font-size: 0.9rem;
 `;
 const Logo = styled(Link)`
   ${(props) =>
@@ -136,7 +137,7 @@ const NavAcc = styled(Link)`
   }
 `;
 const CartNum = styled.p`
-  font-size: smaller;
+  font-size: 0.9rem;
   text-align: center;
   background-color: #ffa502;
   width: 20px;
@@ -160,7 +161,6 @@ const SearchbarBox = styled.div`
   margin: 0 20px 0 20px;
   width: 100%;
   color: white;
-  font-size: small;
   font-weight: normal;
   z-index: 3;
   height: 40px;
@@ -271,8 +271,8 @@ export default function Header({ mainCategories }) {
               <NavAcc href={"/account"}>
                 <BiUser size={24} />
                 <div>
-                  <p className="text-sm font-normal">Sign In</p>
-                  <p className="text-lg font-medium"> Account</p>
+                  <p className="font-normal">Sign In</p>
+                  <p className="text-md font-medium"> Account</p>
                 </div>{" "}
               </NavAcc>
 
