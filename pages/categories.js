@@ -6,7 +6,7 @@ import { Category } from "@/models/Category";
 import { styled } from "styled-components";
 import Link from "next/link";
 import Title from "@/components/Title";
-import { Product } from "@/models/Products";
+import { Product } from "@/models/Address";
 import Footer from "@/components/Footer";
 import HeaderNew from "@/components/Navbar";
 

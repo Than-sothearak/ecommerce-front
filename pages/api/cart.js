@@ -1,5 +1,5 @@
 import { mongooseConnect } from "@/lib/mongoose";
-import { Product } from "@/models/Products";
+import { Product } from "@/models/Address";
 
 
 export default async function handeler(req, res) {

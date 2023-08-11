@@ -4,7 +4,7 @@ import ProductGrid from "@/components/ProductGrid";
 import Title from "@/components/Title";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Category } from "@/models/Category";
-import { Product } from "@/models/Products";
+import { Product } from "@/models/Address";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";

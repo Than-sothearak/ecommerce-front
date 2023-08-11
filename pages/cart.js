@@ -1,5 +1,4 @@
 import Center from "@/components/Center";
-import Header from "@/components/Header";
 import { styled } from "styled-components";
 import Input from "@/components/Input";
 import { useContext, useEffect, useState } from "react";
@@ -11,9 +10,6 @@ import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 import Link from "next/link";
 import { primary } from "@/lib/colors";
 import Footer from "@/components/Footer";
-import HeaderNew from "@/components/Navbar";
-import { Category } from "@/models/Category";
-import { mongooseConnect } from "@/lib/mongoose";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -140,7 +136,7 @@ const Button = styled(Link)`
   border-radius: 20px;
 `;
 
-const CartPage = ({categories}) => {
+const CartPage = () => {
   const { cartProducts, addProduct, removeProduct, clearCart } =
     useContext(CartContext);
   const [products, setProducts] = useState([]);
@@ -207,7 +203,6 @@ const CartPage = ({categories}) => {
   if (isSuccess) {
     return (
       <>
-        <Header categories={categories}/>
         <Center>
           <ColumnsWrapper>
             <Box>
@@ -227,7 +222,6 @@ const CartPage = ({categories}) => {
   }
   return (
     <>
-      <HeaderNew categories={categories}/>
       <Center>
         <ColumnsWrapper>
           <Box>
@@ -363,13 +357,4 @@ const CartPage = ({categories}) => {
 };
 
 export default CartPage;
-export async function getServerSideProps(context) {
-  await mongooseConnect()
-  const categories = await Category.find()
 
-  return {
-    props: {
-      categories: JSON.parse(JSON.stringify(categories)),
-    },
-  };
-}

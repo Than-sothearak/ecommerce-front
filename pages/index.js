@@ -1,9 +1,7 @@
-import Header from "@/components/Header";
 import Featured from "@/components/Featured";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Products";
 import NewProduct from "@/components/NewProduct";
-import FeaturedSlider from "@/components/FeaturedSlider";
 import { styled } from "styled-components";
 import { Category } from "@/models/Category";
 

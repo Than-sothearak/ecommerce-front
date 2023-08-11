@@ -11,6 +11,8 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import { AiFillCloseSquare } from "react-icons/ai";
 import { Toaster } from "react-hot-toast";
 import { primary } from "@/lib/colors";
+import { useSession, signIn, signOut } from "next-auth/react";
+
 
 const StyledHeader = styled.header`
   letter-spacing: 0.5px;
@@ -121,6 +123,14 @@ const NavAcc = styled(Link)`
   display: block;
   color: #fff;
   text-decoration: none;
+  button {
+  
+    &:hover {
+      background-color: white;
+      color: #096fd3;
+      border-radius: 2px;
+    }
+  }
 
   @media screen and (min-width: 640px) {
     padding: 14px 15px;
@@ -224,7 +234,9 @@ export default function Header({ mainCategories }) {
   const { cartProducts } = useContext(CartContext);
   const [mobileNavActive, setMobileNavActive] = useState(false);
   const {inputSearch} = useContext(CartContext)
-
+  
+  const {data: session} = useSession();
+  
   function handleChange(e) {
     inputSearch(e);
   }
@@ -267,12 +279,14 @@ export default function Header({ mainCategories }) {
                 ))}
               </Dropdown>
             </StyledNav>
-            <NavAccountBox mobilenavactive={mobileNavActive}>
+           {session && (
+              <NavAccountBox mobilenavactive={mobileNavActive}>
               <NavAcc href={"/account"}>
                 <BiUser size={24} />
                 <div>
-                  <p className="font-normal">Sign In</p>
-                  <p className="text-md font-medium"> Account</p>
+                  <p className="text-md font-medium"> {session.user.name}</p>
+                  <button onClick={() => signOut() }>Sign out</button>
+
                 </div>{" "}
               </NavAcc>
 
@@ -281,6 +295,23 @@ export default function Header({ mainCategories }) {
                 <CartNum>{cartProducts.length}</CartNum>
               </NavCart>
             </NavAccountBox>
+           )}
+           {!session && (
+                <NavAccountBox mobilenavactive={mobileNavActive}>
+                <NavAcc href={"/account"}>
+                  <BiUser size={24} />
+                  <div>
+                    <button onClick={() => signIn() }>Sign in</button>
+                    <p className="text-md font-medium">Account</p>
+                  </div>{" "}
+                </NavAcc>
+  
+                <NavCart href={"/cart"}>
+                  <BsCart size={28} color="white" />
+                  <CartNum>{cartProducts.length}</CartNum>
+                </NavCart>
+              </NavAccountBox>
+           )}
 
             <NavButton onClick={() => setMobileNavActive((prev) => !prev)}>
               {!mobileNavActive ? (

@@ -4,7 +4,7 @@ import HeaderNew from "@/components/Navbar";
 import ProductGrid from "@/components/ProductGrid";
 import Title from "@/components/Title";
 import { mongooseConnect } from "@/lib/mongoose";
-import { Product } from "@/models/Products";
+import { Product } from "@/models/Address";
 import { styled } from "styled-components";
 import { Category } from "@/models/Category";
 
