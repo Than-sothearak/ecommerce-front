@@ -1,11 +1,13 @@
 import Center from "@/components/Center";
 import ProductBox from "@/components/ProductBox";
+import { RevealWrapper } from "next-reveal";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Category } from "@/models/Category";
 import { styled } from "styled-components";
 import Link from "next/link";
 import Title from "@/components/Title";
-import { Product } from "@/models/Products";
+import { Product } from "@/models/Address";
+import Footer from "@/components/Footer";
 import HeaderNew from "@/components/Navbar";
 
 const CategoryGrid = styled.div`

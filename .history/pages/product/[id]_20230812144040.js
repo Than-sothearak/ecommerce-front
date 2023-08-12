@@ -1,7 +1,8 @@
 import Center from "@/components/Center";
+import Header from "@/components/Header";
 import Title from "@/components/Title";
 import { mongooseConnect } from "@/lib/mongoose";
-import { Product } from "@/models/Products";
+import { Product } from "@/models/Address";
 import styled from "styled-components";
 import WhiteBox from "@/components/WhiteBox";
 import ProductImages from "@/components/ProductImages";
@@ -12,9 +13,10 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { LiaWarehouseSolid } from "react-icons/lia";
 import { AiFillGift } from "react-icons/ai";
 import Link from "next/link";
+import Footer from "@/components/Footer";
 import { Category } from "@/models/Category";
 import HeaderNew from "@/components/Navbar";
-
+import categories from "../categories";
 
 const ColWrapper = styled.div`
   display: grid;

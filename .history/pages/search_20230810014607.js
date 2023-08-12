@@ -3,7 +3,13 @@ import styled from "styled-components";
 import Center from "@/components/Center";
 import { useContext, useEffect } from "react";
 import { CartContext } from "@/components/CartContext";
+import BarsIcon from "@/components/icons/Bars";
 import { useState } from "react";
+import { BsCart } from "react-icons/bs";
+import { BiUser } from "react-icons/bi";
+import { BiSearchAlt2 } from "react-icons/bi";
+import { AiFillCloseSquare } from "react-icons/ai";
+import { Toaster } from "react-hot-toast";
 import axios from "axios";
 import ProductGrid from "@/components/ProductGrid";
 
