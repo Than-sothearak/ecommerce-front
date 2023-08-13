@@ -82,12 +82,12 @@ const ProductBox = ({ _id, title, description, price, images }) => {
   return (
     <>
       <ProductWrapper>
-      <Icon onClick={addWhislist}>
-          {whislist ?  <AiFillHeart size={22} color="red"/> :  <AiOutlineHeart size={22} color="gray" />}
-        </Icon>
+        
         <WhiteBox href={url}>
           <img src={images?.[0]} />
-          
+          <Icon onClick={addWhislist}>
+          {whislist ?  <AiFillHeart size={22} color="red"/> :  <AiOutlineHeart size={22} color="gray" />}
+        </Icon>
         </WhiteBox>
         
         <ProductInfoBox>

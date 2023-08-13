@@ -7,7 +7,6 @@ import Link from "next/link";
 import Table from "@/components/Table";
 import Input from "@/components/Input";
 import axios from "axios";
-import toast from 'react-hot-toast';
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -77,22 +76,18 @@ const Account = ({
   const [postalCode, setPostalCode] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
   const [country, setCountry] = useState("");
+  const [info, setInfo] = useState('')
   const { data: session } = useSession();
-  
+
   useEffect(() => {
-    if (session) {
-      axios.get("/api/information").then((result) => {
-        setName(result.data.name)
-        setEmail(result.data.email)
-        setCity(result.data.city)
-        setPostalCode(result.data.postalCode)
-        setStreetAddress(result.data.streetAddress)
-        setCountry(result.data.country)
-      });
-    } else {
-      return
-    }
-   
+    axios.get("/api/information").then((result) => {
+      setName(result.data.name)
+      setEmail(result.data.email)
+      setCity(result.data.city)
+      setPostalCode(result.data.postalCode)
+      setStreetAddress(result.data.streetAddress)
+      setCountry(result.data.country)
+    });
   }, []);
 
   async function saveProfileData() {
@@ -108,7 +103,7 @@ const Account = ({
       alert('Plaese input values')
     } else {
       await axios.post("/api/information", data);
-      toast.success(`Updated`);
+
     }
   }
 

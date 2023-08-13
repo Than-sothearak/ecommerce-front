@@ -76,20 +76,18 @@ const ProductBox = ({ _id, title, description, price, images }) => {
 
   function addWhislist(e) {
     e.preventDefault();
-     setWhislis(prev => !prev)
+    setWhislis(true);
   }
 
   return (
     <>
       <ProductWrapper>
-      <Icon onClick={addWhislist}>
-          {whislist ?  <AiFillHeart size={22} color="red"/> :  <AiOutlineHeart size={22} color="gray" />}
+        <Icon onClick={addWhislist}>
+          {whislist ? <AiOutlineHeart size={28} /> : <AiFillHeart size={28} />}
         </Icon>
         <WhiteBox href={url}>
           <img src={images?.[0]} />
-          
         </WhiteBox>
-        
         <ProductInfoBox>
           <Title href={url}>{title}</Title>
           <PriceRow>

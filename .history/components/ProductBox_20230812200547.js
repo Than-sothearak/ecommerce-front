@@ -7,8 +7,9 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
 
 const ProductWrapper = styled.div`
-  width: 100%;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+
+box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  
 `;
 
 const WhiteBox = styled(Link)`
@@ -25,17 +26,22 @@ const WhiteBox = styled(Link)`
     max-width: 100%;
     max-height: 140px;
   }
+
+ 
 `;
 const Title = styled.div`
+  
   color: inherit;
   text-decoration: none;
   font-weight: normal;
   font-size: 0.9rem;
   margin: 0;
+
 `;
 const ProductInfoBox = styled.div`
-  color: #2d3436;
-  padding: 10px;
+    color: #2d3436;
+    padding: 10px;
+
 `;
 
 const PriceRow = styled.div`
@@ -53,53 +59,52 @@ const Price = styled.div`
 `;
 
 const TextBtn = styled.div`
-  font-size: 16px;
-  font-weight: 400;
+font-size: 16px;
+font-weight:400;
 
-  @media screen and (max-width: 1024px) {
-    display: block;
-    text-align: center;
-    display: none;
+@media screen and (max-width: 1024px) {
+   display: block;
+   text-align: center;
+   display: none;
+    
   }
-`;
+`
 
 const Icon = styled.div`
   position: absolute;
-  margin: 10px;
-  cursor: pointer;
-`;
+
+`
 
 const ProductBox = ({ _id, title, description, price, images }) => {
-  const { addProduct } = useContext(CartContext);
+  const {addProduct} = useContext(CartContext);
   const [whislist, setWhislis] = useState(false);
-  const url = "/product/" + _id;
+  const url = '/product/'+_id;
 
-  function addWhislist(e) {
-    e.preventDefault();
-     setWhislis(prev => !prev)
+  function addWhislist (e) {
+    e.preventDefault()
+    setWhislis(true);
   }
-
+  
   return (
     <>
-      <ProductWrapper>
-      <Icon onClick={addWhislist}>
-          {whislist ?  <AiFillHeart size={22} color="red"/> :  <AiOutlineHeart size={22} color="gray" />}
+    <ProductWrapper>
+    <Icon>
+          <AiOutlineHeart size={28}/>
         </Icon>
-        <WhiteBox href={url}>
-          <img src={images?.[0]} />
-          
-        </WhiteBox>
+      <WhiteBox href={url}>
+        <img src={images?.[0]} />
         
-        <ProductInfoBox>
-          <Title href={url}>{title}</Title>
-          <PriceRow>
-            <Price>${price}</Price>
-            <Button onClick={() => addProduct(_id, title)}>
-              <TextBtn type="button">Add to cart</TextBtn>
-            </Button>
-          </PriceRow>
-        </ProductInfoBox>
-      </ProductWrapper>
+      </WhiteBox>
+      <ProductInfoBox>
+        <Title href={url}>{title}</Title>
+        <PriceRow>
+          <Price>${price}</Price>
+          <Button onClick={() => addProduct(_id, title)}>
+          <TextBtn type='button'>Add to cart</TextBtn>
+          </Button>
+        </PriceRow>
+      </ProductInfoBox>
+    </ProductWrapper>
     </>
   );
 };

@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     const { user } = await getServerSession(req, res, authOptions);
     const info = await Infomation.findOne({ userEmail: user.email });
     if (info) {
-      res.json(info);
+      res.json(await Infomation.findOne({ userEmail: user.email }));
     } else {
       return;
     }

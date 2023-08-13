@@ -7,7 +7,6 @@ import Link from "next/link";
 import Table from "@/components/Table";
 import Input from "@/components/Input";
 import axios from "axios";
-import toast from 'react-hot-toast';
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -69,32 +68,28 @@ const SignInButton = styled.div`
   color: white;
 `;
 const Account = ({
- 
+  _id,
+  name: currentName,
+  email: currentEmail,
+  city: currentCity,
+  postalCode: currentPotalCode,
+  streetAddress: cureentSteet,
+  country: currentCountry,
 }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [city, setCity] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [streetAddress, setStreetAddress] = useState("");
-  const [country, setCountry] = useState("");
+  const [name, setName] = useState(currentName ||"");
+  const [email, setEmail] = useState(currentEmail || "");
+  const [city, setCity] = useState(currentCity || "");
+  const [postalCode, setPostalCode] = useState(currentPotalCode || "");
+  const [streetAddress, setStreetAddress] = useState( cureentSteet || "");
+  const [country, setCountry] = useState(currentCountry || "");
+  const [info, setInfo] = useState([])
   const { data: session } = useSession();
-  
-  useEffect(() => {
-    if (session) {
-      axios.get("/api/information").then((result) => {
-        setName(result.data.name)
-        setEmail(result.data.email)
-        setCity(result.data.city)
-        setPostalCode(result.data.postalCode)
-        setStreetAddress(result.data.streetAddress)
-        setCountry(result.data.country)
-      });
-    } else {
-      return
-    }
-   
-  }, []);
 
+  useEffect(() => {
+    axios.get("/api/information").then((result) => {
+      setInfo(result.data);
+    });
+  }, []);
   async function saveProfileData() {
     const data = {
       name,
@@ -108,7 +103,7 @@ const Account = ({
       alert('Plaese input values')
     } else {
       await axios.post("/api/information", data);
-      toast.success(`Updated`);
+
     }
   }
 
