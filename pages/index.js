@@ -3,27 +3,28 @@ import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Products";
 import NewProduct from "@/components/NewProduct";
 import { styled } from "styled-components";
-import { Category } from "@/models/Category";
-
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { WishedProduct } from "@/models/WishedProduct";
 
 const Container = styled.div`
 
 `
 
-export default function Home({ products, newProduct,categories }) {
+export default function Home({ products, newProducts, wishedProduct}) {
 
   return (
     <Container>
       {/* <FeaturedSlider /> */}
       <Featured product={products} />
-      <NewProduct newProduct={newProduct} />
+      <NewProduct newProduct={newProducts} wishedProduct={wishedProduct} />
     </Container>
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   await mongooseConnect();
-  const newProduct = await Product.find({}, null, {
+  const newProducts = await Product.find({}, null, {
     sort: { _id: -1 },
     limit: 8,
   });
@@ -31,14 +32,17 @@ export async function getServerSideProps() {
     sort: { price: -1 },
     limit: 1,
   });
-  const categories = await Category.find()
-  const mainCategories = categories.filter(c => !c.parent)
+  const session = await getServerSession(context.req, context.res, authOptions)
+  const wishedProduct = session?.user ? await WishedProduct.find({
+    userEmail: session.user.email,
+    product: newProducts.map(p => p._id.toString()),
+  }) : [];
+
   return {
     props: {
       products: JSON.parse(JSON.stringify(featuredProduct)),
-      newProduct: JSON.parse(JSON.stringify(newProduct)),
-      categories: JSON.parse(JSON.stringify(categories)),
-      mainCategories: JSON.parse(JSON.stringify(mainCategories))
+      newProducts: JSON.parse(JSON.stringify(newProducts)),
+      wishedProduct: wishedProduct.map(i => i.product.toString()),
     },
   };
 }

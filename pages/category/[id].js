@@ -5,9 +5,12 @@ import Title from "@/components/Title";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Category } from "@/models/Category";
 import { Product } from "@/models/Products";
+import { WishedProduct } from "@/models/WishedProduct";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
+import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
 
 const CategoryTitle = styled.div`
   margin-top: 14px;
@@ -43,6 +46,7 @@ export default function CategoryPage({
   categories,
   category,
   childCategory,
+  wishedProduct,
   products: originalProducts,
 }) {
   const propertiesToFill = [];
@@ -50,11 +54,11 @@ export default function CategoryPage({
   const maincat = categories.filter((c) => !c.parent);
 
   let selectCategory = maincat.find(({ _id }) => _id === category?.parent);
-  
+
   if (selectCategory) {
     propertiesToFill.push(...selectCategory?.properties);
   }
-  
+
   // console.log(propertiesToFill)
   const propertyToFill = propertiesToFill.map((p) => ({
     name: p.name,
@@ -109,14 +113,13 @@ export default function CategoryPage({
 
   return (
     <>
-      
       <Center>
         <FilterContainer>
           <CategoryTitle>
             <Title>{category.name}</Title>
           </CategoryTitle>
           <FilterWrapper>
-            {selectCategory ?(
+            {selectCategory ? (
               <>
                 {propertiesToFill.map((property) => (
                   <Filter key={property.name}>
@@ -139,30 +142,30 @@ export default function CategoryPage({
                   </Filter>
                 ))}
               </>
-            ) :
-            <>
-              {category.properties.map((property) => (
-                <Filter key={property.name}>
-                  <h1>{property.name}:</h1>
-                  <select
-                    onChange={(e) =>
-                      handleFilterChange(property.name, e.target.value)
-                    }
-                    // value={
-                    //   defaultFilterValues.find((f) => f.name == property.name).value
-                    // }
-                  >
-                    <option value="all">All</option>
-                    {property.values.map((value, index) => (
-                      <option key={index} value={value}>
-                        {value}
-                      </option>
-                    ))}
-                  </select>
-                </Filter>
-              ))}
-            </>
-}
+            ) : (
+              <>
+                {category.properties.map((property) => (
+                  <Filter key={property.name}>
+                    <h1>{property.name}:</h1>
+                    <select
+                      onChange={(e) =>
+                        handleFilterChange(property.name, e.target.value)
+                      }
+                      // value={
+                      //   defaultFilterValues.find((f) => f.name == property.name).value
+                      // }
+                    >
+                      <option value="all">All</option>
+                      {property.values.map((value, index) => (
+                        <option key={index} value={value}>
+                          {value}
+                        </option>
+                      ))}
+                    </select>
+                  </Filter>
+                ))}
+              </>
+            )}
 
             <Filter>
               <h1>Sort by:</h1>
@@ -177,7 +180,10 @@ export default function CategoryPage({
           </FilterWrapper>
         </FilterContainer>
 
-        <ProductGrid products={products}></ProductGrid>
+        <ProductGrid
+          wishedProduct={wishedProduct}
+          products={products}
+        ></ProductGrid>
       </Center>
     </>
   );
@@ -195,12 +201,20 @@ export async function getServerSideProps(context) {
 
   const products = await Product.find({ category: catIds });
 
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const wishedProduct = session?.user
+    ? await WishedProduct.find({
+        userEmail: session.user.email,
+        product: products.map((p) => p._id.toString()),
+      })
+    : [];
   return {
     props: {
       categories: JSON.parse(JSON.stringify(categories)),
       category: JSON.parse(JSON.stringify(category)),
       childCategory: JSON.parse(JSON.stringify(childCategory)),
       products: JSON.parse(JSON.stringify(products)),
+      wishedProduct: wishedProduct.map((i) => i.product.toString()),
     },
   };
 }

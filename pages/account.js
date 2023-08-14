@@ -8,6 +8,7 @@ import Table from "@/components/Table";
 import Input from "@/components/Input";
 import axios from "axios";
 import toast from 'react-hot-toast';
+import Title from "@/components/Title";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -93,7 +94,7 @@ const Account = ({
       return
     }
    
-  }, []);
+  }, [session]);
 
   async function saveProfileData() {
     const data = {
@@ -120,7 +121,7 @@ const Account = ({
         <Center>
           <ColumnsWrapper>
             <Box>
-              <h2>Whislist</h2>
+             <Title>Wishlist</Title>
 
               <Table>
                 <thead>

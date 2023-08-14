@@ -10,6 +10,7 @@ import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 import Link from "next/link";
 import { primary } from "@/lib/colors";
 import Footer from "@/components/Footer";
+import Title from "@/components/Title";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -225,7 +226,7 @@ const CartPage = () => {
       <Center>
         <ColumnsWrapper>
           <Box>
-            <h2>Cart</h2>
+           <Title>Cart</Title>
             {!cartProducts?.length > 0 && (
               <CartEmptyConatainer>
                 <div>

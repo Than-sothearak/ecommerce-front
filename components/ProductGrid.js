@@ -27,16 +27,18 @@ const StyledProductGrid = styled.div`
    
   } 
 `;
-export default function ProductGrid ({products}) {
+export default function ProductGrid ({products, wishedProduct=[]}) {
     return (
         <StyledProductGrid>
        
          {products?.length > 0 && products.map((product, index) => (
         
               
-            <ProductBox key={product._id} {...product} />
-          
-         
+            <ProductBox 
+            
+              key={product._id} 
+              {...product} 
+              wished={wishedProduct.includes(product._id)} />
          ))}
         
         </StyledProductGrid>

@@ -6,7 +6,7 @@ import styled from "styled-components";
 import WhiteBox from "@/components/WhiteBox";
 import ProductImages from "@/components/ProductImages";
 import Button from "@/components/Button";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/components/CartContext";
 import { AiOutlineHeart } from "react-icons/ai";
 import { LiaWarehouseSolid } from "react-icons/lia";
@@ -14,6 +14,12 @@ import { AiFillGift } from "react-icons/ai";
 import Link from "next/link";
 import { Category } from "@/models/Category";
 import HeaderNew from "@/components/Navbar";
+import { authOptions } from "../api/auth/[...nextauth]";
+import { WishedProduct } from "@/models/WishedProduct";
+import { getServerSession } from "next-auth";
+
+import axios from "axios";
+import WishlistIcon from "@/components/WishlisIcon";
 
 
 const ColWrapper = styled.div`
@@ -50,13 +56,7 @@ const ProductDetial = styled.div`
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 `;
-const Icon = styled.div`
-  width: 28px;
-  bottom: 10px;
-  float: right;
-  display: flex;
-  justify-content: end;
-`;
+
 const Hr = styled.div`
   margin: 20px 0;
   width: 100%;
@@ -89,8 +89,27 @@ const QuickProductDetial = styled.div`
       width: 50%;
   }
 `;
-export default function SingleProductPage({ product,categories }) {
+export default function SingleProductPage({ product,categories, wishedProduct}) {
+  
+  const wished = wishedProduct[0]?.product.includes(product._id)
+
+  const [isWish, setIsWhish] = useState(wished);
   const { addProduct } = useContext(CartContext);
+
+  function addWishlist(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const nextValue = !isWish;
+    try {
+      axios.post('/api/wishlist', {
+        product: product._id
+      }).then(() => {});
+    } catch (err) {
+    console.log(err)
+    }
+    setIsWhish(nextValue)
+  }
+
   const productProperty = Object.entries(product.properties);
   const listItems = productProperty.map((data, index) => (
     <ListItems key={index}>
@@ -101,7 +120,7 @@ export default function SingleProductPage({ product,categories }) {
         
     </ListItems>
   ));
- 
+  
   return (
     <>
       <HeaderNew categories={categories}/>
@@ -112,9 +131,7 @@ export default function SingleProductPage({ product,categories }) {
           </WhiteBox>
           <Container>
             <ProductDetial>
-              <Icon>
-                <AiOutlineHeart size={30} />
-              </Icon>
+             <WishlistIcon wished={isWish} addWishlist={addWishlist}/>
               <Title>{product.title}</Title>
               <p className="mt-5">{product.description}</p>
               <Hr>
@@ -177,10 +194,17 @@ export async function getServerSideProps(context) {
   await mongooseConnect();
   const categories = await Category.find();
   const product = await Product.findById(context.query.id)
+ 
+  const session = await getServerSession(context.req, context.res, authOptions)
+  const wishedProduct = session?.user ? await WishedProduct.find({
+    userEmail: session.user.email,
+    product: product._id
+  }) : 'false';
   return {
     props: {
       product: JSON.parse(JSON.stringify(product)),
       categories: JSON.parse(JSON.stringify(categories)),
+      wishedProduct: JSON.parse(JSON.stringify(wishedProduct))
     },
   };
 }

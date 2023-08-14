@@ -1,7 +1,7 @@
 import Link from "next/link";
 import styled from "styled-components";
 import Center from "@/components/Center";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CartContext } from "./CartContext";
 import BarsIcon from "./icons/Bars";
 import { useState } from "react";

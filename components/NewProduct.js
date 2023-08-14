@@ -11,17 +11,12 @@ margin: 30px 0 10px;
 font-weight: normal;`
 
 
-const NewProduct = ({ newProduct }) => {
-  const [getProduct, setGetProduct] = useState([]);
-  
-  useEffect(()=> {
-    setGetProduct(newProduct);
-  }, [newProduct])
+const NewProduct = ({ newProduct, wishedProduct }) => {
   
   return (
     <Center>
       <Title>New arrivals</Title>
-      <ProductGrid products={newProduct}/>
+      <ProductGrid products={newProduct} wishedProduct={wishedProduct}/>
     </Center>
   );
 };

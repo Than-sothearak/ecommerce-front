@@ -1,10 +1,15 @@
 import { styled } from "styled-components";
 import Link from "next/link";
 import Button from "./Button";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "./CartContext";
 import { AiOutlineHeart } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+import { WrenchIcon } from "@heroicons/react/24/outline";
+import WishlistIcon from "./WishlisIcon";
 
 const ProductWrapper = styled.div`
   width: 100%;
@@ -63,28 +68,39 @@ const TextBtn = styled.div`
   }
 `;
 
-const Icon = styled.div`
-  position: absolute;
-  margin: 10px;
+const WishlistButton = styled.button`
+  margin-left: 10px;
+  margin-top: 10px;
   cursor: pointer;
 `;
 
-const ProductBox = ({ _id, title, description, price, images }) => {
+const ProductBox = ({
+   _id, title, description, price, images, 
+   wished=false
+  }) => {
   const { addProduct } = useContext(CartContext);
-  const [whislist, setWhislis] = useState(false);
+  const [isWish, setIsWhish] = useState(wished);
+  const { push } = useRouter();
+  const {data: session} = useSession();
   const url = "/product/" + _id;
 
-  function addWhislist(e) {
+  function addWishlist(e) {
     e.preventDefault();
-     setWhislis(prev => !prev)
+    e.stopPropagation();
+    const nextValue = !isWish;
+    try {
+      axios.post('/api/wishlist', {
+        product: _id
+      }).then(() => {});
+    } catch (err) {
+    console.log(err)
+    }
+    setIsWhish(nextValue)
   }
-
   return (
     <>
       <ProductWrapper>
-      <Icon onClick={addWhislist}>
-          {whislist ?  <AiFillHeart size={22} color="red"/> :  <AiOutlineHeart size={22} color="gray" />}
-        </Icon>
+         <WishlistIcon addWishlist={addWishlist} wished={isWish}/>
         <WhiteBox href={url}>
           <img src={images?.[0]} />
           

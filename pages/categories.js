@@ -7,6 +7,9 @@ import Link from "next/link";
 import Title from "@/components/Title";
 import { Product } from "@/models/Products";
 import HeaderNew from "@/components/Navbar";
+import { getServerSession } from "next-auth";
+import { WishedProduct } from "@/models/WishedProduct";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 const CategoryGrid = styled.div`
   display: grid;
@@ -47,7 +50,7 @@ const ShowAllSquare = styled(Link)`
   text-decoration: none;
 `;
 
-const categories = ({ mainCategories, productOfCategories, categories }) => {
+const categories = ({ mainCategories, productOfCategories, categories, wishedProduct}) => {
   return (
     <>
       <HeaderNew
@@ -65,7 +68,10 @@ const categories = ({ mainCategories, productOfCategories, categories }) => {
             <CategoryGrid>
               {productOfCategories[cat._id].map((product, index) => (
                
-                  <ProductBox key={product._id} {...product} />
+                  <ProductBox 
+                  key={product._id} 
+                  {...product} 
+                  wished={wishedProduct.includes(product._id)}/>
                
               ))}
            
@@ -83,12 +89,13 @@ const categories = ({ mainCategories, productOfCategories, categories }) => {
 
 export default categories;
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   await mongooseConnect();
   const categories = await Category.find();
   const mainCategories = categories.filter((c) => !c.parent);
   const product = await Product.find()
   const productOfCategories = {};
+  const allFetchProductId = [];
 
   for (let mainCat of mainCategories) {
     const mainCatId = mainCat._id.toString();
@@ -101,20 +108,26 @@ export async function getServerSideProps() {
     // get the id of child category
     const childIds = categoriesHaveParent.map((c) => c._id.toString());
     const categoriesIds = [mainCatId, ...childIds];
-  
+    
     const products = await Product.find({ category: categoriesIds }, null, {
       limit: 3,
       sort: { _id: -1 },
     });
+    allFetchProductId.push(...products.map(p => p._id.toString()))
     productOfCategories[mainCatId] = products;
-    
   }
+
+  const session = await getServerSession(context.req, context.res, authOptions)
+  const wishedProduct = session?.user ? await WishedProduct.find({
+    userEmail: session.user.email,
+    product: allFetchProductId,
+  }) : [];
   return {
     props: {
       categories:JSON.parse(JSON.stringify(categories)),
-      product:JSON.parse(JSON.stringify(product)),
       mainCategories: JSON.parse(JSON.stringify(mainCategories)),
       productOfCategories: JSON.parse(JSON.stringify(productOfCategories)),
+      wishedProduct: wishedProduct.map(i => i.product.toString())
     },
   };
 }
