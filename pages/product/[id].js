@@ -20,6 +20,7 @@ import { getServerSession } from "next-auth";
 
 import axios from "axios";
 import WishlistIcon from "@/components/WishlisIcon";
+import { useSession } from "next-auth/react";
 
 
 const ColWrapper = styled.div`
@@ -95,19 +96,24 @@ export default function SingleProductPage({ product,categories, wishedProduct}) 
 
   const [isWish, setIsWhish] = useState(wished);
   const { addProduct } = useContext(CartContext);
+  const { data: session } = useSession();
 
   function addWishlist(e) {
     e.preventDefault();
     e.stopPropagation();
-    const nextValue = !isWish;
-    try {
-      axios.post('/api/wishlist', {
-        product: product._id
-      }).then(() => {});
-    } catch (err) {
-    console.log(err)
+    if (session) {
+      const nextValue = !isWish;
+      try {
+        axios.post('/api/wishlist', {
+          product: product._id
+        }).then(() => {});
+      } catch (err) {
+      console.log(err)
+      }
+      setIsWhish(nextValue)
+    } else {
+      alert('You must login first')
     }
-    setIsWhish(nextValue)
   }
 
   const productProperty = Object.entries(product.properties);
@@ -199,7 +205,7 @@ export async function getServerSideProps(context) {
   const wishedProduct = session?.user ? await WishedProduct.find({
     userEmail: session.user.email,
     product: product._id
-  }) : 'false';
+  }) : [];
   return {
     props: {
       product: JSON.parse(JSON.stringify(product)),

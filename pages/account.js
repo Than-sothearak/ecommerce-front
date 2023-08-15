@@ -3,12 +3,17 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { primary } from "@/lib/colors";
-import Link from "next/link";
 import Table from "@/components/Table";
 import Input from "@/components/Input";
 import axios from "axios";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 import Title from "@/components/Title";
+import { mongooseConnect } from "@/lib/mongoose";
+import { Product } from "@/models/Products";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { WishedProduct } from "@/models/WishedProduct";
+import { getServerSession } from "next-auth";
+import WishlistGrid from "@/components/WishlistGrid";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -48,8 +53,6 @@ const ButtonStyle = styled.button`
   margin-top: 20px;
 `;
 
-
-
 const SiginWrapper = styled.div`
   height: 300px;
   display: flex;
@@ -69,33 +72,34 @@ const SignInButton = styled.div`
   border-radius: 10px;
   color: white;
 `;
-const Account = ({
- 
-}) => {
+const Account = ({ wishedProduct }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
   const [country, setCountry] = useState("");
+  const [products, setProducts] = useState([]);
+
   const { data: session } = useSession();
-  
+
   useEffect(() => {
     if (session) {
       axios.get("/api/information").then((result) => {
-        setName(result.data.name)
-        setEmail(result.data.email)
-        setCity(result.data.city)
-        setPostalCode(result.data.postalCode)
-        setStreetAddress(result.data.streetAddress)
-        setCountry(result.data.country)
+        setName(result.data.name);
+        setEmail(result.data.email);
+        setCity(result.data.city);
+        setPostalCode(result.data.postalCode);
+        setStreetAddress(result.data.streetAddress);
+        setCountry(result.data.country);
       });
     } else {
-      return
+      return;
     }
-   
+    axios.get("/api/wishlist").then((res) => {
+      setProducts(res.data);
+    });
   }, [session]);
-
   async function saveProfileData() {
     const data = {
       name,
@@ -105,15 +109,13 @@ const Account = ({
       streetAddress,
       country,
     };
-    if (name == '' || email== '') {
-      alert('Plaese input values')
+    if (name == "" || email == "") {
+      alert("Plaese input values");
     } else {
       await axios.post("/api/information", data);
       toast.success(`Updated`);
     }
   }
-
-  
 
   if (session) {
     return (
@@ -121,7 +123,7 @@ const Account = ({
         <Center>
           <ColumnsWrapper>
             <Box>
-             <Title>Wishlist</Title>
+              <Title>Wishlist</Title>
 
               <Table>
                 <thead>
@@ -131,7 +133,14 @@ const Account = ({
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Product</td>
+                    {products.length > 0 ? (
+                      <WishlistGrid
+                        products={products.map((p) => p.product)}
+                        wishedProduct={wishedProduct}
+                      />
+                    ) : (
+                      <td>Your wihslist is empty</td>
+                    )}
                   </tr>
                 </tbody>
               </Table>
@@ -211,3 +220,25 @@ const Account = ({
 };
 
 export default Account;
+
+export async function getServerSideProps(context) {
+  await mongooseConnect();
+  const products = await Product.find();
+
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const wishedProduct = session?.user
+    ? await WishedProduct.find({
+        userEmail: session.user.email,
+        product: products.map((p) => p._id.toString()),
+      })
+    : [];
+  const wishedProductId = wishedProduct.map((i) => i.product.toString());
+  const productsWished = await Product.find({ _id: wishedProductId });
+
+  return {
+    props: {
+      wishedProduct: wishedProduct.map((i) => i.product.toString()),
+      products: JSON.parse(JSON.stringify(productsWished)),
+    },
+  };
+}

@@ -3,9 +3,12 @@ import Link from "next/link";
 import Button from "./Button";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "./CartContext";
+import { AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart } from "react-icons/ai";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
+import { WrenchIcon } from "@heroicons/react/24/outline";
 import WishlistIcon from "./WishlisIcon";
 
 const ProductWrapper = styled.div`
@@ -65,39 +68,33 @@ const TextBtn = styled.div`
   }
 `;
 
-const WishlistButton = styled.button`
-  margin-left: 10px;
-  margin-top: 10px;
-  cursor: pointer;
-`;
 
-const ProductBox = ({
+const WishlistBox = ({
    _id, title, description, price, images, 
-   wished=false
+   wished=false,
   }) => {
   const { addProduct } = useContext(CartContext);
   const [isWish, setIsWhish] = useState(wished);
-  const { push } = useRouter();
-  const {data: session} = useSession();
   const url = "/product/" + _id;
- 
+  const {data: session} = useSession();
+
   function addWishlist(e) {
     e.preventDefault();
     e.stopPropagation();
-    if (session) {
-      const nextValue = !isWish;
-      try {
-        axios.post('/api/wishlist', {
-          product: _id
-        }).then(() => {});
-      } catch (err) {
-      console.log(err)
-      }
-      setIsWhish(nextValue)
-    } else {
-      alert('You must login first')
+  if (session) {
+    const nextValue = !isWish;
+    try {
+      axios.post('/api/wishlist', {
+        product: _id
+      }).then(() => {});
+    } catch (err) {
+    console.log(err)
     }
- 
+    setIsWhish(nextValue)
+  } else {
+    alert('You must login first')
+  }
+    
   }
   return (
     <>
@@ -113,7 +110,7 @@ const ProductBox = ({
           <PriceRow>
             <Price>${price}</Price>
             <Button onClick={() => addProduct(_id, title)}>
-              <TextBtn type="button">Add to cart</TextBtn>
+        
             </Button>
           </PriceRow>
         </ProductInfoBox>
@@ -122,4 +119,4 @@ const ProductBox = ({
   );
 };
 
-export default ProductBox;
+export default WishlistBox;
