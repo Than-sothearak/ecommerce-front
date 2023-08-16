@@ -281,11 +281,10 @@ export default function Header({ mainCategories }) {
             </StyledNav>
            {session && (
               <NavAccountBox mobilenavactive={mobileNavActive}>
-              <NavAcc href={"/account"}>
+              <NavAcc href={"/account"} title="Your profile">
                 <BiUser size={24} />
                 <div>
                   <p className="text-md font-medium"> {session.user.name}</p>
-                  <button onClick={() => signOut() }>Sign out</button>
 
                 </div>{" "}
               </NavAcc>
