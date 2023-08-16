@@ -4,16 +4,16 @@ import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { primary } from "@/lib/colors";
 import Table from "@/components/Table";
-import Input from "@/components/Input";
 import axios from "axios";
-import toast from "react-hot-toast";
-import Title from "@/components/Title";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Products";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { WishedProduct } from "@/models/WishedProduct";
 import { getServerSession } from "next-auth";
 import WishlistGrid from "@/components/WishlistGrid";
+import Taps from "@/components/Taps";
+import SingleOrder from "@/components/SingleOrder";
+import Profile from "@/components/Profile";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -31,26 +31,6 @@ const Box = styled.div`
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   border-radius: 10px;
   padding: 30px;
-`;
-
-const CityHolder = styled.div`
-  display: flex;
-  gap: 5px;
-`;
-const ButtonStyle = styled.button`
-  border: 0;
-  padding: 8px 40px;
-  border-radius: 5px;
-  cursor: pointer;
-  align-items: center;
-  text-decoration: none;
-  font-size: 16px;
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background-color: gray;
-  margin-top: 20px;
 `;
 
 const SiginWrapper = styled.div`
@@ -80,8 +60,10 @@ const Account = ({ wishedProduct }) => {
   const [streetAddress, setStreetAddress] = useState("");
   const [country, setCountry] = useState("");
   const [products, setProducts] = useState([]);
-
+  const [activeTap, setActiveTap] = useState("Orders");
+  const [profileInfo, setProfileInfo] = useState([])
   const { data: session } = useSession();
+  const [orders, setOrder] = useState([]);
 
   useEffect(() => {
     if (session) {
@@ -92,6 +74,7 @@ const Account = ({ wishedProduct }) => {
         setPostalCode(result.data.postalCode);
         setStreetAddress(result.data.streetAddress);
         setCountry(result.data.country);
+        setProfileInfo(result.data)
       });
     } else {
       return;
@@ -99,23 +82,12 @@ const Account = ({ wishedProduct }) => {
     axios.get("/api/wishlist").then((res) => {
       setProducts(res.data);
     });
+
+    axios.get("/api/orders").then((result) => {
+      setOrder(result.data);
+    });
   }, [session]);
-  async function saveProfileData() {
-    const data = {
-      name,
-      email,
-      city,
-      postalCode,
-      streetAddress,
-      country,
-    };
-    if (name == "" || email == "") {
-      alert("Plaese input values");
-    } else {
-      await axios.post("/api/information", data);
-      toast.success(`Updated`);
-    }
-  }
+
 
   if (session) {
     return (
@@ -123,83 +95,49 @@ const Account = ({ wishedProduct }) => {
         <Center>
           <ColumnsWrapper>
             <Box>
-              <Title>Wishlist</Title>
-
+              <Taps
+                taps={["Orders", "Wishlist"]}
+                onChange={setActiveTap}
+                active={activeTap}
+              />
               <Table>
-                <thead>
-                  <tr>
-                    <th>Product</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    {products.length > 0 ? (
-                      <WishlistGrid
-                        products={products.map((p) => p.product)}
-                        wishedProduct={wishedProduct}
-                      />
-                    ) : (
-                      <td>Your wihslist is empty</td>
-                    )}
-                  </tr>
-                </tbody>
+                {activeTap === "Wishlist" && (
+                  <>
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        {products.length > 0 ? (
+                          <WishlistGrid
+                            products={products.map((p) => p.product)}
+                            wishedProduct={wishedProduct}
+                          />
+                        ) : (
+                          <td>Your wihslist is empty</td>
+                        )}
+                      </tr>
+                    </tbody>
+                  </>
+                )}
+                {activeTap === "Orders" && (
+                  <>
+                    <SingleOrder orders={orders} />
+                  </>
+                )}
               </Table>
             </Box>
-
-            <Box>
-              <h2>Profile information</h2>
-              <Input
-                required
-                type="text"
-                placeholder="Name"
-                value={name}
-                name="name"
-                onChange={(ev) => setName(ev.target.value)}
-              />
-              <Input
-                required
-                type="te xt"
-                placeholder="Email"
-                value={email}
-                name="email"
-                onChange={(ev) => setEmail(ev.target.value)}
-              />
-              <CityHolder>
-                <Input
-                  required
-                  type="text"
-                  placeholder="City"
-                  value={city}
-                  name="city"
-                  onChange={(ev) => setCity(ev.target.value)}
-                />
-                <Input
-                  required
-                  type="text"
-                  placeholder="Postal Code"
-                  value={postalCode}
-                  name="postalCode"
-                  onChange={(ev) => setPostalCode(ev.target.value)}
-                />
-              </CityHolder>
-              <Input
-                required
-                type="text"
-                placeholder="Street Address"
-                value={streetAddress}
-                name="streetAddress"
-                onChange={(ev) => setStreetAddress(ev.target.value)}
-              />
-              <Input
-                required
-                type="text"
-                placeholder="Country"
-                value={country}
-                name="country"
-                onChange={(ev) => setCountry(ev.target.value)}
-              />
-              <ButtonStyle onClick={saveProfileData}>Save</ButtonStyle>
-            </Box>
+            <Profile
+              profileInfo={profileInfo}
+              name={name}
+              email={email}
+              city={city}
+              postalCode={postalCode}
+              streetAddress={streetAddress}
+              country={country}
+            />
           </ColumnsWrapper>
         </Center>
       </>
