@@ -3,14 +3,15 @@ import { Product } from "@/models/Products";
 
 export default async function handler (req, res) {
     await mongooseConnect();
-    const {phrase} = req.query;
+    const {phrases} = req.query;
     
     const productQuery = {};
-    if (phrase) {
+    if (phrases) {
       productQuery['$or'] = [
-        {title:{$regex:phrase,$options:'i'}},
-        {desciption:{$regex:phrase,$options:'i'}}
+        {title:{$regex:phrases,$options:'i'}},
+        {desciption:{$regex:phrases,$options:'i'}}
       ]
     }
+  
     res.json(await Product.find(productQuery,))
 }

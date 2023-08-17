@@ -6,9 +6,6 @@ import { CartContext } from "@/components/CartContext";
 import { useState } from "react";
 import axios from "axios";
 import ProductGrid from "@/components/ProductGrid";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]";
-import { WishedProduct } from "@/models/WishedProduct";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Products";
 
@@ -189,10 +186,9 @@ const SearchIcon = styled.div`
   cursor: pointer;
 `;
 
-export default function SearchPage( {wishedProduct}) {
+export default function SearchPage() {
   const {inputs} = useContext(CartContext)
   const [products, setProducts] = useState([]);
-
   function search() {
     if (inputs.length > 2) {
       axios
@@ -215,26 +211,21 @@ export default function SearchPage( {wishedProduct}) {
       <Center>
         <div>
           <h1 className="mt-5 text-gray">{`Result query:(${products.length})`}</h1>
-          <ProductGrid products={products} wishedProduct={wishedProduct}/>
+          <ProductGrid products={products} />
         </div>
       </Center>
     </>
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   await mongooseConnect()
   const allProducts = await Product.find({}, null, { sort: { _id: -1 } });
-  const session = await getServerSession(context.req, context.res, authOptions)
-  const wishedProduct = session?.user ? await WishedProduct.find({
-    userEmail: session.user.email,
-    product: allProducts.map(p => p._id.toString()),
-  }) : [];
+
 
   return {
     props: {
       allProducts: JSON.parse(JSON.stringify(allProducts)),
-      wishedProduct: wishedProduct.map(i => i.product.toString())
     },
   };
 }

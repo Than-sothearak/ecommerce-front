@@ -11,6 +11,7 @@ import Link from "next/link";
 import { primary } from "@/lib/colors";
 import Footer from "@/components/Footer";
 import Title from "@/components/Title";
+import { useSession } from "next-auth/react";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -148,6 +149,7 @@ const CartPage = () => {
   const [streetAddress, setStreetAddress] = useState("");
   const [country, setCountry] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+  const {data: session} = useSession();
   useEffect(() => {
     if (cartProducts?.length > 0) {
       axios.post("/api/cart", { ids: cartProducts }).then((res) => {
@@ -176,24 +178,31 @@ const CartPage = () => {
     removeProduct(id);
   }
 
-  async function goToPayment() {
-    if (name == "" || email == "" || city == "" || country == "") {
-      alert("Please fill in the field");
-    } else {
-      const response = await axios.post("/api/checkout", {
-        name,
-        email,
-        city,
-        postalCode,
-        streetAddress,
-        country,
-        cartProducts,
-      });
-      if (response.data.url) {
-        window.location = response.data.url;
+ 
+    async function goToPayment() {
+      if (session) {
+        if (name == "" || email == "" || city == "" || country == "") {
+          alert("Please fill in the field");
+        } else {
+          const response = await axios.post("/api/checkout", {
+            name,
+            email,
+            city,
+            postalCode,
+            streetAddress,
+            country,
+            cartProducts,
+          });
+          if (response.data.url) {
+            window.location = response.data.url;
+          }
+        }
+      } else {
+        alert('You must sign in first!')
       }
+    
     }
-  }
+  
 
   let total = 0;
   for (const productId of cartProducts) {
