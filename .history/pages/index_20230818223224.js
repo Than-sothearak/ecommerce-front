@@ -50,10 +50,10 @@ export async function getServerSideProps(context) {
   return {
     props: {
       categories: JSON.parse(JSON.stringify(categories)),
-
       products: JSON.parse(JSON.stringify(featuredProduct)),
       newProducts: JSON.parse(JSON.stringify(newProducts)),
-      wishedProduct: wishedProduct.map((i) => i.product.toString()),
+      mainCategories: JSON.parse(JSON.stringify(mainCategories)),
+      productOfCategories: JSON.parse(JSON.stringify(productOfCategories)),
     },
   };
 }

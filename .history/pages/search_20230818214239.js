@@ -186,12 +186,11 @@ const SearchIcon = styled.div`
   cursor: pointer;
 `;
 
-
+console.log(encodeURIComponent(inputs))
 
 export default function SearchPage() {
   const {inputs} = useContext(CartContext)
   const [products, setProducts] = useState([]);
-
   function search() {
     if (inputs.length > 2) {
       axios
