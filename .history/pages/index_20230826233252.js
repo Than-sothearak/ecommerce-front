@@ -36,7 +36,7 @@ export async function getServerSideProps(context) {
   const categories = await Category.find();
   const mainCategories = categories.filter((c) => !c.parent);
   const products = await Product.find();
-  const featuredProductId = await Setting.find()
+  const featuredProductId = Setting.find()
   const session = await getServerSession(context.req, context.res, authOptions);
   const wishedProduct = session?.user
     ? await WishedProduct.find({

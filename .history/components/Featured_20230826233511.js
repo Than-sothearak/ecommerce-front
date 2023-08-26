@@ -87,15 +87,13 @@ const TextBtn = styled.div`
     display: none;
   }
 `;
-const Featured = ({ products, featuredProductId }) => {
+const Featured = ({ product, featuredProductId }) => {
   const { addProduct } = useContext(CartContext);
-  
-  const featuredProducts = products.filter(p => {
-    return  p._id === featuredProductId[0].value
+  const featuredProduct = product.map(p => {
+    p._id === featuredProductId.value
   });
-  
-  const featuredProduct = featuredProducts[0]
 
+  
   function addToCart() {
     addProduct(featuredProduct._id, featuredProduct.title);
   }

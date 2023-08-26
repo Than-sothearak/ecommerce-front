@@ -95,6 +95,7 @@ const Featured = ({ products, featuredProductId }) => {
   });
   
   const featuredProduct = featuredProducts[0]
+  console.log(featuredProduct)
 
   function addToCart() {
     addProduct(featuredProduct._id, featuredProduct.title);

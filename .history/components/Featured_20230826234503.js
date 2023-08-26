@@ -89,12 +89,12 @@ const TextBtn = styled.div`
 `;
 const Featured = ({ products, featuredProductId }) => {
   const { addProduct } = useContext(CartContext);
-  
-  const featuredProducts = products.filter(p => {
-    return  p._id === featuredProductId[0].value
+  const featuredProduct = products.map(p => {
+    p._id
   });
   
-  const featuredProduct = featuredProducts[0]
+
+  console.log(products)
 
   function addToCart() {
     addProduct(featuredProduct._id, featuredProduct.title);
