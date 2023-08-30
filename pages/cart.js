@@ -12,6 +12,8 @@ import { primary } from "@/lib/colors";
 import Footer from "@/components/Footer";
 import Title from "@/components/Title";
 import { useSession } from "next-auth/react";
+import { mongooseConnect } from "@/lib/mongoose";
+import { Setting } from "@/models/Setting";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -138,8 +140,8 @@ const Button = styled(Link)`
   border-radius: 20px;
 `;
 
-const CartPage = () => {
-  const { cartProducts, addProduct, removeProduct, clearCart } =
+const CartPage = (shippingFee) => {
+  const { cartProducts, addProduct, removeProduct, clearCart,  } =
     useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [name, setName] = useState("");
@@ -178,7 +180,7 @@ const CartPage = () => {
     removeProduct(id);
   }
 
- 
+
     async function goToPayment() {
       if (session) {
         if (name == "" || email == "" || city == "" || country == "") {
@@ -204,12 +206,14 @@ const CartPage = () => {
     }
   
 
-  let total = 0;
+  let subtotal = 0;
   for (const productId of cartProducts) {
     const price = products.find((p) => p._id == productId)?.price || 0;
-    total += price;
+    subtotal += price;
   }
-
+  
+  const total = subtotal + parseInt(shippingFee.shippingFee.value || 0);
+ 
   if (isSuccess) {
     return (
       <>
@@ -292,11 +296,28 @@ const CartPage = () => {
                     </tr>
                   ))}
                   <tr>
+                    
+                    <td>Subtotal</td>
                     <td></td>
-                    <td>Total</td>
                     <td>
-                      <h2>${total}</h2>
+                      <h2>${subtotal}</h2>
                     </td>
+                    
+                  </tr>
+                  <tr>
+                 
+                  <td>Shipping fee</td>
+                  <td></td>
+                  <td>
+                   ${shippingFee.shippingFee.value}
+                  </td>
+                  </tr>
+                  <tr></tr>
+              
+                  <tr className="text-xl font-bold">
+                    <td>Total</td>
+                    <td></td>
+                    <td>${total}</td>
                   </tr>
                 </tbody>
               </Table>
@@ -367,4 +388,15 @@ const CartPage = () => {
 };
 
 export default CartPage;
+
+export async function getServerSideProps() {
+  await mongooseConnect();
+  const shippingFee = await Setting.findOne({name: 'shippingFee'})
+  return {
+    props: {
+      shippingFee: JSON.parse(JSON.stringify(shippingFee))
+      }
+  }
+ 
+}
 
