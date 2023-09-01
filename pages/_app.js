@@ -6,13 +6,23 @@ import { SessionProvider } from "next-auth/react";
 
 const GlobalStyle = createGlobalStyle`
 
+
+
+  @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300&family=Rubik+Iso&display=swap');
+
+
 body{
-  
-  font-family: 'Roboto', sans-serif;
+  padding: 0;
+  margin: 0;
+
+  font-family: HCo Gotham SSm,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;;
 }
 `;
 
-export default function App({ Component, pageProps: {session, ...pageProps}}) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}) {
   return (
     <>
       <GlobalStyle />

@@ -8,7 +8,6 @@ import { useState } from "react";
 import { BsCart } from "react-icons/bs";
 import { BiLogOut, BiUser } from "react-icons/bi";
 import { BiSearchAlt2 } from "react-icons/bi";
-import { AiFillCloseSquare } from "react-icons/ai";
 import { Toaster } from "react-hot-toast";
 import { primary } from "@/lib/colors";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -20,175 +19,26 @@ import {
   ShoppingBagIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-
-const StyledHeader = styled.header`
-  letter-spacing: 0.5px;
-  background-color: #222;
-  font-size: 0.9rem;
-`;
-const Logo = styled(Link)`
-  align-items: center;
-  color: #fff;
-  text-decoration: none;
-`;
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 0;
-`;
-const StyledNav = styled.nav`
-  display: none;
-  width: 100%;
-  align-items: center;
-  gap: 20px;
-
-  @media screen and (min-width: 768px) {
-    right: 10px;
-  }
-  @media screen and (min-width: 1024px) {
-    display: flex;
-    position: static;
-    padding: 0;
-  }
-`;
-const NavLink = styled(Link)`
-  display: block;
-  color: #fff;
-  text-decoration: none;
-  padding: 10px 0;
-  &:hover {
-    color: ${primary};
-  }
-
-  @media screen and (min-width: 1024px) {
-    padding: 0;
-  }
-`;
-const NavButton = styled.button`
-  background-color: transparent;
-  border: 0;
-  color: white;
-  cursor: pointer;
-  position: relative;
-  z-index: 4;
-  @media screen and (min-width: 1024px) {
-    display: none;
-  }
-`;
-const NavAccountBox = styled.div`
-  position: relative;
-  bottom: 0;
-  
- 
-  align-items: center;
-  gap: 20px;
-  display: flex;
-  @media screen and (min-width: 768px) {
-    display: flex;
-    position: static;
-    padding: 0;
-  }
-`;
-const NavCart = styled(Link)`
-  padding: 14px 15px;
-  border-radius: 30px;
-  height: 54px;
-  display: flex;
-  align-items: center;
-  position: relative;
-`;
-const NavAcc = styled(Link)`
-  display: none;
-  color: #fff;
-  text-decoration: none;
-  button {
-    &:hover {
-      background-color: white;
-      color: #096fd3;
-      border-radius: 2px;
-    }
-  }
-@media screen and (min-width: 768px) {
-    display: flex;
-    position: static;
-    padding: 0;
-  }
-  @media screen and (min-width: 640px) {
-    padding: 14px 15px;
-    border-radius: 30px;
-    height: 54px;
-    color: white;
-    background-color: transparent;
-    gap: 10px;
-    align-items: center;
-    &:hover {
-      background-color: #096fd3;
-    }
-  }
-`;
-const CartNum = styled.p`
-  font-size: 0.9rem;
-  text-align: center;
-  background-color: #ffa502;
-  width: 20px;
-  height: 20px;
-  border-radius: 100%;
-  position: absolute;
-  left: 28px;
-  bottom: 28px;
-`;
-const SearchbarBox = styled.div`
-  display: flex;
-  background-color: white;
-  align-items: center;
-  margin: 0 20px 0 20px;
-  width: 100%;
-  color: white;
-  font-weight: normal;
-  z-index: 3;
-  height: 40px;
-  border-radius: 40px;
-  justify-content: space-between;
-
-  @media screen and (min-width: 768px) {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-`;
-const SearchBox = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-`;
-const SearchInput = styled.input`
-  margin-left: 20px;
-  width: 100%;
-  outline: none;
-  color: black;
-  background: transparent;
-  padding: 0 10px;
-`;
-
-const SearchIcon = styled(Link)`
-  width: 30px;
-  height: auto;
-  color: gray;
-`;
+import DropDownNew from "./DropDown";
+import axios from "axios";
 
 
-export default function Header({ mainCategories }) {
+export default function Header() {
   const { cartProducts } = useContext(CartContext);
   const [open, setOpen] = useState(false);
   const { inputSearch } = useContext(CartContext);
-
+  const [categories, setCategories] = useState([]);
   const { data: session } = useSession();
 
   function handleChange(e) {
     inputSearch(e);
   }
-
+  useEffect(() => {
+  axios.get('api/categories').then(res => {
+    setCategories(res.data)
+  })
+  }, [])
+  
   return (
     <>
       <StyledHeader>
@@ -214,6 +64,7 @@ export default function Header({ mainCategories }) {
               <NavLink href={"/"}>Home</NavLink>
               <NavLink href={"/products"}>All products</NavLink>
               <NavLink href={"/categories"}>Categories</NavLink>
+              {/* <DropDownNew options={categories}/> */}
             </StyledNav>
 
             {session && (
@@ -226,7 +77,7 @@ export default function Header({ mainCategories }) {
                 </NavAcc>
 
                 <NavCart href={"/cart"}>
-                  <BsCart size={28} color="white" />
+                  <BsCart size={28} color="black" />
                   <CartNum>{cartProducts.length}</CartNum>
                 </NavCart>
               </NavAccountBox>
@@ -242,7 +93,7 @@ export default function Header({ mainCategories }) {
                 </NavAcc>
 
                 <NavCart href={"/cart"}>
-                  <BsCart size={28} color="white" />
+                  <BsCart size={28} color="black" />
                   <CartNum>{cartProducts.length}</CartNum>
                 </NavCart>
               </NavAccountBox>
@@ -324,26 +175,24 @@ export default function Header({ mainCategories }) {
                               {session && (
                                 <div className="flex flex-col gap-5">
                                   <Link
-                                  href={"/account"}
-                                  className="flex items-center gap-2"
-                                >
-                                  <BiUser size={24} />
-                                  <div>
-                                    <p className="text-md font-medium">
-                                 
-                                      {session.user.name}
-                                    </p>
-                                  </div>
-                                
-                                </Link>
-                            
-                            
+                                    href={"/account"}
+                                    className="flex items-center gap-2"
+                                  >
+                                    <BiUser size={24} />
+                                    <div>
+                                      <p className="text-md font-medium">
+                                        {session.user.name}
+                                      </p>
+                                    </div>
+                                  </Link>
+
                                   <div className="flex items-center gap-2">
-                                  <BiLogOut  size={24}/>
-                                  <button onClick={() => signOut()}>Sign out</button>
+                                    <BiLogOut size={24} />
+                                    <button onClick={() => signOut()}>
+                                      Sign out
+                                    </button>
+                                  </div>
                                 </div>
-                                </div>
-                                
                               )}
                             </div>
                             <div>
@@ -378,3 +227,155 @@ export default function Header({ mainCategories }) {
     </>
   );
 }
+const StyledHeader = styled.header`
+  letter-spacing: 0.5px;
+  background-color: white;
+  font-size: 0.9rem;
+  color: rgba(55, 65, 81, var(--tw-text-opacity));
+`;
+const Logo = styled(Link)`
+  align-items: center;
+  text-decoration: none;
+`;
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+`;
+const StyledNav = styled.nav`
+  display: none;
+  width: 100%;
+  align-items: center;
+  gap: 20px;
+  color: rgba(55, 65, 81, var(--tw-text-opacity));
+ 
+
+  @media screen and (min-width: 768px) {
+    right: 10px;
+  }
+  @media screen and (min-width: 1024px) {
+    display: flex;
+    position: static;
+    padding: 0;
+  }
+`;
+const NavLink = styled(Link)`
+  display: block;
+  text-decoration: none;
+  padding: 10px 0;
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgba(249, 250, 251, var(--tw-bg-opacity));
+  }
+
+  @media screen and (min-width: 1024px) {
+    padding: 0;
+  }
+`;
+
+const NavButton = styled.button`
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+  z-index: 4;
+  @media screen and (min-width: 1024px) {
+    display: none;
+  }
+`;
+const NavAccountBox = styled.div`
+  position: relative;
+  bottom: 0;
+  align-items: center;
+  gap: 20px;
+  display: flex;
+  @media screen and (min-width: 768px) {
+    display: flex;
+    position: static;
+    padding: 0;
+  }
+`;
+const NavCart = styled(Link)`
+  padding: 14px 15px;
+  border-radius: 30px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  position: relative;
+`;
+const NavAcc = styled(Link)`
+  display: none;
+  text-decoration: none;
+
+  @media screen and (min-width: 768px) {
+    display: flex;
+    position: static;
+    padding: 0;
+  }
+  @media screen and (min-width: 640px) {
+    padding: 14px 15px;
+    border-radius: 30px;
+    height: 54px;
+    background-color: transparent;
+    gap: 10px;
+    align-items: center;
+    &:hover {
+      background-color: #096fd3;
+      color: white;
+    }
+  }
+`;
+const CartNum = styled.p`
+  font-size: 0.9rem;
+  text-align: center;
+  background-color: #ffa502;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  position: absolute;
+  left: 28px;
+  bottom: 28px;
+`;
+const SearchbarBox = styled.div`
+  display: flex;
+  border: 1px solid gray;
+  background-color: white;
+  align-items: center;
+  margin: 0 20px 0 20px;
+  width: 100%;
+  color: white;
+  font-weight: normal;
+  z-index: 3;
+  height: 40px;
+  border-radius: 40px;
+  justify-content: space-between;
+
+  @media screen and (min-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+`;
+const SearchBox = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
+const SearchInput = styled.input`
+  margin-left: 20px;
+  width: 100%;
+  outline: none;
+  background: transparent;
+  padding: 0 10px;
+`;
+
+const SearchIcon = styled(Link)`
+  width: 30px;
+  height: auto;
+  color: gray;
+`;

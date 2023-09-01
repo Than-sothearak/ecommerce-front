@@ -32,8 +32,15 @@ const Title = styled.div`
   color: inherit;
   text-decoration: none;
   font-weight: normal;
+  white-space: nowrap; 
+  width: 240px; 
+  text-overflow: ellipsis; 
+  overflow: hidden;
   font-size: 0.9rem;
   margin: 0;
+  @media screen and (max-width: 868px) {
+    width: 200px; 
+  }
 `;
 const ProductInfoBox = styled.div`
   color: #2d3436;

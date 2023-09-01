@@ -7,7 +7,7 @@ import { BsFacebook, BsInstagram, BsTwitter, BsTiktok } from "react-icons/bs";
 import Link from "next/link";
 
 const FooterWrapper = styled.div`
-  background-color: #222;
+  background-color: #F9F9F9 ;
   padding: 30px;
   margin-top: 80px;
   font-size: 0.9rem;
@@ -26,7 +26,7 @@ const FooterContainer = styled.div`
   }
   ul {
     padding-top: 20px;
-    color: #747d8c;
+    color: #4A4A4A ;
     cursor: pointer;
   }
   li {
@@ -45,12 +45,14 @@ const LogoWrapper = styled.div`
     height: 180px;
   }
   p {
+    color: #000;
     text-align: center;
     margin-top: 20px;
   }
 `;
-const InfoWrapper = styled.div``;
-
+const InfoWrapper = styled.div`
+color: #4A4A4A;
+`
 const SocialWrapper = styled.div`
   padding: 10px;
   display: flex;
@@ -60,6 +62,7 @@ const SocialWrapper = styled.div`
 `;
 
 const SocialLink = styled(Link)`
+color: #4A4A4A;
   &:hover {
     color: ${primary};
   }
@@ -148,7 +151,7 @@ const Footer = () => {
       </FooterWrapper>
       <FooterButtom>
         <Center>
-          <p className="text-sm">© 2023, e-commerce-front. All Rights Reserved.</p>
+          <p className="text-s">© 2023, e-commerce-front. All Rights Reserved.</p>
         </Center>
       </FooterButtom>
     </>

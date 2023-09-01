@@ -129,7 +129,7 @@ export default function CategoryPage({
                         handleFilterChange(property.name, e.target.value)
                       }
                       value={
-                        filtersValues.find((f) => f.name == property.name).value
+                        filtersValues?.find((f) => f.name == property?.name).value
                       }
                     >
                       <option value="all">All</option>

@@ -106,12 +106,12 @@ const Featured = ({ products, featuredProductId }) => {
           <Column>
             <div>
               <RevealWrapper delay={20}  duration={3000}>
-                <Title>{featuredProduct.title}</Title>
-                <Desc>{featuredProduct.description}</Desc>
+                <Title>{featuredProduct?.title}</Title>
+                <Desc>{featuredProduct?.description}</Desc>
               </RevealWrapper>
               <RevealWrapper delay={80} duration={3000}>
                 <ButtonWrapper>
-                  <ButtonLink href={"/product/" + featuredProduct._id}>
+                  <ButtonLink href={"/product/" + featuredProduct?._id}>
                     Read more
                   </ButtonLink>
                   <Button onClick={addToCart}>
@@ -123,7 +123,7 @@ const Featured = ({ products, featuredProductId }) => {
           </Column>
           <RevealWrapper delay={80} duration={3000}>
             <Column>
-              <img src={featuredProduct.images?.[0]} />
+              <img src={featuredProduct?.images?.[0]} />
             </Column>
           </RevealWrapper>
         </ColumnsWrapper>
