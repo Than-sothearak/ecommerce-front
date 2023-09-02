@@ -5,7 +5,7 @@ const StyledDiv = styled.div`
   max-width: 1280px;
   letter-spacing: 0.3px;
   margin: 0 auto;
-  padding: 0 10px;
+  padding: 0;
   @media screen and (min-width: 312px) {
     padding: 0 20px;
   }
@@ -18,7 +18,7 @@ const StyledDiv = styled.div`
   }
   
   @media screen and (min-width: 1024px) {
-    padding: 10;
+    padding: 10px;
   }
 
 `;

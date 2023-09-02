@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import DropDownTitle from "./DropDownTitle";
 function DropDownNew({ options }) {
-  const computer = options.filter((c) => c.name === "Computer")[0];
-  const subComputer = options.filter((c) => c.parent?.name === computer.name);
+  const gamingPcs = options.filter((c) => c.name === "Gaming PCs")[0];
+  const subGamingPcs = options.filter((c) => c.parent?.name === gamingPcs.name);
 
   const gamingLaptop = options.filter((c) => c.name === "Gaming Laptops")[0];
   const subGamingLaptop = options.filter(
@@ -12,7 +12,7 @@ function DropDownNew({ options }) {
   return (
     <>
       <div>
-        <DropDownTitle options={computer} subCategory={subComputer} />
+        <DropDownTitle options={gamingPcs} subCategory={subGamingPcs} />
       </div>
            
     </>

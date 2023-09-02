@@ -14,7 +14,7 @@ const GamingPcs = ({ mainCategories, wishedProduct, productOfCategories }) => {
   const products = Object.entries(productOfCategories);
   const p = products.pop()
   const product = p.pop()
-  console.log(product)
+
   return (
     <>
       <Center>

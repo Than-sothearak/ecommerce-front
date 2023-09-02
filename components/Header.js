@@ -34,7 +34,7 @@ export default function Header() {
     setCategories(res.data)
   })
 
-  }, [categories])
+  }, [])
   
   return (
     <>

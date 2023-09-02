@@ -4,20 +4,21 @@ import { BsCart4 } from "react-icons/bs";
 
 export const ButtonStyle = css`
    
-  padding: 8px 12px;
-  border-radius: 5px;
+  padding: 5px 12px;
+  border: 1px solid red;
+  border-radius: 20px;
   cursor: pointer;
   align-items: center;
   text-decoration: none;
-  font-size: 14px;
-  color: white;
+  font-size: 12px;
+  color: red;
   font-weight: bold;
   display: flex;
   align-items: center;
   gap: 5px;
-  background-color: ${primary};
   transition: 0.3s all ease-out;
   &:hover {
+    border: none;
    transition: 0.3s all ease-in;
    transform: scale(1.1);
    background-color: ${primary};
@@ -31,6 +32,6 @@ const StyledButton = styled.button`
 
 export default function Button({children,...rest}) {
   return (
-    <StyledButton  {...rest}>  <BsCart4 size={24}/> {children} </StyledButton>
+    <StyledButton  {...rest}>  <BsCart4 size={18}/> {children} </StyledButton>
   );
 }
