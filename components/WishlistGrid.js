@@ -35,10 +35,10 @@ export default function WishlistGrid ({products, wishedProduct=[]}) {
         
               
             <WishlistBox
-              key={product._id} 
+              key={product?._id} 
               {...product} 
 
-              wished={wishedProduct.includes(product._id)} />
+              wished={wishedProduct.includes(product?._id)} />
          ))}
         
         </StyledProductGrid>

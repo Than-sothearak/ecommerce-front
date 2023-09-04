@@ -1,19 +1,48 @@
 import Center from "@/components/Center";
-import Footer from "@/components/Footer";
 import ProductGrid from "@/components/ProductGrid";
 import Title from "@/components/Title";
 import { mongooseConnect } from "@/lib/mongoose";
-import { Category } from "@/models/Category";
-import { Product } from "@/models/Products";
-import { WishedProduct } from "@/models/WishedProduct";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { authOptions } from "../api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
+import { Category } from "@/models/Category";
+import { Product } from "@/models/Products";
+import { WishedProduct } from "@/models/WishedProduct";
+import { authOptions } from "../api/auth/[...nextauth]";
+import PcProductGrid from "@/components/PcProductGrid";
 
-
-export default function CategoryPage({
+const CategoryTitle = styled.div`
+  margin-top: 14px;
+  margin-bottom: 0;
+  align-items: center;
+`;
+const FilterContainer = styled.div`
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+`;
+const FilterWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: small;
+  z-index: -1;
+`;
+const Filter = styled.div`
+  background-color: #eee;
+  padding: 8px;
+  border-radius: 5px;
+  display: flex;
+  h1 {
+    font-weight: bold;
+  }
+  select {
+    background-color: transparent;
+  }
+`;
+export default function LaptopPage({
   categories,
   category,
   childCategory,
@@ -23,7 +52,9 @@ export default function CategoryPage({
   const propertiesToFill = [];
 
   const maincat = categories.filter((c) => !c.parent);
+
   let selectCategory = maincat.find(({ _id }) => _id === category?.parent);
+
   if (selectCategory) {
     propertiesToFill.push(...selectCategory?.properties);
   }
@@ -60,9 +91,8 @@ export default function CategoryPage({
       return;
     }
     const catIds = [category._id, ...(childCategory?.map((c) => c._id) || [])];
-
     const params = new URLSearchParams();
-    
+   
     params.set("categories", catIds.join(","));
     params.set("sort", sort);
     filtersValues.forEach((f) => {
@@ -121,9 +151,9 @@ export default function CategoryPage({
                       onChange={(e) =>
                         handleFilterChange(property.name, e.target.value)
                       }
-                      value={
-                        defaultFilterValues.find((f) => f.name == property.name).value
-                      }
+                      // value={
+                      //   defaultFilterValues.find((f) => f.name == property.name).value
+                      // }
                     >
                       <option value="all">All</option>
                       {property.values.map((value, index) => (
@@ -162,7 +192,7 @@ export default function CategoryPage({
 export async function getServerSideProps(context) {
   await mongooseConnect();
   const categories = await Category.find();
-  const category = await Category.findById(context.query.id);
+  const category = await Category.findById(context.query.gaminglaptopid);
  
   //find child category
   const childCategory = await Category.find({ parent: category._id });
@@ -189,33 +219,3 @@ export async function getServerSideProps(context) {
     },
   };
 }
-const CategoryTitle = styled.div`
-  margin-top: 14px;
-  margin-bottom: 0;
-  align-items: center;
-`;
-const FilterContainer = styled.div`
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-`;
-const FilterWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  font-size: small;
-  z-index: -1;
-`;
-const Filter = styled.div`
-  background-color: #eee;
-  padding: 8px;
-  border-radius: 5px;
-  display: flex;
-  h1 {
-    font-weight: bold;
-  }
-  select {
-    background-color: transparent;
-  }
-`;

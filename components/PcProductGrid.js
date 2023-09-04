@@ -4,12 +4,23 @@ import PcBox from "./PcBox";
 import { grayBorder } from "@/lib/colors";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+  BsFillArrowLeftSquareFill,
+  BsFillArrowRightSquareFill,
+  BsSearch,
+} from "react-icons/bs";
 
 export default function PcProductGrid({
   products: originalProducts,
   wishedProduct = [],
   categories,
+  childCategory,
+  page,
+  handlePrevious,
+  handleNext,
+  pageCount,
 }) {
+
   const defaultFilterValues = categories.map((a) =>
     a.properties.map((p) => ({
       name: p.name,
@@ -33,13 +44,13 @@ export default function PcProductGrid({
     });
     setFiltersChanged(true);
   }
-  console.log(filtersValues);
+
   useEffect(() => {
     if (!filtersChanged) {
       return;
     }
-    const catIds = categories.map((c) => c._id);
-
+    const catIds = [categories[0]._id, ...(childCategory?.map((c) => c._id) || [])];
+  
     const params = new URLSearchParams();
 
     params.set("categories", catIds.join(","));
@@ -53,7 +64,7 @@ export default function PcProductGrid({
     axios.get(url).then((res) => {
       setGetProducts(res.data);
     });
-  }, [filtersValues, sort]);
+  }, [filtersValues, sort,page]);
 
   function handleChange(value) {
     setSort(value);
@@ -67,6 +78,7 @@ export default function PcProductGrid({
       }));
     });
   }
+  
   return (
     <Container>
       <FilterWrapper>
@@ -113,11 +125,29 @@ export default function PcProductGrid({
           </SortBy>
 
           <NextPage>
-            <button>{`<<`}</button>
+               <button 
+             
+               onClick={handlePrevious}>
+                <BsFillArrowLeftSquareFill
+                  size={32}
+                  color={
+                    page === Math.ceil(pageCount) - 1 ? "#808080" : "#DCDCDC"
+                  }
+                />
+              </button>
             <TextButton>
-              <h1>Page 1 of 3</h1>
+              <div>{page+1}</div>
             </TextButton>
-            <button>{`>>`}</button>
+            <button
+                onClick={handleNext}
+              >
+                <BsFillArrowRightSquareFill
+                  size={32}
+                  color={
+                    page === Math.ceil(pageCount) - 1 ? "#DCDCDC" : "#808080"
+                  }
+                />
+              </button>
           </NextPage>
         </SortFilter>
         <StyledProductGrid>

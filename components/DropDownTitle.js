@@ -16,6 +16,7 @@ function DropDownTitle({
   defaultText = "Categories",
   options,
   subCategory,
+  url,
 }) {
   const [actionDropDown, setActionDropDown] = useState(false);
   const [isShown, setIsShown] = useState(false);
@@ -58,7 +59,7 @@ function DropDownTitle({
         <DropDownButton  
            onClick={dropdown}   
         >
-          Gaming PCs
+         {mainDefaultText?.name}
           <SVG
        
           >
@@ -87,7 +88,7 @@ function DropDownTitle({
                 onMouseEnter={() => setActionDropDown(true)}
                 onMouseLeave={() => setActionDropDown(false)}  
                >
-                  <Link href={'/gaming-pcs/'}>
+                  <Link href={url}>
                 <OptionRow>
                 
                   <Label>{`All ${options?.name}`}</Label>
@@ -111,7 +112,7 @@ function DropDownTitle({
                  {subCategory
                    .map((option, index) => (
                  <>
-                    <Link href={'/gaming-pcs/'+ option?._id}>
+                    <Link href={url+"/"+ option?._id}>
                      <OptionRow
                        key={index}
                      >

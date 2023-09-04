@@ -1,5 +1,4 @@
 import Center from "@/components/Center";
-import ProductBox from "@/components/ProductBox";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Category } from "@/models/Category";
 import { styled } from "styled-components";
@@ -9,45 +8,9 @@ import { Product } from "@/models/Products";
 import { getServerSession } from "next-auth";
 import { WishedProduct } from "@/models/WishedProduct";
 import { authOptions } from "./api/auth/[...nextauth]";
+import PcBox from "@/components/PcBox";
+import { primary } from "@/lib/colors";
 
-const CategoryGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  @media screen and (min-width: 768px) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-  }
-`;
-
-const CategoryTitle = styled.div`
-  display: flex;
-  margin-top: 14px;
-  margin-bottom: 0;
-  align-items: center;
-  gap: 10px;
-  h2 {
-    margin-bottom: 10px;
-    margin-top: 10px;
-  }
-  a {
-    color: #555;
-    display: inline-block;
-  }
-`;
-const CategoryWrapper = styled.div`
-  margin-bottom: 40px;
-`;
-
-const ShowAllSquare = styled(Link)`
-  background-color: #ddd;
-  height: 160px;
-  border-radius: 10px;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  color: #555;
-  text-decoration: none;
-`;
 
 const Categories = ({ mainCategories, productOfCategories, categories, wishedProduct}) => {
   return (
@@ -57,14 +20,14 @@ const Categories = ({ mainCategories, productOfCategories, categories, wishedPro
           <CategoryWrapper key={cat._id}>
             <CategoryTitle>
               <Title>{cat.name}</Title>
-              <div>
+              <LinkWrapper>
                 <Link href={"/category/" + cat._id}>Show all</Link>
-              </div>
+              </LinkWrapper>
             </CategoryTitle>
             <CategoryGrid>
               {productOfCategories[cat._id].map((product, index) => (
                
-                  <ProductBox 
+                  <PcBox 
                   key={product._id} 
                   {...product} 
                   wished={wishedProduct.includes(product._id)}/>
@@ -127,3 +90,52 @@ export async function getServerSideProps(context) {
     },
   };
 }
+const LinkWrapper = styled.div`
+  &:hover {
+    text-decoration: underline;
+  }
+`
+const CategoryGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  @media screen and (min-width: 768px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+`;
+
+const CategoryTitle = styled.div`
+  display: flex;
+  align-items: baseline;
+  margin-top: 14px;
+  margin-bottom: 0;
+  gap: 10px;
+  h2 {
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  a {
+    color: #555;
+    display: inline-block;
+  }
+`;
+const CategoryWrapper = styled.div`
+  margin-bottom: 80px;
+`;
+
+const ShowAllSquare = styled(Link)`
+  background-color: #ddd;
+  height: 160px;
+  border-radius: 10px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  color: #555;
+  text-decoration: none;
+  margin-top: 20px;
+  &:hover {
+    text-decoration: underline;
+    background-color: ${primary};
+    color: white;
+  }
+`;

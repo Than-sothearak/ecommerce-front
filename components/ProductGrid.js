@@ -1,6 +1,7 @@
 import { styled } from "styled-components";
 import ProductBox from "./ProductBox";
 import { RevealWrapper } from "next-reveal";
+import PcBox from "./PcBox";
 
 const StyledProductGrid = styled.div`
   display: grid;
@@ -33,7 +34,7 @@ export default function ProductGrid({ products, wishedProduct = [] }) {
             delay={50*index}
             duration={1000}
           >
-            <ProductBox  {...product}
+            <PcBox {...product}
             wished={wishedProduct.includes(product._id)}/>
           </RevealWrapper>
         ))}

@@ -44,8 +44,8 @@ const PcBox = ({
   }
   let USDollar = new Intl.NumberFormat();
 
-  const productProperty = Object.entries(properties);
-  const listItems = productProperty.map((data, index) => (
+  const productProperty = Object?.entries(properties);
+  const listItems = productProperty?.map((data, index) => (
     <ListItems key={index}>
         
           <li><span> {data[1].replace(/\s*\(.*?\)\s*/g, '')}</span></li>

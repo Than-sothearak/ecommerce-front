@@ -344,7 +344,7 @@ const SearchbarBox = styled.div`
   background-color: white;
   align-items: center;
   margin: 0 20px 0 20px;
-  width: 100%;
+  width: 80%;
   color: white;
   font-weight: normal;
   z-index: 3;
