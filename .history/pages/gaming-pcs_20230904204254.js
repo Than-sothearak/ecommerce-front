@@ -8,8 +8,8 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { WishedProduct } from "@/models/WishedProduct";
 import { getServerSession } from "next-auth";
 import PcProductGrid from "@/components/PcProductGrid";
-import { paginate } from "@/helper/paginate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const GamingPcs = ({
   childCategory,
@@ -17,15 +17,32 @@ const GamingPcs = ({
   productOfCategories, 
   wishedProduct}) => {
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const product = Object.entries(productOfCategories);
-  const p = product.pop()
-  const products = p.pop()
+  const [page, setPage] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
+
   
-  const pageSize = 9;
+  const products = Object.entries(productOfCategories);
+  const p = products.pop()
+  const product = p.pop()
+  
+  const pageSize = 10;
+  
+  function handlePrevious() {
+    setPage((p) => {
+      if (p < 0) return p;
+      return p - 1;
+    });
+  }
+ 
+  function handleNext() {
+    setPage((p) => {
+      if (p === pageCount) return p;
+      return p + 1;
+    });
+  }
 
-  const paginatedProducts = paginate(products, currentPage, pageSize);
 
+ 
   return (
     <>
       <Center>
@@ -34,12 +51,8 @@ const GamingPcs = ({
             {mainCategories[0].name}
           </Title>
         </CategoryTitle>
-        <PcProductGrid
-  
-        currentPage={currentPage}
-        items={products}
-        products={paginatedProducts} 
-        pageSize={pageSize}
+        <PcProductGrid 
+        products={product} 
         wishedProduct={wishedProduct} 
         categories={mainCategories} 
         childCategory={childCategory} />
@@ -51,7 +64,7 @@ const GamingPcs = ({
 export default GamingPcs;
 export async function getServerSideProps(context) {
   await mongooseConnect();
-  console.log(context.req.page)
+
   const categories = await Category.find();
   const mainCategories = categories.filter((c) => c.name === 'Gaming PCs');
   const productOfCategories = {};
@@ -85,7 +98,7 @@ export async function getServerSideProps(context) {
   }) : [];
   return {
     props: {
- 
+      page,
       categories:JSON.parse(JSON.stringify(categories)),
       childCategory: JSON.parse(JSON.stringify(childCategory)),
       mainCategories: JSON.parse(JSON.stringify(mainCategories)),

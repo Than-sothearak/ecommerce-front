@@ -13,9 +13,9 @@ export default function PcProductGrid({
   wishedProduct = [],
   categories,
   childCategory,
+  onPageChange,
   pageSize,
   items,
-  currentPage: originalCurrentPage,
   filtersChanged:currentFiltersChanged,
 }) {
 
@@ -25,18 +25,13 @@ export default function PcProductGrid({
       value: "all",
     }))
   );
- 
+
   const [getProducts, setGetProducts] = useState(originalProducts);
   const [sort, setSort] = useState("all");
   const [filtersChanged, setFiltersChanged] = useState(currentFiltersChanged);
   const [filtersValues, setFiltersValues] = useState(defaultFilterValues[0]);
-  const [currentPage, setCurrentPage] = useState(originalCurrentPage);
+
   const propertiesToFill = categories.map((a) => a.properties.map((p) => p));
-  
-  const onPageChange = (page) => {
-    setCurrentPage(page);
-    setFiltersChanged(true)
-  };
 
   function handleFilterChange(filterName, filterValue) {
     setFiltersValues((prev) => {

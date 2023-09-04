@@ -13,10 +13,10 @@ export default function PcProductGrid({
   wishedProduct = [],
   categories,
   childCategory,
+  currentPage,
+  onPageChange,
   pageSize,
   items,
-  currentPage: originalCurrentPage,
-  filtersChanged:currentFiltersChanged,
 }) {
 
   const defaultFilterValues = categories.map((a) =>
@@ -25,18 +25,13 @@ export default function PcProductGrid({
       value: "all",
     }))
   );
- 
+
   const [getProducts, setGetProducts] = useState(originalProducts);
   const [sort, setSort] = useState("all");
-  const [filtersChanged, setFiltersChanged] = useState(currentFiltersChanged);
+  const [filtersChanged, setFiltersChanged] = useState(false);
   const [filtersValues, setFiltersValues] = useState(defaultFilterValues[0]);
-  const [currentPage, setCurrentPage] = useState(originalCurrentPage);
+
   const propertiesToFill = categories.map((a) => a.properties.map((p) => p));
-  
-  const onPageChange = (page) => {
-    setCurrentPage(page);
-    setFiltersChanged(true)
-  };
 
   function handleFilterChange(filterName, filterValue) {
     setFiltersValues((prev) => {
@@ -67,7 +62,7 @@ export default function PcProductGrid({
     axios.get(url).then((res) => {
       setGetProducts(res.data);
     });
-  }, [filtersValues, sort, currentPage]);
+  }, [filtersValues, sort,]);
   
   const paginatedProducts = paginate(getProducts, currentPage, pageSize);
 

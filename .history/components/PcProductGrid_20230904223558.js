@@ -35,7 +35,6 @@ export default function PcProductGrid({
   
   const onPageChange = (page) => {
     setCurrentPage(page);
-    setFiltersChanged(true)
   };
 
   function handleFilterChange(filterName, filterValue) {

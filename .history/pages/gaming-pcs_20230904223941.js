@@ -22,7 +22,7 @@ const GamingPcs = ({
   const p = product.pop()
   const products = p.pop()
   
-  const pageSize = 9;
+  const pageSize = 1;
 
   const paginatedProducts = paginate(products, currentPage, pageSize);
 
@@ -35,7 +35,8 @@ const GamingPcs = ({
           </Title>
         </CategoryTitle>
         <PcProductGrid
-  
+        filtersChanged={filtersChanged} 
+        onPageChange={onPageChange}
         currentPage={currentPage}
         items={products}
         products={paginatedProducts} 

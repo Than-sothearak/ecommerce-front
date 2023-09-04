@@ -8,8 +8,8 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { WishedProduct } from "@/models/WishedProduct";
 import { getServerSession } from "next-auth";
 import PcProductGrid from "@/components/PcProductGrid";
+import { useEffect, useState } from "react";
 import { paginate } from "@/helper/paginate";
-import { useState } from "react";
 
 const GamingPcs = ({
   childCategory,
@@ -17,15 +17,26 @@ const GamingPcs = ({
   productOfCategories, 
   wishedProduct}) => {
 
+
   const [currentPage, setCurrentPage] = useState(1);
   const product = Object.entries(productOfCategories);
   const p = product.pop()
   const products = p.pop()
   
-  const pageSize = 9;
+  const pageSize = 2;
+  function fetchProduct () {
+    const paginatedProducts = paginate(products, currentPage, pageSize);
 
-  const paginatedProducts = paginate(products, currentPage, pageSize);
+  }
+  
+  const onPageChange = (page) => {
+    setCurrentPage(page);
+  };
+  useEffect(() => {
+    fetchProduct();
+  },[currentPage])
 
+  console.log(currentPage)
   return (
     <>
       <Center>
@@ -34,8 +45,8 @@ const GamingPcs = ({
             {mainCategories[0].name}
           </Title>
         </CategoryTitle>
-        <PcProductGrid
-  
+        <PcProductGrid 
+        onPageChange={onPageChange}
         currentPage={currentPage}
         items={products}
         products={paginatedProducts} 

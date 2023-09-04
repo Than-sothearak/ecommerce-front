@@ -4,19 +4,21 @@ import PcBox from "./PcBox";
 import { grayBorder } from "@/lib/colors";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Pagination from "./Pagination";
-import { paginate } from "@/helper/paginate";
-
+import {
+  BsFillArrowLeftSquareFill,
+  BsFillArrowRightSquareFill,
+  BsSearch,
+} from "react-icons/bs";
 
 export default function PcProductGrid({
   products: originalProducts,
   wishedProduct = [],
   categories,
   childCategory,
-  pageSize,
-  items,
-  currentPage: originalCurrentPage,
-  filtersChanged:currentFiltersChanged,
+  page,
+  handlePrevious,
+  handleNext,
+  pageCount,
 }) {
 
   const defaultFilterValues = categories.map((a) =>
@@ -25,18 +27,13 @@ export default function PcProductGrid({
       value: "all",
     }))
   );
- 
+
   const [getProducts, setGetProducts] = useState(originalProducts);
   const [sort, setSort] = useState("all");
-  const [filtersChanged, setFiltersChanged] = useState(currentFiltersChanged);
+  const [filtersChanged, setFiltersChanged] = useState(false);
   const [filtersValues, setFiltersValues] = useState(defaultFilterValues[0]);
-  const [currentPage, setCurrentPage] = useState(originalCurrentPage);
+
   const propertiesToFill = categories.map((a) => a.properties.map((p) => p));
-  
-  const onPageChange = (page) => {
-    setCurrentPage(page);
-    setFiltersChanged(true)
-  };
 
   function handleFilterChange(filterName, filterValue) {
     setFiltersValues((prev) => {
@@ -67,9 +64,7 @@ export default function PcProductGrid({
     axios.get(url).then((res) => {
       setGetProducts(res.data);
     });
-  }, [filtersValues, sort, currentPage]);
-  
-  const paginatedProducts = paginate(getProducts, currentPage, pageSize);
+  }, [filtersValues, sort, page]);
 
   function handleChange(value) {
     setSort(value);
@@ -128,17 +123,36 @@ export default function PcProductGrid({
               <option value="oldest">Oldest</option>
             </select>
           </SortBy>
-          <Pagination 
-             items={items.length} 
-             currentPage={currentPage} 
-             pageSize={pageSize} 
-             onPageChange={onPageChange}
-          />
-         
+
+          <NextPage>
+               <button 
+             
+               onClick={handlePrevious}>
+                <BsFillArrowLeftSquareFill
+                  size={32}
+                  color={
+                    page === Math.ceil(pageCount) - 1 ? "#808080" : "#DCDCDC"
+                  }
+                />
+              </button>
+            <TextButton>
+              <div>{page+1}</div>
+            </TextButton>
+            <button
+                onClick={handleNext}
+              >
+                <BsFillArrowRightSquareFill
+                  size={32}
+                  color={
+                    page === Math.ceil(pageCount) - 1 ? "#DCDCDC" : "#808080"
+                  }
+                />
+              </button>
+          </NextPage>
         </SortFilter>
         <StyledProductGrid>
-          {paginatedProducts?.length > 0 &&
-            paginatedProducts.map((product, index) => (
+          {getProducts?.length > 0 &&
+            getProducts.map((product, index) => (
               <RevealWrapper
                 key={product._id}
                 delay={50 * index}
@@ -278,5 +292,22 @@ const FilterTitle = styled.div`
     }
   }
 `;
+const NextPage = styled.div`
+  margin: 5px 0;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  padding: 8px 20px;
+  gap: 10px;
+  font-size: 12px;
+  @media screen and (min-width: 768px) {
+    font-size: 14px;
+    padding: 8px 20px;
+  }
+`;
+const TextButton = styled.div`
+  display: flex;
 
-
+  justify-items: center;
+  text-align: center;
+`;
