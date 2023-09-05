@@ -10,11 +10,11 @@ const Pagination = ({ items, pageSize, currentPage, onPageChange }) => {
     const pagesCount = Math.ceil(items / pageSize); 
 
 
-  const pages = Array.from({ length: pagesCount }, (_, i) => i + 1);
+  const pages = Array.from({ length: pagesCount }, (_, i) => i + 0);
 
   return (
     <NextPage>
-    
+    <p>Pages</p>
         {pages.map(page => (
             <li 
             key={page}
@@ -22,7 +22,7 @@ const Pagination = ({ items, pageSize, currentPage, onPageChange }) => {
             >
                 <a
                 onClick={() => onPageChange(page)}
-                >{page}</a>
+                >{page+1}</a>
             </li>
         ))}
      

@@ -7,83 +7,20 @@ import axios from "axios";
 import Pagination from "./Pagination";
 import { paginate } from "@/helper/paginate";
 
-
 export default function PcProductGrid({
-  products: originalProducts,
+  products,
   wishedProduct = [],
-  categories,
-  childCategory,
   pageSize,
   items,
-  currentPage: originalCurrentPage,
-  filtersChanged:currentFiltersChanged,
+  currentPage,
+  filtersChanged,
+  propertiesToFill,
+  handleFilterChange,
+  handleReset,
+  handleChange,
+  filtersValues,
+  onPageChange,
 }) {
-
-  const defaultFilterValues = categories.map((a) =>
-    a.properties.map((p) => ({
-      name: p.name,
-      value: "all",
-    }))
-  );
- 
-  const [getProducts, setGetProducts] = useState(originalProducts);
-  const [sort, setSort] = useState("all");
-  const [filtersChanged, setFiltersChanged] = useState(currentFiltersChanged);
-  const [filtersValues, setFiltersValues] = useState(defaultFilterValues[0]);
-  const [currentPage, setCurrentPage] = useState(originalCurrentPage);
-  const propertiesToFill = categories.map((a) => a.properties.map((p) => p));
-  
-  const onPageChange = (page) => {
-    setCurrentPage(page);
-    setFiltersChanged(true)
-  };
-
-  function handleFilterChange(filterName, filterValue) {
-    setFiltersValues((prev) => {
-      return prev.map((p) => ({
-        name: p.name,
-        value: p.name === filterName ? filterValue : p.value,
-      }));
-    });
-    setFiltersChanged(true);
-  }
-
-  useEffect(() => {
-    if (!filtersChanged) {
-      return;
-    }
-    const catIds = [categories[0]._id, ...(childCategory?.map((c) => c._id) || [])];
-  
-    const params = new URLSearchParams();
-
-    params.set("categories", catIds.join(","));
-    params.set("sort", sort);
-    filtersValues.forEach((f) => {
-      if (f.value !== "all") {
-        params.set(f.name, f.value);
-      }
-    });
-    const url = `/api/productsfilter?` + params.toString();
-    axios.get(url).then((res) => {
-      setGetProducts(res.data);
-    });
-  }, [filtersValues, sort, currentPage]);
-  
-  const paginatedProducts = paginate(getProducts, currentPage, pageSize);
-
-  function handleChange(value) {
-    setSort(value);
-    setFiltersChanged(true);
-  }
-  function handleReset () {
-    setFiltersValues(prev => {
-      return prev.map(p => ({
-        name: p.name,
-        value: 'all'
-      }));
-    });
-  }
-  
   return (
     <Container>
       <FilterWrapper>
@@ -128,60 +65,62 @@ export default function PcProductGrid({
               <option value="oldest">Oldest</option>
             </select>
           </SortBy>
-          <Pagination 
-             items={items.length} 
-             currentPage={currentPage} 
-             pageSize={pageSize} 
-             onPageChange={onPageChange}
+          <Pagination
+            items={items}
+            currentPage={currentPage}
+            pageSize={pageSize}
+            onPageChange={onPageChange}
           />
-         
         </SortFilter>
-        <StyledProductGrid>
-          {paginatedProducts?.length > 0 &&
-            paginatedProducts.map((product, index) => (
-              <RevealWrapper
-                key={product._id}
-                delay={50 * index}
-                duration={1000}
-              >
-                <PcBox
-                  {...product}
-                  wished={wishedProduct.includes(product._id)}
-                />
-              </RevealWrapper>
-            ))}
-        </StyledProductGrid>
+  
+          <StyledProductGrid>
+            {products?.length > 0 &&
+              products.map((product, index) => (
+                <RevealWrapper
+                  key={product._id}
+                  delay={50 * index}
+                  duration={1000}
+                >
+                  <PcBox
+                    {...product}
+                    wished={wishedProduct.includes(product._id)}
+                  />
+                </RevealWrapper>
+              ))}
+          </StyledProductGrid>
+   
+    
       </ProductContainer>
     </Container>
   );
 }
 const SortBy = styled.div`
-display: flex;
-gap: 10px;
-align-items: center;
-border: 1px solid ${grayBorder};
-margin: 10px 0;
-padding: 5px 10px;
-font-size: 14px;
-border-radius: 20px;
-`
-const FilterHeader = styled.div`
-font-size: 14px;
-display: flex;
-margin-left: 5px;
-margin-right: 5px;
-margin-bottom: 10px;
-padding-bottom: 10px;
-border-bottom: 1px solid ${grayBorder};
-justify-content: space-between;
-h1 {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid ${grayBorder};
+  margin: 10px 0;
+  padding: 5px 10px;
   font-size: 14px;
-  font-weight: bold;
-}
-button {
-  text-decoration: underline;
-}
-`
+  border-radius: 20px;
+`;
+const FilterHeader = styled.div`
+  font-size: 14px;
+  display: flex;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid ${grayBorder};
+  justify-content: space-between;
+  h1 {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  button {
+    text-decoration: underline;
+  }
+`;
 const StyledProductGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -212,10 +151,10 @@ const FilterWrapper = styled.div`
   border: 1px solid ${grayBorder};
   border-radius: 20px;
   padding: 10px;
-   @media screen and (min-width: 1240px) {
-     height: 50%;
+  @media screen and (min-width: 1240px) {
+    height: 800px;
   }
-  `;
+`;
 const FilterInput = styled.div`
   background-color: white;
   gap: 20px;
@@ -241,7 +180,7 @@ const Filter = styled.div`
   background-color: white;
   margin: 5px 5px;
   border-bottom: 1px solid ${grayBorder};
-  
+
   font-size: 13px;
   select {
     font-size: 12px;
@@ -280,5 +219,3 @@ const FilterTitle = styled.div`
     }
   }
 `;
-
-
