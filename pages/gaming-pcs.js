@@ -38,14 +38,6 @@ const GamingPcs = ({
     a.properties.map((p) => p)
   );
 
-  const fetchData = async () => {
-
-    await axios.get("/api/paginationpcs?page=" + currentPage).then((res) => {
-      setProducts(res.data.products);
-      setItems(res.data.pagination?.items);
-      setPageSize(res.data.pagination?.itemPerPage)
-    });
-  };
  
   const onPageChange = (page) => {
     setCurrentPage(page);
@@ -87,6 +79,7 @@ const GamingPcs = ({
 
     params.set("categories", catIds.join(","));
     params.set("sort", sort);
+    params.set("page", currentPage);
     filtersValues.forEach((f) => {
       if (f.value !== "all") {
         params.set(f.name, f.value);
@@ -96,16 +89,13 @@ const GamingPcs = ({
     await axios.get(url).then((res) => {
         setProducts(res.data.products);
         setItems(res.data.pagination?.items);
+        setPageSize(res.data.pagination?.itemPerPage)
       });
   }
 
   useEffect(() => {
    
-   if(!filtersChanged) {
-    fetchData();
-   }else {
     fetchDataFilter();
-   }
   }, [filtersValues, sort, currentPage]);
   
   return (

@@ -14,16 +14,14 @@ import PcProductGrid from "@/components/PcProductGrid";
 
 
 export default function LaptopPage({
-  categories,
   category,
   childCategory,
   wishedProduct,
-  products: originalProducts,
 }) 
 {
   const [currentPage, setCurrentPage] = useState(0);
   const [items, setItems] = useState(0);
-  const [products, setProducts] = useState(originalProducts);
+  const [products, setProducts] = useState([]);
   const [pageSize, setPageSize] = useState(1)
   const [filtersChanged, setFiltersChanged] = useState(false);
 
@@ -40,15 +38,6 @@ export default function LaptopPage({
   const [sort, setSort] = useState("all");
   const [filtersValues, setFiltersValues] = useState(defaultFilterValues);
   
-  // const fetchData = async () => {
-
-  //   await axios.get("/api/paginationlaptops?page=" + currentPage).then((res) => {
-  //     setProducts(res.data.products);
-  //     setItems(res.data.pagination?.items);
-  //     setPageSize(res.data.pagination?.itemPerPage)
-  //   });
-  // };
- 
   const onPageChange = (page) => {
     setCurrentPage(page);
     setFiltersChanged(true)
@@ -80,15 +69,14 @@ export default function LaptopPage({
   }
    
   useEffect(() => {
-    if (!filtersChanged) {
-      return;
-    }
+  
     const catName = [category._id, ...(childCategory?.map((c) => c._id) || [])];
 
     const params = new URLSearchParams();
     
     params.set("categories", catName.join(","));
     params.set("sort", sort);
+    params.set('page', currentPage);
     filtersValues.forEach((f) => {
       if (f.value !== "all") {
         params.set(f.name, f.value);

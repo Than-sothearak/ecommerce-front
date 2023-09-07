@@ -39,19 +39,9 @@ const GamingPcs = ({
     a.properties.map((p) => p)
   );
   ;
-
-  const fetchData = async () => {
-
-    await axios.get("/api/paginationlaptops?page=" + currentPage).then((res) => {
-      setProducts(res.data.products);
-      setItems(res.data.pagination?.items);
-      setPageSize(res.data.pagination?.itemPerPage)
-    });
-  };
  
   const onPageChange = (page) => {
     setCurrentPage(page);
-    setFiltersChanged(true)
   };
 
   function handleFilterChange(filterName, filterValue) {
@@ -62,12 +52,12 @@ const GamingPcs = ({
       }));
     });
     setFiltersChanged(true);
+  
   }
 
   function handleChange(value) {
     setSort(value);
-    setFiltersChanged(true);
-    fetchDataFilter();
+    setFiltersChanged(true)
   }
   function handleReset() {
     setFiltersValues((prev) => {
@@ -89,27 +79,29 @@ const GamingPcs = ({
 
     params.set("categories", catIds.join(","));
     params.set("sort", sort);
+    params.set('page', currentPage)
+  
     filtersValues.forEach((f) => {
       if (f.value !== "all") {
         params.set(f.name, f.value);
       }
     });
       const url = `/api/productsfilter?`+params.toString();
-    await axios.get(url).then((res) => {
+      await axios.get(url).then((res) => {
         setProducts(res.data.products);
         setItems(res.data.pagination?.items);
+        setPageSize(res.data.pagination?.itemPerPage)
       });
+  
+
   }
 
+ 
+
   useEffect(() => {
-   
-   if(!filtersChanged) {
-    fetchData();
-   }else {
-    fetchDataFilter();
-   }
-  }, [filtersValues, sort, currentPage]);
-  
+      fetchDataFilter();
+  }, [filtersValues, sort, currentPage, filtersChanged]);
+
   return (
     <>
       <Center>

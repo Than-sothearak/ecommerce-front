@@ -13,7 +13,6 @@ export default function PcProductGrid({
   pageSize,
   items,
   currentPage,
-  filtersChanged,
   propertiesToFill,
   handleFilterChange,
   handleReset,
@@ -89,7 +88,15 @@ export default function PcProductGrid({
                 </RevealWrapper>
               ))}
           </StyledProductGrid>
-   
+          <SortFilterBottom>
+      
+          <Pagination
+            items={items}
+            currentPage={currentPage}
+            pageSize={pageSize}
+            onPageChange={onPageChange}
+          />
+        </SortFilterBottom>
     
       </ProductContainer>
     </Container>
@@ -126,6 +133,7 @@ const StyledProductGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 30px;
+  margin-bottom: 20px;
 
   transition: visibility 1s linear;
   @media screen and (max-width: 280px) {
@@ -172,6 +180,13 @@ const SortFilter = styled.div`
   border: 1px solid #b2b1b1;
   border-radius: 20px;
 `;
+const SortFilterBottom = styled.div`
+  display: flex;
+  justify-content: start;
+  border: 1px solid #b2b1b1;
+  border-radius: 20px;
+  padding-left: 15px;
+`
 const Filter = styled.div`
   display: flex;
   justify-content: space-between;

@@ -31,7 +31,7 @@ export async function getServerSideProps(context) {
   await mongooseConnect();
   const newProducts = await Product.find({}, null, {
     sort: { _id: -1 },
-    limit: 8,
+    limit: 9,
   });
   const categories = await Category.find();
   const mainCategories = categories.filter((c) => !c.parent);

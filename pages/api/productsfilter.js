@@ -3,21 +3,20 @@ import { Product } from "@/models/Product";
 
 export default async function handler (req, res) {
     await mongooseConnect();
-    const {categories, sort, ...filters} = req.query;
+    const {categories, sort, page, ...filtersValues} = req.query;
     const [sortOrder] = sort.split();
     const productsQuery = {
       category:categories.split(','),
     };
     
-    
-    if (Object.keys(filters).length > 0) {
-      Object.keys(filters).forEach(filterName => {
-        productsQuery['properties.'+filterName] = filters[filterName];
+    if (Object.keys(filtersValues).length > 0) {
+      Object.keys(filtersValues).forEach(filterName => {
+        productsQuery['properties.'+filterName] = filtersValues[filterName];
       })
    
     }
-    const page = req.query.page || 0;
-    const itemPerPage = 10;
+  
+    const itemPerPage = 9;
     let sorted
     if (sortOrder === 'highest' || sortOrder === 'lowest') { 
         sorted =  {price:sortOrder === 'highest' ? -1 : 1}
@@ -37,11 +36,12 @@ export default async function handler (req, res) {
       .limit(itemPerPage);
     
 
-      const items = productItems.length
+      const items = products.length
     
       const countPage = products.length / itemPerPage;
       
       res.json({
-        pagination: { items, countPage }, products
-      })
+        pagination: { items, countPage, itemPerPage },
+        products,
+      });
 }

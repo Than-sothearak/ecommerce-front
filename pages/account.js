@@ -6,7 +6,7 @@ import { primary } from "@/lib/colors";
 import Table from "@/components/Table";
 import axios from "axios";
 import { mongooseConnect } from "@/lib/mongoose";
-import { Product } from "@/models/Products";
+import { Product } from "@/models/Product";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { WishedProduct } from "@/models/WishedProduct";
 import { getServerSession } from "next-auth";

@@ -2,36 +2,47 @@ import Center from "@/components/Center";
 import ProductGrid from "@/components/ProductGrid";
 import Title from "@/components/Title";
 import { mongooseConnect } from "@/lib/mongoose";
-import { Category } from "@/models/Category";
-import { Product } from "@/models/Product";
-import { WishedProduct } from "@/models/WishedProduct";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { authOptions } from "../api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
+import { Category } from "@/models/Category";
+import { Product } from "@/models/Product";
+import { WishedProduct } from "@/models/WishedProduct";
+import { authOptions } from "../api/auth/[...nextauth]";
+import PcProductGrid from "@/components/PcProductGrid";
 
 
 export default function CategoryPage({
-  categories,
   category,
   childCategory,
   wishedProduct,
-  products: originalProducts,
-}) {
-
-  const defaultFilterValues = category.properties.map((p) => ({
-    name: p.name,
-    value: "all",
-  }));
-  
-
-  const [sort, setSort] = useState("all");
-  const [products, setProducts] = useState(originalProducts);
-  const [filtersValues, setFiltersValues] = useState(defaultFilterValues);
-
+}) 
+{
+  const [currentPage, setCurrentPage] = useState(0);
+  const [items, setItems] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [pageSize, setPageSize] = useState(1)
   const [filtersChanged, setFiltersChanged] = useState(false);
-  console.log(products[0].category.name)
+
+ const defaultFilterValues = category.properties.map(p => ({
+  name: p.name,
+  value: 'all'
+ }))
+
+ const propertiesToFill = category.properties.map((a) => {
+  return a
+ }
+);
+ 
+  const [sort, setSort] = useState("all");
+  const [filtersValues, setFiltersValues] = useState(defaultFilterValues);
+  
+  const onPageChange = (page) => {
+    setCurrentPage(page);
+    setFiltersChanged(true)
+  };
+
   function handleFilterChange(filterName, filterValue) {
     setFiltersValues((prev) => {
       return prev.map((p) => ({
@@ -41,87 +52,78 @@ export default function CategoryPage({
     });
     setFiltersChanged(true);
   }
+  
+  function handleChange(value) {
+    setSort(value);
+    setFiltersChanged(true);
+  }
+  function handleReset() {
+    setFiltersValues((prev) => {
+      return prev.map((p) => ({
+        name: p.name,
+        value: "all",
+      }));
+    });
+    setFiltersChanged(true);
+    setCurrentPage(0)
+  }
+   
   useEffect(() => {
-    if (!filtersChanged) {
-      return;
-    }
+  
     const catName = [category._id, ...(childCategory?.map((c) => c._id) || [])];
 
     const params = new URLSearchParams();
     
     params.set("categories", catName.join(","));
     params.set("sort", sort);
+    params.set('page', currentPage);
     filtersValues.forEach((f) => {
       if (f.value !== "all") {
         params.set(f.name, f.value);
       }
     });
-    const url = `/api/filter?` + params.toString();
+    const url = `/api/productsfilter?` + params.toString();
     axios.get(url).then((res) => {
-      setProducts(res.data);
+      setProducts(res.data.products);
+      setItems(res.data.pagination?.items);
+      setPageSize(res.data.pagination?.itemPerPage)
     });
   }, [filtersValues, sort]);
-
-  function handleChange(value) {
-    setSort(value);
-    setFiltersChanged(true);
-  }
-
+  
   return (
     <>
       <Center>
-        <FilterContainer>
-          <CategoryTitle>
-            <Title>{category.name}</Title>
-          </CategoryTitle>
-          <FilterWrapper>
-                {category.properties.map((property) => (
-                  <Filter key={property.name}>
-                    <h1>{property.name}:</h1>
-                    <select
-                      onChange={(e) =>
-                        handleFilterChange(property.name, e.target.value)
-                      }
-                      value={
-                        filtersValues.find((f) => f.name == property.name).value
-                      }
-                    >
-                      <option value="all">All</option>
-                      {property.values.map((value, index) => (
-                        <option key={index} value={value}>
-                          {value}
-                        </option>
-                      ))}
-                    </select>
-                  </Filter>
-                ))}
-            <Filter>
-              <h1>Sort by:</h1>
-              <select onChange={(e) => handleChange(e.target.value)}>
-                <option>Default</option>
-                <option value="lowest">Low price</option>
-                <option value="highest">High price</option>
-                <option value="newest">Newest</option>
-                <option value="oldest">Oldest</option>
-              </select>
-            </Filter>
-          </FilterWrapper>
-        </FilterContainer>
-
-        <ProductGrid
-          wishedProduct={wishedProduct}
+        <CategoryTitle>
+          <Title>{category.name}</Title>
+        </CategoryTitle>
+      
+        <PcProductGrid
+          onPageChange={onPageChange}
+          filtersValues={filtersValues}
+          handleFilterChange={handleFilterChange}
+          handleReset={handleReset}
+          handleChange={handleChange}
+          propertiesToFill={[propertiesToFill]}
+          items={items}
+          currentPage={currentPage}
           products={products}
-        ></ProductGrid>
+          pageSize={pageSize}
+          wishedProduct={wishedProduct}
+          categories={category}
+          childCategory={childCategory}
+        />
       </Center>
     </>
   );
-}
+};
 
+
+  
 export async function getServerSideProps(context) {
   await mongooseConnect();
   const categories = await Category.find();
-  // const category = await Category.findOne({name: context.query.id});
   const category = await Category.findById(context.query.id);
+
   //find child category
   const childCategory = await Category.find({ parent: category._id });
 
@@ -147,8 +149,11 @@ export async function getServerSideProps(context) {
     },
   };
 }
+
 const CategoryTitle = styled.div`
   margin-top: 14px;
+  text-align: center;
+  justify-content: center;
   margin-bottom: 0;
   align-items: center;
 `;
@@ -164,6 +169,9 @@ const FilterWrapper = styled.div`
   gap: 10px;
   font-size: small;
   z-index: -1;
+  select {
+    width: 280px;
+  }
 `;
 const Filter = styled.div`
   background-color: #eee;
@@ -172,8 +180,10 @@ const Filter = styled.div`
   display: flex;
   h1 {
     font-weight: bold;
+   
   }
   select {
     background-color: transparent;
+    
   }
 `;
