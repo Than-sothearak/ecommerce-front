@@ -187,7 +187,7 @@ const PriceRow = styled.div`
 `;
 const Price = styled.span`
   font-size: 1.8rem;
-  font-weight: bold;
+  font-weight: 500;
 `;
 
 const ListItems = styled.tr`

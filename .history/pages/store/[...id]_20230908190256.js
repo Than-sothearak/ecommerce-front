@@ -50,7 +50,7 @@ export default function SingleProductPage({
       alert("You must login first");
     }
   }
-  let USDollar = new Intl.NumberFormat();
+
   const productProperty = Object.entries(product.properties);
   const listItems = productProperty.map((data, index) => (
     <Table key={index}>
@@ -75,7 +75,7 @@ export default function SingleProductPage({
           <Container>
             <ProductDetial>
               <WishlistIcon wished={isWish} addWishlist={addWishlist} />
-              <h1>{product.title}</h1>
+              <Title>{product.title}</Title>
               <p className="mt-5">{product.description}</p>
               <Hr>
                 <hr></hr>
@@ -99,7 +99,7 @@ export default function SingleProductPage({
               </div>
               <PriceRow>
                 <div>
-                  <Price>${USDollar.format(parseInt(product.price))}</Price>
+                  <Price>${product.price}</Price>
                 </div>
                 <div>
                   <Button
@@ -114,7 +114,7 @@ export default function SingleProductPage({
           </Container>
         </ColWrapper>
         <div>
-          <h1 className="text-3xl mb-2 text-center">Specifications</h1>
+          <h1 className="text-2xl mb-2 text-center">Specifications</h1>
           <QuickProductDetial>
             {listItems.filter((item) => {
               if (item) {
@@ -160,13 +160,7 @@ border: 1px solid #ddd;
     display: flex;
     align-items: center;
     width: 50%;
-    padding: 2px 10px;
-  }
-   @media screen and (min-width: 768px) {
-    td {
-       padding: 5px 80px;
-       
-    }
+    padding: 0 40px;
   }
 `
 
@@ -186,8 +180,8 @@ const PriceRow = styled.div`
   align-items: center;
 `;
 const Price = styled.span`
-  font-size: 1.8rem;
-  font-weight: bold;
+  font-size: 2rem;
+  font-weight: 500;
 `;
 
 const ListItems = styled.tr`
@@ -205,13 +199,6 @@ const ProductDetial = styled.div`
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-    h1 {
-      font-size: 24px;
-      font-weight: bold;
-    }
-    p {
-      font-size: 14px;
-    }
 `;
 
 const Hr = styled.div`
@@ -220,7 +207,6 @@ const Hr = styled.div`
 `;
 const LinkText = styled(Link)`
   text-decoration-line: underline;
-  font-size: 14px;
 `;
 const AddToList = styled.div`
   width: 50%;

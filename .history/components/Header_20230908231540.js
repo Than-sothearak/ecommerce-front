@@ -373,7 +373,7 @@ const SearchInput = styled.input`
   margin-left: 20px;
   width: 100%;
   outline: none;
-  color: black;
+  
   padding: 0 10px;
 `;
 

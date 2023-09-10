@@ -1,4 +1,6 @@
 import React from 'react'
+import Center from '@/components/Center'
+import Header from '@/components/Header'
 import styled from "styled-components";
 import Link from "next/link";
 import {BiSearchAlt2} from "react-icons/bi";

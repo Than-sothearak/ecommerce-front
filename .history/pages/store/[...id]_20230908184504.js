@@ -13,6 +13,7 @@ import { LiaWarehouseSolid } from "react-icons/lia";
 import { AiFillGift } from "react-icons/ai";
 import Link from "next/link";
 import { Category } from "@/models/Category";
+import HeaderNew from "@/components/Navbar";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { WishedProduct } from "@/models/WishedProduct";
 import { getServerSession } from "next-auth";
@@ -21,11 +22,10 @@ import axios from "axios";
 import WishlistIcon from "@/components/WishlisIcon";
 import { useSession } from "next-auth/react";
 
-export default function SingleProductPage({
-  product,
-  wishedProduct,
-}) {
-  const wished = wishedProduct[0]?.product.includes(product._id);
+
+export default function SingleProductPage({ product,categories, wishedProduct}) {
+  
+  const wished = wishedProduct[0]?.product.includes(product._id)
 
   const [isWish, setIsWhish] = useState(wished);
   const { addProduct } = useContext(CartContext);
@@ -37,36 +37,32 @@ export default function SingleProductPage({
     if (session) {
       const nextValue = !isWish;
       try {
-        axios
-          .post("/api/wishlist", {
-            product: product._id,
-          })
-          .then(() => {});
+        axios.post('/api/wishlist', {
+          product: product._id
+        }).then(() => {});
       } catch (err) {
-        console.log(err);
+      console.log(err)
       }
-      setIsWhish(nextValue);
+      setIsWhish(nextValue)
     } else {
-      alert("You must login first");
+      alert('You must login first')
     }
   }
-  let USDollar = new Intl.NumberFormat();
+
   const productProperty = Object.entries(product.properties);
   const listItems = productProperty.map((data, index) => (
-    <Table key={index}>
-      <ListItems >
-      <td>
-        <strong> {data[0]}</strong>
-      </td>
-      <td>
-        <span> {data[1]}</span>
-      </td>
+    <ListItems key={index}>
+        <ul className="flex">
+          <li className="w-36"> <strong> {data[0]}</strong></li>
+          <li className="w-80 text-start"><span> {data[1]}</span></li>
+        </ul>
+        
     </ListItems>
-    </Table>
   ));
-
+  
   return (
     <>
+    
       <Center>
         <ColWrapper>
           <WhiteBox>
@@ -74,8 +70,8 @@ export default function SingleProductPage({
           </WhiteBox>
           <Container>
             <ProductDetial>
-              <WishlistIcon wished={isWish} addWishlist={addWishlist} />
-              <h1>{product.title}</h1>
+             <WishlistIcon wished={isWish} addWishlist={addWishlist}/>
+              <Title>{product.title}</Title>
               <p className="mt-5">{product.description}</p>
               <Hr>
                 <hr></hr>
@@ -99,13 +95,10 @@ export default function SingleProductPage({
               </div>
               <PriceRow>
                 <div>
-                  <Price>${USDollar.format(parseInt(product.price))}</Price>
+                  <Price>${product.price}</Price>
                 </div>
                 <div>
-                  <Button
-                    primary
-                    onClick={() => addProduct(product._id, product.title)}
-                  >
+                  <Button primary onClick={() => addProduct(product._id, product.title)}>
                     Add to cart
                   </Button>
                 </div>
@@ -114,14 +107,22 @@ export default function SingleProductPage({
           </Container>
         </ColWrapper>
         <div>
-          <h1 className="text-3xl mb-2 text-center">Specifications</h1>
-          <QuickProductDetial>
-            {listItems.filter((item) => {
-              if (item) {
-                return { item };
-              }
-            })}
-          </QuickProductDetial>
+        <h1 className="text-2xl mb-2">
+        Quick highlights
+        </h1>
+        <QuickProductDetial>
+          <div>
+          {listItems.filter(item => {
+             if (item) {
+              return (
+                <div>
+                 {item}
+                </div>
+              )
+             }
+          })}
+          </div>
+        </QuickProductDetial>
         </div>
       </Center>
     </>
@@ -131,44 +132,22 @@ export default function SingleProductPage({
 export async function getServerSideProps(context) {
   await mongooseConnect();
   const categories = await Category.find();
-  const product = await Product.findById(context.query.id);
-
-  const session = await getServerSession(context.req, context.res, authOptions);
-  const wishedProduct = session?.user
-    ? await WishedProduct.find({
-        userEmail: session.user.email,
-        product: product._id,
-      })
-    : [];
+  const product = await Product.findById(context.query.id)
+ 
+  const session = await getServerSession(context.req, context.res, authOptions)
+  const wishedProduct = session?.user ? await WishedProduct.find({
+    userEmail: session.user.email,
+    product: product._id
+  }) : [];
   return {
     props: {
       product: JSON.parse(JSON.stringify(product)),
       categories: JSON.parse(JSON.stringify(categories)),
-      wishedProduct: JSON.parse(JSON.stringify(wishedProduct)),
+      wishedProduct: JSON.parse(JSON.stringify(wishedProduct))
     },
   };
 }
 
-const Table = styled.table`
-border: 1px solid #ddd;
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-  &:nth-child(even){background-color: #f2f2f2;}
-  &:hover {background-color: #ddd;}
-  td {
-    display: flex;
-    align-items: center;
-    width: 50%;
-    padding: 2px 10px;
-  }
-   @media screen and (min-width: 768px) {
-    td {
-       padding: 5px 80px;
-       
-    }
-  }
-`
 
 const ColWrapper = styled.div`
   display: grid;
@@ -186,14 +165,12 @@ const PriceRow = styled.div`
   align-items: center;
 `;
 const Price = styled.span`
-  font-size: 1.8rem;
-  font-weight: bold;
+  font-size: 2rem;
+  font-weight: 500;
 `;
 
-const ListItems = styled.tr`
+const ListItems = styled.li`
   font-size: 14px;
-  display: flex;
-  justify-content: space-between;
 `;
 const Container = styled.div`
   font-family: "Open Sans", sans-serif;
@@ -205,13 +182,6 @@ const ProductDetial = styled.div`
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-    h1 {
-      font-size: 24px;
-      font-weight: bold;
-    }
-    p {
-      font-size: 14px;
-    }
 `;
 
 const Hr = styled.div`
@@ -220,7 +190,6 @@ const Hr = styled.div`
 `;
 const LinkText = styled(Link)`
   text-decoration-line: underline;
-  font-size: 14px;
 `;
 const AddToList = styled.div`
   width: 50%;
@@ -232,13 +201,18 @@ const AddToList = styled.div`
   @media screen and (min-width: 768px) {
     flex: 0.5;
   }
+
 `;
 const QuickProductDetial = styled.div`
- 
+  width: 100%;
+  list-style-type: none;
   color: #474746;
   padding: 20px;
   border-radius: 8px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    @media screen and (min-width: 768px) {
+      width: 50%;
+  }
 `;

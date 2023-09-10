@@ -13,6 +13,7 @@ import { LiaWarehouseSolid } from "react-icons/lia";
 import { AiFillGift } from "react-icons/ai";
 import Link from "next/link";
 import { Category } from "@/models/Category";
+import HeaderNew from "@/components/Navbar";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { WishedProduct } from "@/models/WishedProduct";
 import { getServerSession } from "next-auth";
@@ -23,6 +24,7 @@ import { useSession } from "next-auth/react";
 
 export default function SingleProductPage({
   product,
+  categories,
   wishedProduct,
 }) {
   const wished = wishedProduct[0]?.product.includes(product._id);
@@ -50,10 +52,10 @@ export default function SingleProductPage({
       alert("You must login first");
     }
   }
-  let USDollar = new Intl.NumberFormat();
+
   const productProperty = Object.entries(product.properties);
   const listItems = productProperty.map((data, index) => (
-    <Table key={index}>
+    <table key={index}>
       <ListItems >
       <td>
         <strong> {data[0]}</strong>
@@ -62,7 +64,7 @@ export default function SingleProductPage({
         <span> {data[1]}</span>
       </td>
     </ListItems>
-    </Table>
+    </table>
   ));
 
   return (
@@ -75,7 +77,7 @@ export default function SingleProductPage({
           <Container>
             <ProductDetial>
               <WishlistIcon wished={isWish} addWishlist={addWishlist} />
-              <h1>{product.title}</h1>
+              <Title>{product.title}</Title>
               <p className="mt-5">{product.description}</p>
               <Hr>
                 <hr></hr>
@@ -99,7 +101,7 @@ export default function SingleProductPage({
               </div>
               <PriceRow>
                 <div>
-                  <Price>${USDollar.format(parseInt(product.price))}</Price>
+                  <Price>${product.price}</Price>
                 </div>
                 <div>
                   <Button
@@ -114,7 +116,7 @@ export default function SingleProductPage({
           </Container>
         </ColWrapper>
         <div>
-          <h1 className="text-3xl mb-2 text-center">Specifications</h1>
+          <h1 className="text-2xl mb-2 text-center">Quick highlights</h1>
           <QuickProductDetial>
             {listItems.filter((item) => {
               if (item) {
@@ -149,27 +151,6 @@ export async function getServerSideProps(context) {
   };
 }
 
-const Table = styled.table`
-border: 1px solid #ddd;
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-  &:nth-child(even){background-color: #f2f2f2;}
-  &:hover {background-color: #ddd;}
-  td {
-    display: flex;
-    align-items: center;
-    width: 50%;
-    padding: 2px 10px;
-  }
-   @media screen and (min-width: 768px) {
-    td {
-       padding: 5px 80px;
-       
-    }
-  }
-`
-
 const ColWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -186,14 +167,13 @@ const PriceRow = styled.div`
   align-items: center;
 `;
 const Price = styled.span`
-  font-size: 1.8rem;
-  font-weight: bold;
+  font-size: 2rem;
+  font-weight: 500;
 `;
 
 const ListItems = styled.tr`
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
+  font-size: 18px;
+  gap: 10px;
 `;
 const Container = styled.div`
   font-family: "Open Sans", sans-serif;
@@ -205,13 +185,6 @@ const ProductDetial = styled.div`
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-    h1 {
-      font-size: 24px;
-      font-weight: bold;
-    }
-    p {
-      font-size: 14px;
-    }
 `;
 
 const Hr = styled.div`
@@ -220,7 +193,6 @@ const Hr = styled.div`
 `;
 const LinkText = styled(Link)`
   text-decoration-line: underline;
-  font-size: 14px;
 `;
 const AddToList = styled.div`
   width: 50%;

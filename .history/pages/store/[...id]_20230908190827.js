@@ -50,7 +50,7 @@ export default function SingleProductPage({
       alert("You must login first");
     }
   }
-  let USDollar = new Intl.NumberFormat();
+
   const productProperty = Object.entries(product.properties);
   const listItems = productProperty.map((data, index) => (
     <Table key={index}>
@@ -99,7 +99,7 @@ export default function SingleProductPage({
               </div>
               <PriceRow>
                 <div>
-                  <Price>${USDollar.format(parseInt(product.price))}</Price>
+                  <Price>${product.price}</Price>
                 </div>
                 <div>
                   <Button
@@ -186,8 +186,8 @@ const PriceRow = styled.div`
   align-items: center;
 `;
 const Price = styled.span`
-  font-size: 1.8rem;
-  font-weight: bold;
+  font-size: 2rem;
+  font-weight: 500;
 `;
 
 const ListItems = styled.tr`
