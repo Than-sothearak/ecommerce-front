@@ -58,7 +58,7 @@ export default function CategoryPage({
     propertiesToFill.push(...selectCategory?.properties);
   }
 
-
+  // console.log(propertiesToFill)
   const propertyToFill = propertiesToFill.map((p) => ({
     name: p.name,
     value: "all",
