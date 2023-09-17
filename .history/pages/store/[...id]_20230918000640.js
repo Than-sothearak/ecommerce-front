@@ -128,7 +128,7 @@ export async function getServerSideProps(context) {
   const categories = await Category.find();
   const product = await Product.findById(context.query.id);
 
-  const reviews = await Review.find({product: product._id}, null, {sort: {_id: 1}})
+  const reviews = await Review.find({product: product._id}, null, {limit: 4})
   const session = await getServerSession(context.req, context.res, authOptions);
   const wishedProduct = session?.user
     ? await WishedProduct.find({

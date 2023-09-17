@@ -20,10 +20,9 @@ import { getServerSession } from "next-auth";
 import axios from "axios";
 import WishlistIcon from "@/components/WishlisIcon";
 import { useSession } from "next-auth/react";
-import ReviewProduct from "@/components/ReviewProduct";
-import { Review } from "@/models/Review";
+import Review from "@/components/Review";
 
-export default function SingleProductPage({ product, wishedProduct, reviews }) {
+export default function SingleProductPage({ product, wishedProduct }) {
   const wished = wishedProduct[0]?.product.includes(product._id);
 
   const [isWish, setIsWhish] = useState(wished);
@@ -117,7 +116,7 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
             </Table>
           ))}
         </div>
-        <ReviewProduct product={product} reviews={reviews}/>
+        <Review />
       </Center>
     </>
   );
@@ -128,7 +127,6 @@ export async function getServerSideProps(context) {
   const categories = await Category.find();
   const product = await Product.findById(context.query.id);
 
-  const reviews = await Review.find({product: product._id}, null, {sort: {_id: 1}})
   const session = await getServerSession(context.req, context.res, authOptions);
   const wishedProduct = session?.user
     ? await WishedProduct.find({
@@ -141,7 +139,6 @@ export async function getServerSideProps(context) {
       product: JSON.parse(JSON.stringify(product)),
       categories: JSON.parse(JSON.stringify(categories)),
       wishedProduct: JSON.parse(JSON.stringify(wishedProduct)),
-      reviews: JSON.parse(JSON.stringify(reviews))
     },
   };
 }

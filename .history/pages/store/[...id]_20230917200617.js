@@ -20,10 +20,12 @@ import { getServerSession } from "next-auth";
 import axios from "axios";
 import WishlistIcon from "@/components/WishlisIcon";
 import { useSession } from "next-auth/react";
-import ReviewProduct from "@/components/ReviewProduct";
-import { Review } from "@/models/Review";
+import Review from "@/components/Review";
 
-export default function SingleProductPage({ product, wishedProduct, reviews }) {
+export default function SingleProductPage({
+  product,
+  wishedProduct,
+}) {
   const wished = wishedProduct[0]?.product.includes(product._id);
 
   const [isWish, setIsWhish] = useState(wished);
@@ -51,6 +53,18 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
   }
   let USDollar = new Intl.NumberFormat();
   const productProperty = Object.entries(product.properties);
+  const listItems = productProperty.map((data, index) => (
+    <Table key={index}>
+      <ListItems >
+      <td>
+        <strong> {data[0]}</strong>
+      </td>
+      <td>
+        <span> {data[1]}</span>
+      </td>
+    </ListItems>
+    </Table>
+  ));
 
   return (
     <>
@@ -101,23 +115,16 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
           </Container>
         </ColWrapper>
         <div>
-          <h1 className="text-3xl mb-5 text-center">Specifications</h1>
-          {productProperty.map((data, index) => (
-            <Table key={index}>
-              <tbody>
-              <ListItems>
-                <td>
-                  <strong> {data[0]}</strong>
-                </td>
-                <td>
-                  <span> {data[1]}</span>
-                </td>
-              </ListItems>
-              </tbody>
-            </Table>
-          ))}
+          <h1 className="text-3xl mb-2 text-center">Specifications</h1>
+          <QuickProductDetial>
+            {listItems.filter((item) => {
+              if (item) {
+                return { item };
+              }
+            })}
+          </QuickProductDetial>
         </div>
-        <ReviewProduct product={product} reviews={reviews}/>
+        <Review product={product}/>
       </Center>
     </>
   );
@@ -128,7 +135,6 @@ export async function getServerSideProps(context) {
   const categories = await Category.find();
   const product = await Product.findById(context.query.id);
 
-  const reviews = await Review.find({product: product._id}, null, {sort: {_id: 1}})
   const session = await getServerSession(context.req, context.res, authOptions);
   const wishedProduct = session?.user
     ? await WishedProduct.find({
@@ -141,34 +147,30 @@ export async function getServerSideProps(context) {
       product: JSON.parse(JSON.stringify(product)),
       categories: JSON.parse(JSON.stringify(categories)),
       wishedProduct: JSON.parse(JSON.stringify(wishedProduct)),
-      reviews: JSON.parse(JSON.stringify(reviews))
     },
   };
 }
 
 const Table = styled.table`
-  border: 1px solid #ddd;
+border: 1px solid #ddd;
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
-  &:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  &:hover {
-    background-color: #ddd;
-  }
+  &:nth-child(even){background-color: #f2f2f2;}
+  &:hover {background-color: #ddd;}
   td {
     display: flex;
     align-items: center;
     width: 50%;
     padding: 2px 10px;
   }
-  @media screen and (min-width: 768px) {
+   @media screen and (min-width: 768px) {
     td {
-      padding: 5px 80px;
+       padding: 5px 80px;
+       
     }
   }
-`;
+`
 
 const ColWrapper = styled.div`
   display: grid;
@@ -205,13 +207,13 @@ const ProductDetial = styled.div`
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-  h1 {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  p {
-    font-size: 14px;
-  }
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    p {
+      font-size: 14px;
+    }
 `;
 
 const Hr = styled.div`
@@ -232,4 +234,13 @@ const AddToList = styled.div`
   @media screen and (min-width: 768px) {
     flex: 0.5;
   }
+`;
+const QuickProductDetial = styled.div`
+ 
+  color: #474746;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 `;

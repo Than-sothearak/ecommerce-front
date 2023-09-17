@@ -21,7 +21,6 @@ import axios from "axios";
 import WishlistIcon from "@/components/WishlisIcon";
 import { useSession } from "next-auth/react";
 import ReviewProduct from "@/components/ReviewProduct";
-import { Review } from "@/models/Review";
 
 export default function SingleProductPage({ product, wishedProduct, reviews }) {
   const wished = wishedProduct[0]?.product.includes(product._id);
@@ -117,7 +116,8 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
             </Table>
           ))}
         </div>
-        <ReviewProduct product={product} reviews={reviews}/>
+        <ReviewProduct product={product} reviews={reviews} />
+        <ReviewProduct />
       </Center>
     </>
   );
@@ -127,8 +127,8 @@ export async function getServerSideProps(context) {
   await mongooseConnect();
   const categories = await Category.find();
   const product = await Product.findById(context.query.id);
-
-  const reviews = await Review.find({product: product._id}, null, {sort: {_id: 1}})
+  console.log(product)
+  const reviews = await Review.find({product:product})
   const session = await getServerSession(context.req, context.res, authOptions);
   const wishedProduct = session?.user
     ? await WishedProduct.find({
