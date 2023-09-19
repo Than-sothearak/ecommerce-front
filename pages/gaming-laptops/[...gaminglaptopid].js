@@ -17,11 +17,12 @@ export default function LaptopPage({
   category,
   childCategory,
   wishedProduct,
+  products:fetchProducts,
 }) 
 {
   const [currentPage, setCurrentPage] = useState(0);
   const [items, setItems] = useState(0);
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(fetchProducts);
   const [pageSize, setPageSize] = useState(1)
   const [filtersChanged, setFiltersChanged] = useState(false);
 
