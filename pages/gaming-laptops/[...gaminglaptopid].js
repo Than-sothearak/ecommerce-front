@@ -11,6 +11,7 @@ import { Product } from "@/models/Product";
 import { WishedProduct } from "@/models/WishedProduct";
 import { authOptions } from "../api/auth/[...nextauth]";
 import PcProductGrid from "@/components/PcProductGrid";
+import { Review } from "@/models/Review";
 
 
 export default function LaptopPage({
@@ -18,6 +19,7 @@ export default function LaptopPage({
   childCategory,
   wishedProduct,
   products:fetchProducts,
+  reviews,
 }) 
 {
   const [currentPage, setCurrentPage] = useState(0);
@@ -112,6 +114,7 @@ export default function LaptopPage({
           wishedProduct={wishedProduct}
           categories={category}
           childCategory={childCategory}
+          reviews={reviews}
         />
       </Center>
     </>
@@ -140,8 +143,10 @@ export async function getServerSideProps(context) {
         product: products.map((p) => p._id.toString()),
       })
     : [];
+    const reviews = await Review.find({product:products.map(p => p)})
   return {
     props: {
+      reviews: JSON.parse(JSON.stringify(reviews)),
       categories: JSON.parse(JSON.stringify(categories)),
       category: JSON.parse(JSON.stringify(category)),
       childCategory: JSON.parse(JSON.stringify(childCategory)),
