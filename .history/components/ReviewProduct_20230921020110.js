@@ -6,10 +6,10 @@ import Textarea from "./Textarea";
 import axios from "axios";
 import Table from "./Table";
 
-const ReviewProduct = ({ product, session}) => {
+const ReviewProduct = ({product}) => {
   const [stars, setStars] = useState(0);
   const [description, setDescription] = useState("");
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState([])
   const starCount = [1, 2, 3, 4, 5];
 
   function handleClick(starNumber) {
@@ -17,61 +17,52 @@ const ReviewProduct = ({ product, session}) => {
   }
 
   async function submitReview() {
-    if (session) {
-      try {
-        await axios.post("/api/reviews", {
-          description,
-          stars,
-          product: product._id,
-        });
-        setStars(0);
-        setDescription("");
-        loadReview();
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      alert("You must login first");
+    try {
+     await axios.post("/api/reviews", { description, stars, product: product._id });
+      setStars(0);
+      setDescription("");
+      loadReview();
+    } catch (error) {
+      console.error(error);
     }
   }
-  async function loadReview() {
-    await axios.get("/api/reviews?product=" + product._id).then((res) => {
-      setReviews(res.data);
-    });
+  async function loadReview () {
+    await axios.get('/api/reviews?product=' + product._id).then(res => {
+      setReviews(res.data)
+     })
   }
   useEffect(() => {
     loadReview();
-  }, []);
-  const rating = reviews.map((review) => {
-    return review.stars;
-  });
+  }, [])
+  const rating = reviews.map(review => {
+     return review.stars
+  })
 
-  const findFiveStars = rating.filter((rating) => {
-    return rating === 5;
-  }).length;
-  const findFourStars = rating.filter((rating) => {
-    return rating === 4;
-  }).length;
+const findFiveStars = rating.filter(rating => {
+  return rating === 5
+}).length
+const findFourStars = rating.filter(rating => {
+  return rating === 4
+}).length
 
-  const findTreeStars = rating.filter((rating) => {
-    return rating === 3;
-  }).length;
+const findTreeStars = rating.filter(rating => {
+  return rating === 3
+}).length
 
-  const findTowStars = rating.filter((rating) => {
-    return rating === 2;
-  }).length;
+const findTowStars = rating.filter(rating => {
+  return rating === 2
+}).length
 
-  const findOneStars = rating.filter((rating) => {
-    return rating === 1;
-  }).length;
+const findOneStars = rating.filter(rating => {
+  return rating === 1
+}).length
 
-  const totalRating = rating.reduce(function (acc, val) {
-    return acc + val;
-  }, 0);
+ const totalRating = 
+       rating.reduce(function(acc, val) { return acc + val; }, 0)
 
-  const totalRaingStar = totalRating / reviews.length;
+ const totalRaingStar = totalRating / reviews.length
 
-  const getLimitReviews = reviews.slice(0, 4);
+ const getLimitReviews = reviews.slice(0, 4)
 
   return (
     <ProductReview>
@@ -81,16 +72,13 @@ const ReviewProduct = ({ product, session}) => {
         </h1>
         <TotalReview>
           <h1 className="text-5xl font-bold mt-10 text-center text-gray-900">
-            {totalRaingStar.toFixed(1)}
+          {totalRaingStar.toFixed(1)} 
           </h1>
           <AllStar>
             {starCount.map((star, index) => (
               <button key={star}>
-                {totalRaingStar >= star ? (
-                  <AiFillStar color="#fbc531" />
-                ) : (
-                  <AiOutlineStar />
-                )}
+            {totalRaingStar >= star ? <AiFillStar color='#fbc531'/> : <AiOutlineStar />}
+
               </button>
             ))}
           </AllStar>
@@ -108,26 +96,24 @@ const ReviewProduct = ({ product, session}) => {
               <tr key={review._id}>
                 <td>
                   <div className="flex justify-between ">
-                    <div className="text-lg">
-                      {starCount.map((star, index) => (
-                        <button disabled={true} key={star}>
-                          {review.stars >= star ? (
-                            <AiFillStar color="#2f3640" />
-                          ) : (
-                            <AiOutlineStar />
-                          )}
-                        </button>
-                      ))}
-                      <p className="text-sm text-gray-400">
-                        {review.userName}
-                      </p>
-                    </div>
-                    <h1 className="text-md text-gray-400 font-bold">
-                      {new Date(review.createdAt).toLocaleString("sv-SE")}
-                    </h1>
+                  <div className="text-lg">
+                  {starCount.map((star, index) => (
+                    <button
+                    disabled={true} 
+                    key={star}>
+                      {review.stars >= star ? <AiFillStar color='#2f3640'/> : <AiOutlineStar />}
+                      <p className="text-end text-gray-400">{review.userName}</p>
+
+                    </button>
+                  ))}
+                  </div>
+                    <h1 className="text-md text-gray-400 font-bold">{(new Date(review.createdAt).toLocaleString('sv-SE'))}</h1>
+
                   </div>
                   <p className="mt-2">{review.description}</p>
                 </td>
+               
+                
               </tr>
             ))}
           </tbody>
@@ -182,7 +168,7 @@ const ProductReview = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 80px;
-  @media screen and (min-width: 768px) {
+   @media screen and (min-width: 768px) {
     grid-template-columns: 1fr 1fr;
   }
 `;

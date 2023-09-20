@@ -14,7 +14,7 @@ import PcProductGrid from "@/components/PcProductGrid";
 import { Review } from "@/models/Review";
 
 
-export default function CategoryPage({
+export default function LaptopPage({
   category,
   childCategory,
   wishedProduct,
@@ -125,7 +125,7 @@ export default function CategoryPage({
 export async function getServerSideProps(context) {
   await mongooseConnect();
   const categories = await Category.find();
-  const category = await Category.findById(context.query.id);
+  const category = await Category.findById(context.query.gaminglaptopid);
 
   //find child category
   const childCategory = await Category.find({ parent: category._id });
@@ -157,8 +157,6 @@ export async function getServerSideProps(context) {
 
 const CategoryTitle = styled.div`
   margin-top: 14px;
-  text-align: center;
-  justify-content: center;
   margin-bottom: 0;
   align-items: center;
 `;

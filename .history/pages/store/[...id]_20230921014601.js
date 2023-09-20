@@ -28,7 +28,7 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
   const [isWish, setIsWhish] = useState(wished);
   const { addProduct } = useContext(CartContext);
   const { data: session } = useSession();
-
+  console.log(session)
   function addWishlist(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -117,9 +117,7 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
             </Table>
           ))}
         </div>
-        <ReviewProduct
-        session={session} 
-        product={product} />
+        <ReviewProduct product={product} reviews={reviews}/>
       </Center>
     </>
   );

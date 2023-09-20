@@ -6,7 +6,7 @@ import Textarea from "./Textarea";
 import axios from "axios";
 import Table from "./Table";
 
-const ReviewProduct = ({ product, session}) => {
+const ReviewProduct = ({ product }) => {
   const [stars, setStars] = useState(0);
   const [description, setDescription] = useState("");
   const [reviews, setReviews] = useState([]);
@@ -17,21 +17,17 @@ const ReviewProduct = ({ product, session}) => {
   }
 
   async function submitReview() {
-    if (session) {
-      try {
-        await axios.post("/api/reviews", {
-          description,
-          stars,
-          product: product._id,
-        });
-        setStars(0);
-        setDescription("");
-        loadReview();
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      alert("You must login first");
+    try {
+      await axios.post("/api/reviews", {
+        description,
+        stars,
+        product: product._id,
+      });
+      setStars(0);
+      setDescription("");
+      loadReview();
+    } catch (error) {
+      console.error(error);
     }
   }
   async function loadReview() {
@@ -118,7 +114,7 @@ const ReviewProduct = ({ product, session}) => {
                           )}
                         </button>
                       ))}
-                      <p className="text-sm text-gray-400">
+                      <p className="text-small text-gray-400">
                         {review.userName}
                       </p>
                     </div>

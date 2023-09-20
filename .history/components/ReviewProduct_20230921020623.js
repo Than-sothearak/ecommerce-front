@@ -17,21 +17,17 @@ const ReviewProduct = ({ product, session}) => {
   }
 
   async function submitReview() {
-    if (session) {
-      try {
-        await axios.post("/api/reviews", {
-          description,
-          stars,
-          product: product._id,
-        });
-        setStars(0);
-        setDescription("");
-        loadReview();
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      alert("You must login first");
+    try {
+      await axios.post("/api/reviews", {
+        description,
+        stars,
+        product: product._id,
+      });
+      setStars(0);
+      setDescription("");
+      loadReview();
+    } catch (error) {
+      console.error(error);
     }
   }
   async function loadReview() {

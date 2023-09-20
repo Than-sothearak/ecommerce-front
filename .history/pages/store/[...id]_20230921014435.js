@@ -1,4 +1,5 @@
 import Center from "@/components/Center";
+import Title from "@/components/Title";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import styled from "styled-components";
@@ -15,16 +16,16 @@ import { Category } from "@/models/Category";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { WishedProduct } from "@/models/WishedProduct";
 import { getServerSession } from "next-auth";
+
 import axios from "axios";
 import WishlistIcon from "@/components/WishlisIcon";
 import { useSession } from "next-auth/react";
 import ReviewProduct from "@/components/ReviewProduct";
 import { Review } from "@/models/Review";
 
-
 export default function SingleProductPage({ product, wishedProduct, reviews }) {
   const wished = wishedProduct[0]?.product.includes(product._id);
-  
+
   const [isWish, setIsWhish] = useState(wished);
   const { addProduct } = useContext(CartContext);
   const { data: session } = useSession();
@@ -33,7 +34,6 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
     e.preventDefault();
     e.stopPropagation();
     if (session) {
-    
       const nextValue = !isWish;
       try {
         axios
@@ -117,9 +117,7 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
             </Table>
           ))}
         </div>
-        <ReviewProduct
-        session={session} 
-        product={product} />
+        <ReviewProduct product={product} reviews={reviews}/>
       </Center>
     </>
   );

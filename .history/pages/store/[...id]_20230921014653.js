@@ -119,7 +119,8 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
         </div>
         <ReviewProduct
         session={session} 
-        product={product} />
+        product={product} 
+        reviews={reviews}/>
       </Center>
     </>
   );

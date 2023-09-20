@@ -21,10 +21,9 @@ import { useSession } from "next-auth/react";
 import ReviewProduct from "@/components/ReviewProduct";
 import { Review } from "@/models/Review";
 
-
 export default function SingleProductPage({ product, wishedProduct, reviews }) {
   const wished = wishedProduct[0]?.product.includes(product._id);
-  
+
   const [isWish, setIsWhish] = useState(wished);
   const { addProduct } = useContext(CartContext);
   const { data: session } = useSession();
@@ -33,7 +32,6 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
     e.preventDefault();
     e.stopPropagation();
     if (session) {
-    
       const nextValue = !isWish;
       try {
         axios
@@ -117,9 +115,7 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
             </Table>
           ))}
         </div>
-        <ReviewProduct
-        session={session} 
-        product={product} />
+        <ReviewProduct product={product} reviews={reviews}/>
       </Center>
     </>
   );

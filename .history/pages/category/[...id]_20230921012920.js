@@ -18,7 +18,6 @@ export default function CategoryPage({
   category,
   childCategory,
   wishedProduct,
-  reviews,
 }) 
 {
   const [currentPage, setCurrentPage] = useState(0);
@@ -113,7 +112,6 @@ export default function CategoryPage({
           wishedProduct={wishedProduct}
           categories={category}
           childCategory={childCategory}
-          reviews={reviews}
         />
       </Center>
     </>

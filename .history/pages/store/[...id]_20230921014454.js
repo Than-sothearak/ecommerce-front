@@ -33,7 +33,6 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
     e.preventDefault();
     e.stopPropagation();
     if (session) {
-    
       const nextValue = !isWish;
       try {
         axios
@@ -117,9 +116,7 @@ export default function SingleProductPage({ product, wishedProduct, reviews }) {
             </Table>
           ))}
         </div>
-        <ReviewProduct
-        session={session} 
-        product={product} />
+        <ReviewProduct product={product} reviews={reviews}/>
       </Center>
     </>
   );

@@ -18,7 +18,6 @@ export default function CategoryPage({
   category,
   childCategory,
   wishedProduct,
-  reviews,
 }) 
 {
   const [currentPage, setCurrentPage] = useState(0);
@@ -113,7 +112,6 @@ export default function CategoryPage({
           wishedProduct={wishedProduct}
           categories={category}
           childCategory={childCategory}
-          reviews={reviews}
         />
       </Center>
     </>
@@ -145,7 +143,6 @@ export async function getServerSideProps(context) {
     const reviews = await Review.find({product:products.map(p => p)})
   return {
     props: {
-      reviews: JSON.parse(JSON.stringify(reviews)),
       categories: JSON.parse(JSON.stringify(categories)),
       category: JSON.parse(JSON.stringify(category)),
       childCategory: JSON.parse(JSON.stringify(childCategory)),
