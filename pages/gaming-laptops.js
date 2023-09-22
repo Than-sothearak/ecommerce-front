@@ -26,7 +26,6 @@ const GamingPcs = ({
   const [pageSize, setPageSize] = useState(1)
   const [filtersChanged, setFiltersChanged] = useState(false);
 
-  console.log(reviews)
   const defaultFilterValues = mainCategories.map((a) =>
     a.properties.map((p) => ({
       name: p.name,

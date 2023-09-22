@@ -35,10 +35,9 @@ export default async function handler (req, res) {
       ).skip(page * itemPerPage)
       .limit(itemPerPage);
     
-
-      const items = products.length
+      const items = productItems.length
     
-      const countPage = products.length / itemPerPage;
+      const countPage = productItems.length / itemPerPage;
       
       res.json({
         pagination: { items, countPage, itemPerPage },
