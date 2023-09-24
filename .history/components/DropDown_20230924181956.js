@@ -5,13 +5,13 @@ import DropDownTitle from "./DropDownTitle";
 function DropDownNew({ options }) {
   const gamingPcs = options.filter((c) => c.name === "Gaming PCs")[0];
   const subGamingPcs = options.filter((c) => c.parent?.name === gamingPcs.name);
-  const gamingPcsUrl= '/store/gaming-pcs'
+  const gamingPcsUrl= '/gaming-pcs'
   
   const gamingLaptop = options.filter((c) => c.name === "Gaming Laptops")[0];
   const subGamingLaptop = options.filter(
     (c) => c.parent?.name === gamingLaptop.name
   );
-  const gamingLaptopsUrl = '/store/gaming-laptops'
+  const gamingLaptopsUrl = 'store/gaming-laptops'
   return (
     <>
       <div className="flex">
