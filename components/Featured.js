@@ -63,7 +63,7 @@ const ButtonWrapper = styled.div`
 const ButtonLink = styled(Link)`
   border: 1px solid ${primary};
   padding: 15px 20px;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   align-items: center;
   text-decoration: none;

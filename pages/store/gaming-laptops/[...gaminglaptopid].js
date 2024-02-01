@@ -18,13 +18,13 @@ export default function LaptopPage({
   category,
   childCategory,
   wishedProduct,
-  products:fetchProducts,
+  products,
   reviews,
 }) 
 {
   const [currentPage, setCurrentPage] = useState(0);
   const [items, setItems] = useState(0);
-  const [products, setProducts] = useState(fetchProducts);
+  const [productFilter, setProductFilter] = useState([]);
   const [pageSize, setPageSize] = useState(1)
   const [filtersChanged, setFiltersChanged] = useState(false);
 
@@ -32,6 +32,7 @@ export default function LaptopPage({
   name: p.name,
   value: 'all'
  }))
+ 
 
  const propertiesToFill = category.properties.map((a) => {
   return a
@@ -40,7 +41,7 @@ export default function LaptopPage({
  
   const [sort, setSort] = useState("all");
   const [filtersValues, setFiltersValues] = useState(defaultFilterValues);
-  
+ 
   const onPageChange = (page) => {
     setCurrentPage(page);
     setFiltersChanged(true)
@@ -70,11 +71,10 @@ export default function LaptopPage({
     setFiltersChanged(true);
     setCurrentPage(0)
   }
-   
-  useEffect(() => {
+  
+   useEffect(() => {
   
     const catName = [category._id, ...(childCategory?.map((c) => c._id) || [])];
-
     const params = new URLSearchParams();
     
     params.set("categories", catName.join(","));
@@ -87,7 +87,7 @@ export default function LaptopPage({
     });
     const url = `/api/productsfilter?` + params.toString();
     axios.get(url).then((res) => {
-      setProducts(res.data.products);
+      setProductFilter(res.data.products);
       setItems(res.data.pagination?.items);
       setPageSize(res.data.pagination?.itemPerPage)
     });
@@ -109,7 +109,7 @@ export default function LaptopPage({
           propertiesToFill={[propertiesToFill]}
           items={items}
           currentPage={currentPage}
-          products={products}
+          products={productFilter}
           pageSize={pageSize}
           wishedProduct={wishedProduct}
           categories={category}

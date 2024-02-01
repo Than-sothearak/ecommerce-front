@@ -39,11 +39,12 @@ export default function PcProductGrid({
                 onChange={(e) =>
                   handleFilterChange(property.name, e.target.value)
                 }
+        
                 value={
                   filtersValues?.find((f) => f.name == property?.name)?.value
                 }
               >
-                <option value="all"></option>
+                <option value='all'>All</option>
                 {property?.values.map((value, index) => (
                   <option key={index} value={value}>
                     {value}

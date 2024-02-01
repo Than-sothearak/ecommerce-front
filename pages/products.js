@@ -16,6 +16,7 @@ import { Review } from "@/models/Review";
 const Categories = ({ mainCategories, productOfCategories, categories, wishedProduct,reviews}) => {
   return (
     <>
+  
       <Center>
         {mainCategories.map((cat) => (
           <CategoryWrapper key={cat._id}>
@@ -44,6 +45,7 @@ const Categories = ({ mainCategories, productOfCategories, categories, wishedPro
           </CategoryWrapper>
         ))}
       </Center>
+  
     </>
   );
 };
