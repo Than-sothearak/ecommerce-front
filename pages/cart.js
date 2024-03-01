@@ -152,6 +152,7 @@ const CartPage = (shippingFee) => {
   const [country, setCountry] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const {data: session} = useSession();
+  
   useEffect(() => {
     if (cartProducts?.length > 0) {
       axios.post("/api/cart", { ids: cartProducts }).then((res) => {

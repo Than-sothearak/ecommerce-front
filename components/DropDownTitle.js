@@ -16,12 +16,11 @@ function DropDownTitle({
   defaultText = "Categories",
   options,
   subCategory,
-  url,
 }) {
   const [actionDropDown, setActionDropDown] = useState(false);
   const [isShown, setIsShown] = useState(false);
   const dropdownEl = useRef(null);
-  const [mainDefaultText, setMainDefaultText] = useState(options);
+  const [mainDefaultText, setMainDefaultText] = useState();
 
   const dropdown = () => {
     setActionDropDown(!actionDropDown);
@@ -59,7 +58,7 @@ function DropDownTitle({
         <DropDownButton  
            onClick={dropdown}   
         >
-         {mainDefaultText?.name}
+         {defaultText}
           <SVG
        
           >
@@ -79,7 +78,7 @@ function DropDownTitle({
           </SVG>
         </DropDownButton>
         
-        {subCategory && (
+        {options && (
            <DropDownWrapper>
            {actionDropDown && (
              <>
@@ -88,10 +87,10 @@ function DropDownTitle({
                 onMouseEnter={() => setActionDropDown(true)}
                 onMouseLeave={() => setActionDropDown(false)}  
                >
-                  <Link href={url}>
+                  <Link href={`/store/`}>
                 <OptionRow>
                 
-                  <Label>{`All ${options?.name}`}</Label>
+                  <Label>{`All product`}</Label>
              
                   <SvgTest>
                          <svg
@@ -112,7 +111,7 @@ function DropDownTitle({
                  {subCategory
                    .map((option, index) => (
                  <>
-                    <Link href={url+"/"+ option?._id}>
+                    <Link href={`/category/${option?._id}`}>
                      <OptionRow
                        key={index}
                      >

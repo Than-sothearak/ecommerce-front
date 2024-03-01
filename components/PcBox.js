@@ -68,12 +68,15 @@ const PcBox = ({
   return (
     <>
       <ProductWrapper>
-        <WishlistIcon addWishlist={addWishlist} wished={isWish} />
+       <ImageBox>
+       <WishlistIcon addWishlist={addWishlist} wished={isWish} />
         <WhiteBox href={url}>
           <img src={images?.[0]} />
         </WhiteBox>
+       </ImageBox>
 
         <ProductInfoBox>
+          <div>
           <Title href={url}>{title}</Title>
           <ReviewWrapper>
             <StarIcon>
@@ -86,6 +89,7 @@ const PcBox = ({
             </StarIcon>
             <div>{`(${rating?.length})`}</div>
           </ReviewWrapper>
+          </div>
           <DescriptionWrapper>
           <div>
           {listItems.filter(item => {
@@ -125,8 +129,18 @@ const PcBox = ({
 
 export default PcBox;
 
+const ImageBox = styled.div`
+display: flex;
+flex-direction: column;
+`
+
 const ProductWrapper = styled.div`
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  background-color: black;
   width: 100%;
   border-radius: 10px;
   background-color: white;
@@ -168,6 +182,10 @@ const DescriptionWrapper = styled.div`
 
 `;
 const ProductInfoBox = styled.div`
+height: 100%;
+display: flex;
+flex-direction: column;
+
   color: #2d3436;
   padding: 0px 20px;
 `;
@@ -175,6 +193,8 @@ const ProductInfoBox = styled.div`
 const PriceRow = styled.div`
   margin-top: 20px;
   padding: 10px 20px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
   background-color: #f1f2f6;
   justify-content: space-between;
   align-items: center;

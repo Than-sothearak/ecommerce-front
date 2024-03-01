@@ -12,13 +12,11 @@ import { Toaster } from "react-hot-toast";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Dialog, Tab, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import {
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import DropDownNew from "./DropDown";
 import axios from "axios";
 import DropDownMobile from "./DropdownMobile";
-
+import Navbar from "./Navbar";
 
 export default function Header() {
   const { cartProducts } = useContext(CartContext);
@@ -31,12 +29,11 @@ export default function Header() {
     inputSearch(e);
   }
   useEffect(() => {
-  axios.get('/api/categories').then(res => {
-    setCategories(res.data)
-  })
+    axios.get("/api/categories").then((res) => {
+      setCategories(res.data);
+    });
+  }, []);
 
-  }, [])
-  
   return (
     <>
       <StyledHeader>
@@ -59,10 +56,9 @@ export default function Header() {
               </SearchBox>
             </SearchbarBox>
             <StyledNav>
-              <DropDownNew options={categories}/>
               <NavLink href={"/products"}>All products</NavLink>
               <NavLink href={"/gear-store"}>Gear Store</NavLink>
-            
+              <DropDownNew options={categories} />
             </StyledNav>
 
             {session && (
@@ -139,82 +135,67 @@ export default function Header() {
 
                       {/* Links */}
                       <Tab.Group as="div" className="mt-2">
-                        <div className="ml-4 font-semibold text-lg"></div>
-                        <Tab.Panels as={Fragment}>
-                          <Tab.Panel className="space-y-5 px-4 pb-8 pt-10">
-                            <LinkNav>
-                              <Link
-                                href={"/"}
-                                id={`home-heading-mobile`}
-                               
-                              >
-                                Home
-                              </Link>
-                            </LinkNav>
-                            <LinkNav>
-                              <Link
-                                href={"/products"}
-                                id={`home-heading-mobile`}
-                              
-                              >
-                                All products
-                              </Link>
-                            </LinkNav>
-                            <div>
-                            
-                                 <DropDownMobile options={categories}/>
-                              
-                            </div>
-                           
-                            <LinkNav className="border-gray-300 border-b pb-10 ">
-                              <Link
-                                href={"/products"}
-                                id={`home-heading-mobile`}
-                              >
-                                Categories
-                              </Link>
-                            </LinkNav>
-                            <div>
-                              {session && (
-                                <div className="flex flex-col gap-5">
-                                  <Link
-                                    href={"/account"}
-                                    className="flex items-center gap-2"
-                                  >
+                        <div className="ml-4 font-semibold text-lg">
+                          <Tab.Panels as={Fragment}>
+                            <Tab.Panel className="space-y-1 px-4 pb-8 pt-10">
+                              <LinkNav>
+                                <Link href={"/"} id={`home-heading-mobile`}>
+                                  Home
+                                </Link>
+                              </LinkNav>
+                              <LinkNav>
+                                <Link
+                                  href={"/products"}
+                                  id={`home-heading-mobile`}
+                                >
+                                  All products
+                                </Link>
+                              </LinkNav>
+
+                              <DropDownNew options={categories} />
+
+                              <div>
+                                {session && (
+                                  <div className="flex flex-col gap-5">
+                                    <Link
+                                      href={"/account"}
+                                      className="flex items-center gap-2"
+                                    >
+                                      <BiUser size={24} />
+                                      <div>
+                                        <p className="text-md font-medium">
+                                          {session.user.name}
+                                        </p>
+                                      </div>
+                                    </Link>
+
+                                    <div className="flex items-center gap-2">
+                                      <BiLogOut size={24} />
+                                      <button onClick={() => signOut()}>
+                                        Sign out
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                              <div>
+                                {!session && (
+                                  <Link href={"/account"}>
                                     <BiUser size={24} />
                                     <div>
+                                      <button onClick={() => signIn()}>
+                                        Sign in
+                                      </button>
                                       <p className="text-md font-medium">
-                                        {session.user.name}
+                                        Account
                                       </p>
-                                    </div>
+                                    </div>{" "}
                                   </Link>
-
-                                  <div className="flex items-center gap-2">
-                                    <BiLogOut size={24} />
-                                    <button onClick={() => signOut()}>
-                                      Sign out
-                                    </button>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                            <div>
-                              {!session && (
-                                <Link href={"/account"}>
-                                  <BiUser size={24} />
-                                  <div>
-                                    <button onClick={() => signIn()}>
-                                      Sign in
-                                    </button>
-                                    <p className="text-md font-medium">
-                                      Account
-                                    </p>
-                                  </div>{" "}
-                                </Link>
-                              )}
-                            </div>
-                          </Tab.Panel>
-                        </Tab.Panels>
+                                )}
+                              </div>
+                            </Tab.Panel>
+                          </Tab.Panels>
+                        </div>
                       </Tab.Group>
                     </Dialog.Panel>
                   </Transition.Child>
@@ -252,7 +233,6 @@ const StyledNav = styled.nav`
   align-items: center;
   gap: 20px;
   color: rgba(55, 65, 81, var(--tw-text-opacity));
- 
 
   @media screen and (min-width: 768px) {
     right: 10px;
@@ -408,4 +388,4 @@ const LinkNav = styled.div`
     --tw-bg-opacity: 1;
     background-color: rgba(249, 250, 251, var(--tw-bg-opacity));
   }
-`
+`;

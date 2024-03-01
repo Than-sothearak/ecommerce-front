@@ -3,20 +3,11 @@ import styled from "styled-components";
 import DropDownTitle from "./DropDownTitle";
 
 function DropDownNew({ options }) {
-  const gamingPcs = options.filter((c) => c.name === "Gaming PCs")[0];
-  const subGamingPcs = options.filter((c) => c.parent?.name === gamingPcs.name);
-  const gamingPcsUrl= '/store/gaming-pcs'
-  
-  const gamingLaptop = options.filter((c) => c.name === "Gaming Laptops")[0];
-  const subGamingLaptop = options.filter(
-    (c) => c.parent?.name === gamingLaptop.name
-  );
-  const gamingLaptopsUrl = '/store/gaming-laptops'
+ 
   return (
     <>
       <div className="flex">
-        <DropDownTitle options={gamingPcs} subCategory={subGamingPcs} url={gamingPcsUrl}/>
-        <DropDownTitle options={gamingLaptop} subCategory={subGamingLaptop} url={gamingLaptopsUrl}/>
+        <DropDownTitle options={options} subCategory={options} />
       </div>
            
     </>

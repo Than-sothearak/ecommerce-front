@@ -24,7 +24,8 @@ export default function PcProductGrid({
 
   return (
     <Container>
-      <FilterWrapper>
+      {products.length <= 0 ? <NoProducts><p>No product found</p></NoProducts>:<>
+        <FilterWrapper>
         <FilterHeader>
           <h1>Filter</h1>
           <button onClick={handleReset}>Reset All</button>
@@ -102,9 +103,18 @@ export default function PcProductGrid({
         </SortFilterBottom>
     
       </ProductContainer>
+      </>}
     </Container>
   );
 }
+const NoProducts = styled.div`
+display:  flex;
+width: 100%;
+justify-content: center;
+align-items: center;
+text-align: center;
+;
+`
 const SortBy = styled.div`
   display: flex;
   gap: 10px;
@@ -164,7 +174,7 @@ const FilterWrapper = styled.div`
   border-radius: 20px;
   padding: 10px;
   @media screen and (min-width: 1240px) {
-    height: 800px;
+    height: 100%;
   }
 `;
 const FilterInput = styled.div`
@@ -185,6 +195,7 @@ const SortFilter = styled.div`
 `;
 const SortFilterBottom = styled.div`
   display: flex;
+  margin-top: 40px;
   justify-content: start;
   border: 1px solid #b2b1b1;
   border-radius: 20px;

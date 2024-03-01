@@ -18,7 +18,7 @@ export const DropDownButton = styled.button`
   padding: 0.5rem;
 
   --tw-text-opacity: 1;
-  color: rgba(55, 65, 81, var(--tw-text-opacity));
+  color: black;
 
   /* Shadow */
   --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),

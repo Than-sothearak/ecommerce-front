@@ -12,37 +12,39 @@ import { WishedProduct } from "@/models/WishedProduct";
 import { authOptions } from "../api/auth/[...nextauth]";
 import PcProductGrid from "@/components/PcProductGrid";
 import { Review } from "@/models/Review";
-
+import { useRouter } from "next/navigation";
 
 export default function CategoryPage({
   category,
   childCategory,
   wishedProduct,
   reviews,
-}) 
-{
+  products,
+}) {
   const [currentPage, setCurrentPage] = useState(0);
   const [items, setItems] = useState(0);
-  const [products, setProducts] = useState([]);
-  const [pageSize, setPageSize] = useState(1)
+  const [productsFilter, setProductsFilter] = useState([]);
+  const [pageSize, setPageSize] = useState(1);
+  const [url, setUrl] = useState('')
   const [filtersChanged, setFiltersChanged] = useState(false);
 
- const defaultFilterValues = category.properties.map(p => ({
-  name: p.name,
-  value: 'all'
- }))
+  const defaultFilterValues = category.properties.map((p) => ({
+    name: p.name,
+    value: "all",
+  }));
 
- const propertiesToFill = category.properties.map((a) => {
-  return a
- }
-);
- 
+  const propertiesToFill = category.properties.map((a) => {
+    return a;
+  });
+
   const [sort, setSort] = useState("all");
   const [filtersValues, setFiltersValues] = useState(defaultFilterValues);
   
+  
+
   const onPageChange = (page) => {
     setCurrentPage(page);
-    setFiltersChanged(true)
+    setFiltersChanged(true);
   };
 
   function handleFilterChange(filterName, filterValue) {
@@ -54,7 +56,7 @@ export default function CategoryPage({
     });
     setFiltersChanged(true);
   }
-  
+
   function handleChange(value) {
     setSort(value);
     setFiltersChanged(true);
@@ -67,18 +69,17 @@ export default function CategoryPage({
       }));
     });
     setFiltersChanged(true);
-    setCurrentPage(0)
+    setCurrentPage(0);
   }
-   
+
   useEffect(() => {
-  
     const catName = [category._id, ...(childCategory?.map((c) => c._id) || [])];
 
     const params = new URLSearchParams();
-    
+
     params.set("categories", catName.join(","));
     params.set("sort", sort);
-    params.set('page', currentPage);
+    params.set("page", currentPage);
     filtersValues.forEach((f) => {
       if (f.value !== "all") {
         params.set(f.name, f.value);
@@ -86,19 +87,19 @@ export default function CategoryPage({
     });
     const url = `/api/productsfilter?` + params.toString();
     axios.get(url).then((res) => {
-      setProducts(res.data.products);
+      setProductsFilter(res.data.products);
       setItems(res.data.pagination?.items);
       setPageSize(res.data.pagination?.itemPerPage)
     });
-  }, [filtersValues, sort]);
-  
+  }, [filtersValues, sort, currentPage, products]);
+
   return (
     <>
       <Center>
         <CategoryTitle>
           <Title>{category.name}</Title>
         </CategoryTitle>
-      
+
         <PcProductGrid
           onPageChange={onPageChange}
           filtersValues={filtersValues}
@@ -108,7 +109,7 @@ export default function CategoryPage({
           propertiesToFill={[propertiesToFill]}
           items={items}
           currentPage={currentPage}
-          products={products}
+          products={filtersChanged ? productsFilter : products}
           pageSize={pageSize}
           wishedProduct={wishedProduct}
           categories={category}
@@ -118,10 +119,8 @@ export default function CategoryPage({
       </Center>
     </>
   );
-};
+}
 
-
-  
 export async function getServerSideProps(context) {
   await mongooseConnect();
   const categories = await Category.find();
@@ -133,7 +132,7 @@ export async function getServerSideProps(context) {
   const childIds = childCategory.map((c) => c._id);
   const catIds = [category._id, ...childIds];
 
-  const products = await Product.find({ category: catIds });
+  const products = await Product.find({ category: catIds }).limit(9);
 
   const session = await getServerSession(context.req, context.res, authOptions);
   const wishedProduct = session?.user
@@ -142,7 +141,7 @@ export async function getServerSideProps(context) {
         product: products.map((p) => p._id.toString()),
       })
     : [];
-    const reviews = await Review.find({product:products.map(p => p)})
+  const reviews = await Review.find({ product: products.map((p) => p) });
   return {
     props: {
       reviews: JSON.parse(JSON.stringify(reviews)),
@@ -185,10 +184,8 @@ const Filter = styled.div`
   display: flex;
   h1 {
     font-weight: bold;
-   
   }
   select {
     background-color: transparent;
-    
   }
 `;
