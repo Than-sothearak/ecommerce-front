@@ -54,7 +54,7 @@ export default Categories;
 
 export async function getServerSideProps(context) {
   await mongooseConnect();
-  const categories = await Category.find();
+  const categories = await Category.find({}, null, { sort: { _id: -1 } });
   const mainCategories = categories.filter((c) => !c.parent);
   const product = await Product.find()
   const productOfCategories = {};
