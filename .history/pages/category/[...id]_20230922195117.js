@@ -73,7 +73,7 @@ export default function CategoryPage({
   useEffect(() => {
   
     const catName = [category._id, ...(childCategory?.map((c) => c._id) || [])];
-   
+
     const params = new URLSearchParams();
     
     params.set("categories", catName.join(","));

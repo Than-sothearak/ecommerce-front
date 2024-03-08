@@ -135,7 +135,7 @@ const FilterHeader = styled.div`
 const StyledProductGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 30px;
+  
   margin-bottom: 20px;
   background-color: transparent;
 

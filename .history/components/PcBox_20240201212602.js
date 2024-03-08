@@ -66,7 +66,7 @@ const PcBox = ({
   const totalRaingStar = totalRating / rating?.length
  
   return (
-    <Container>
+    <>
       <ProductWrapper>
         <WishlistIcon addWishlist={addWishlist} wished={isWish} />
         <WhiteBox href={url}>
@@ -119,20 +119,17 @@ const PcBox = ({
           </FooterButton>
         </PriceRow>
       </ProductWrapper>
-    </Container>
+    </>
   );
 };
 
 export default PcBox;
 
-const Container = styled.div`
-background-color: transparent;
-`
 const ProductWrapper = styled.div`
   margin-top: 20px;
   width: 100%;
   border-radius: 10px;
-  background-color: white;
+  background-color: black;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 `;
 
@@ -178,8 +175,6 @@ const ProductInfoBox = styled.div`
 const PriceRow = styled.div`
   margin-top: 20px;
   padding: 10px 20px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
   background-color: #f1f2f6;
   justify-content: space-between;
   align-items: center;

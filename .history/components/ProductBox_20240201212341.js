@@ -10,7 +10,7 @@ import WishlistIcon from "./WishlisIcon";
 
 const ProductWrapper = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: transparent;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 `;
 
@@ -73,9 +73,7 @@ const TextBtn = styled.div`
   }
 `;
 
-const Container = styled.div`
-background-color: black;
-`;
+
 
 const ProductBox = ({
    _id, title, description, price, images, 
@@ -106,7 +104,7 @@ const ProductBox = ({
  
   }
   return (
-    <Container>
+    <>
       <ProductWrapper>
          <WishlistIcon addWishlist={addWishlist} wished={isWish}/>
         <WhiteBox href={url}>
@@ -124,7 +122,7 @@ const ProductBox = ({
           </PriceRow>
         </ProductInfoBox>
       </ProductWrapper>
-    </Container>
+    </>
   );
 };
 

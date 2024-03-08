@@ -178,9 +178,7 @@ const ProductInfoBox = styled.div`
 const PriceRow = styled.div`
   margin-top: 20px;
   padding: 10px 20px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  background-color: #f1f2f6;
+  background-color: black;
   justify-content: space-between;
   align-items: center;
 `;

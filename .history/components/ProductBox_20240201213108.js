@@ -75,7 +75,7 @@ const TextBtn = styled.div`
 
 const Container = styled.div`
 background-color: black;
-`;
+`
 
 const ProductBox = ({
    _id, title, description, price, images, 
@@ -106,25 +106,7 @@ const ProductBox = ({
  
   }
   return (
-    <Container>
-      <ProductWrapper>
-         <WishlistIcon addWishlist={addWishlist} wished={isWish}/>
-        <WhiteBox href={url}>
-          <img src={images?.[0]} />
-          
-        </WhiteBox>
-        
-        <ProductInfoBox>
-          <Title href={url}>{title}</Title>
-          <PriceRow>
-            <Price>${price}</Price>
-            <Button onClick={() => addProduct(_id, title)}>
-              <TextBtn type="button">Add to cart</TextBtn>
-            </Button>
-          </PriceRow>
-        </ProductInfoBox>
-      </ProductWrapper>
-    </Container>
+    <>
   );
 };
 

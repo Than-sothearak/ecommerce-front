@@ -137,7 +137,6 @@ const StyledProductGrid = styled.div`
   grid-template-columns: 1fr;
   gap: 30px;
   margin-bottom: 20px;
-  background-color: transparent;
 
   transition: visibility 1s linear;
   @media screen and (max-width: 280px) {

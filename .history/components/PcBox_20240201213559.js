@@ -126,7 +126,7 @@ const PcBox = ({
 export default PcBox;
 
 const Container = styled.div`
-background-color: transparent;
+background-color: black;
 `
 const ProductWrapper = styled.div`
   margin-top: 20px;
@@ -178,8 +178,6 @@ const ProductInfoBox = styled.div`
 const PriceRow = styled.div`
   margin-top: 20px;
   padding: 10px 20px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
   background-color: #f1f2f6;
   justify-content: space-between;
   align-items: center;
