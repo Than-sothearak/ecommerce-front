@@ -15,7 +15,6 @@ function DropDownTitleMobile ({
   defaultText = "Categories",
   options,
   subCategory,
-  url,
 }) {
   const [actionDropDown, setActionDropDown] = useState(false);
   const [isShown, setIsShown] = useState(false);
@@ -58,7 +57,7 @@ function DropDownTitleMobile ({
         <DropDownButtonMobile 
            onClick={dropdown}   
         >
-         {mainDefaultText?.name}
+         {defaultText}
           <SVG
        
           >
@@ -87,10 +86,10 @@ function DropDownTitleMobile ({
                 onMouseEnter={() => setActionDropDown(true)}
                 onMouseLeave={() => setActionDropDown(false)}  
                >
-                  <Link href={url}>
+                  <Link href={`/gear-store`}>
                 <OptionRow>
                 
-                  <Label>{`All ${options?.name}`}</Label>
+                  <Label>{`All products`}</Label>
              
                   <SvgTest>
                          <svg
@@ -111,12 +110,12 @@ function DropDownTitleMobile ({
                  {subCategory
                    .map((option, index) => (
                  <>
-                    <Link href={url+"/"+ option?._id}>
+                    <Link href={`/category/${option?._id}`}>
                      <OptionRow
                        key={index}
                      >
                     
-                      <Label>{`${option.name}`}</Label>
+                      <Label>{`${option?.name}`}</Label>
                     
                      
                        <SvgTest>

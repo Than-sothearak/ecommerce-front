@@ -1,0 +1,104 @@
+import Link from "next/link";
+import React, { useState } from "react";
+import styled from "styled-components";
+import { MdArrowForwardIos } from "react-icons/md";
+
+const NavbarContainer = styled.nav`
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  width: 180px;
+  position: absolute;
+  z-index: 10;
+`;
+
+const Icon = styled.li`
+  cursor: pointer;
+  &:hover {
+    .dropdown-menu {
+      display: block;
+    }
+  }
+`;
+
+const NavItem = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  &:hover {
+  
+    .dropdown-menu {
+      display: block;
+    }
+  }
+`;
+
+const DropdownMenu = styled.ul`
+  display: none;
+  position: absolute;
+  z-index: 1;
+  left: 170px;
+  gap: 0;
+ 
+`;
+
+const SubCategory = styled.li`
+  
+  top: 20px;
+  padding: 10px;
+  background-color: #444;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  width: 100%;
+  
+  &:hover {
+    color: #00bcd4;
+    .dropdown-menu {
+      display: block;
+    }
+  }
+`;
+
+const Navbar = ({ options }) => {
+  const mainCategories = options.filter((c) => !c.parent);
+  const subcategories = options.filter((c) => c.parent);
+
+  return (
+    <NavbarContainer>
+      <ul>
+        {mainCategories.map((category) => (
+          <NavItem key={category.name}>
+            <Link href={`/category/${category._id}`}>{category.name}</Link>
+            {subcategories.filter((c) => c?.parent._id === category._id)[0]
+              ?.name && (
+              <Icon>
+                <MdArrowForwardIos />
+              </Icon>
+            )}
+
+            {subcategories.filter((c) => c?.parent._id === category._id)[0]
+              ?.name && (
+              <DropdownMenu className="dropdown-menu">
+                {subcategories
+                  .filter((c) => c?.parent._id === category._id)
+                  .map((s) => (
+                    <SubCategory key={s._id}
+                    >
+                    {s.name}
+                    </SubCategory>
+                  ))}
+              </DropdownMenu>
+            )}
+          </NavItem>
+        ))}
+      </ul>
+    </NavbarContainer>
+  );
+};
+
+export default Navbar;

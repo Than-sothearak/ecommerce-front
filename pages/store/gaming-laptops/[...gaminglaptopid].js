@@ -13,38 +13,35 @@ import { authOptions } from "../../api/auth/[...nextauth]";
 import PcProductGrid from "@/components/PcProductGrid";
 import { Review } from "@/models/Review";
 
-
 export default function LaptopPage({
   category,
   childCategory,
   wishedProduct,
   products,
   reviews,
-}) 
-{
+}) {
   const [currentPage, setCurrentPage] = useState(0);
   const [items, setItems] = useState(0);
+  const [cat, setCat] = useState('')
   const [productFilter, setProductFilter] = useState([]);
-  const [pageSize, setPageSize] = useState(1)
+  const [pageSize, setPageSize] = useState(1);
   const [filtersChanged, setFiltersChanged] = useState(false);
 
- const defaultFilterValues = category.properties.map(p => ({
-  name: p.name,
-  value: 'all'
- }))
- 
+  const defaultFilterValues = category.properties.map((p) => ({
+    name: p.name,
+    value: "all",
+  }));
 
- const propertiesToFill = category.properties.map((a) => {
-  return a
- }
-);
- 
+  const propertiesToFill = category.properties.map((a) => {
+    return a;
+  });
+
   const [sort, setSort] = useState("all");
   const [filtersValues, setFiltersValues] = useState(defaultFilterValues);
- 
+
   const onPageChange = (page) => {
     setCurrentPage(page);
-    setFiltersChanged(true)
+    setFiltersChanged(true);
   };
 
   function handleFilterChange(filterName, filterValue) {
@@ -56,7 +53,7 @@ export default function LaptopPage({
     });
     setFiltersChanged(true);
   }
-  
+
   function handleChange(value) {
     setSort(value);
     setFiltersChanged(true);
@@ -69,37 +66,40 @@ export default function LaptopPage({
       }));
     });
     setFiltersChanged(true);
-    setCurrentPage(0)
+    setCurrentPage(0);
   }
-  
-   useEffect(() => {
-  
+
+  const params = new URLSearchParams();
+  const fecthData = async () => {
     const catName = [category._id, ...(childCategory?.map((c) => c._id) || [])];
-    const params = new URLSearchParams();
-    
+  
     params.set("categories", catName.join(","));
     params.set("sort", sort);
-    params.set('page', currentPage);
+    params.set("page", currentPage);
     filtersValues.forEach((f) => {
       if (f.value !== "all") {
         params.set(f.name, f.value);
       }
     });
-    const url = `/api/productsfilter?` + params.toString();
-    axios.get(url).then((res) => {
+      await axios.get(`/api/productsfilter?` + params.toString()).then((res) => {
       setProductFilter(res.data.products);
       setItems(res.data.pagination?.items);
-      setPageSize(res.data.pagination?.itemPerPage)
-    });
-  }, [filtersValues, sort]);
+      setPageSize(res.data.pagination?.itemPerPage);
   
+    });
+  };
+
+  useEffect(() => {
+    fecthData();
+  }, [filtersValues, sort,]);
+    
   return (
     <>
       <Center>
         <CategoryTitle>
           <Title>{category.name}</Title>
         </CategoryTitle>
-      
+
         <PcProductGrid
           onPageChange={onPageChange}
           filtersValues={filtersValues}
@@ -119,10 +119,8 @@ export default function LaptopPage({
       </Center>
     </>
   );
-};
+}
 
-
-  
 export async function getServerSideProps(context) {
   await mongooseConnect();
   const categories = await Category.find();
@@ -143,7 +141,7 @@ export async function getServerSideProps(context) {
         product: products.map((p) => p._id.toString()),
       })
     : [];
-    const reviews = await Review.find({product:products.map(p => p)})
+  const reviews = await Review.find({ product: products.map((p) => p) });
   return {
     props: {
       reviews: JSON.parse(JSON.stringify(reviews)),
@@ -184,10 +182,8 @@ const Filter = styled.div`
   display: flex;
   h1 {
     font-weight: bold;
-   
   }
   select {
     background-color: transparent;
-    
   }
 `;

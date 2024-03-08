@@ -4,21 +4,12 @@ import DropDownTitle from "./DropDownTitle";
 import DropDownTitleMobile from "./DropDownTitleMobile";
 
 function DropDownMobile({ options }) {
-  const gamingPcs = options.filter((c) => c.name === "Gaming PCs")[0];
-  const subGamingPcs = options.filter((c) => c.parent?.name === gamingPcs.name);
-  const gamingPcsUrl= '/store/gaming-pcs'
-  
-  const gamingLaptop = options.filter((c) => c.name === "Gaming Laptops")[0];
-  const subGamingLaptop = options.filter(
-    (c) => c.parent?.name === gamingLaptop.name
-  );
-  const gamingLaptopsUrl = '/store/gaming-laptops'
+ 
   return (
     <>
-      <div className="flex flex-col justify-end">
-        <DropDownTitleMobile options={gamingPcs} subCategory={subGamingPcs} url={gamingPcsUrl}/>
-        <DropDownTitleMobile options={gamingLaptop} subCategory={subGamingLaptop} url={gamingLaptopsUrl}/>
-      </div>
+   
+        <DropDownTitleMobile options={options} subCategory={options} />
+    
            
     </>
   );
