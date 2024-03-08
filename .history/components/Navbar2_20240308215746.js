@@ -56,6 +56,15 @@ const DropdownSubMenu = styled.li`
 `;
 
 
+const DropdownSub = styled.li`
+
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  background-color: #f9f9f9;
+`;
 
 
 const Navbar = ({ options }) => {
@@ -84,8 +93,16 @@ const Navbar = ({ options }) => {
                     <DropdownMenu key={s._id}>
                       <NavItem>
                         <Link href={`/category/${s._id}`}>{s.name}</Link>
-                        
-                        
+                        {subcategories.filter(
+                          (c) => c?.parent._id === category._id
+                        )[0]?.name && (
+                          <Icon>
+                            <MdArrowForwardIos />
+                          </Icon>
+                        )}
+                        <DropdownSub>
+                        <Link href={`/category/${s._id}`}>ssdsdsd</Link>
+                        </DropdownSub>
                       </NavItem>
                     </DropdownMenu>
                   ))}

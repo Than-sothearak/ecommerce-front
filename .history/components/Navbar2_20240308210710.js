@@ -6,9 +6,10 @@ import { MdArrowForwardIos } from "react-icons/md";
 const NavbarContainer = styled.ul`
   position: absolute;
   background-color: #f1f1f1;
-
+  min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
+  padding: 18px;
 `;
 
 const Icon = styled.li`
@@ -22,17 +23,15 @@ const Icon = styled.li`
 
 const NavItem = styled.li`
   display: flex;
-  min-width: 180px;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   position: relative;
-  background-color: #f9f9f9;
-  padding: 20px;
-  width: 100%;
   cursor: pointer;
   &:hover {
-    background-color: #f1f1f1;
+    text-decoration: underline;
     .dropdown-menu {
       display: block;
     }
@@ -40,31 +39,30 @@ const NavItem = styled.li`
 `;
 
 const DropdownMenu = styled.ul`
-  top: 0;
-  left: 100%;
-  margin-top: -1px;
-`;
-
-const DropdownSubMenu = styled.li`
   display: none;
-  position: absolute;
   top: 0;
   left: 100%;
   margin-top: -1px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  background-color: #f9f9f9;
 `;
 
+const SubCategory = styled.li`
+ 
 
-
+  &:hover {
+    text-decoration: underline;
+    .dropdown-menu {
+      display: block;
+    }
+  }
+`;
 
 const Navbar = ({ options }) => {
   const mainCategories = options.filter((c) => !c.parent);
   const subcategories = options.filter((c) => c.parent);
 
   return (
-    <NavbarContainer>
-      <DropdownMenu>
+    <DropdownMenu>
+     
         {mainCategories.map((category) => (
           <NavItem key={category.name}>
             <Link href={`/category/${category._id}`}>{category.name}</Link>
@@ -77,24 +75,20 @@ const Navbar = ({ options }) => {
 
             {subcategories.filter((c) => c?.parent._id === category._id)[0]
               ?.name && (
-              <DropdownSubMenu className="dropdown-menu " tabindex="-1">
+              <DropdownMenu className="dropdown-menu " tabindex="-1">
                 {subcategories
                   .filter((c) => c?.parent._id === category._id)
                   .map((s) => (
-                    <DropdownMenu key={s._id}>
-                      <NavItem>
-                        <Link href={`/category/${s._id}`}>{s.name}</Link>
-                        
-                        
-                      </NavItem>
-                    </DropdownMenu>
+                    <SubCategory key={s._id}>
+                      <Link href={`/category/${s._id}`}>{s.name}</Link>
+                    </SubCategory>
                   ))}
-              </DropdownSubMenu>
+              </DropdownMenu>
             )}
           </NavItem>
         ))}
-      </DropdownMenu>
-    </NavbarContainer>
+    
+    </DropdownMenu>
   );
 };
 

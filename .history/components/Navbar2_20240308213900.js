@@ -6,9 +6,10 @@ import { MdArrowForwardIos } from "react-icons/md";
 const NavbarContainer = styled.ul`
   position: absolute;
   background-color: #f1f1f1;
-
+  min-width: 180px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
+  
 `;
 
 const Icon = styled.li`
@@ -22,7 +23,6 @@ const Icon = styled.li`
 
 const NavItem = styled.li`
   display: flex;
-  min-width: 180px;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
@@ -32,7 +32,7 @@ const NavItem = styled.li`
   width: 100%;
   cursor: pointer;
   &:hover {
-    background-color: #f1f1f1;
+    background-color:#f1f1f1;
     .dropdown-menu {
       display: block;
     }
@@ -55,8 +55,18 @@ const DropdownSubMenu = styled.li`
   background-color: #f9f9f9;
 `;
 
+const SubCategory = styled.li`
+   padding: 20px;
+   min-width: 140px;
 
-
+  &:hover {
+  
+    background-color:#f1f1f1;
+    .dropdown-menu {
+      display: block;
+    }
+  }
+`;
 
 const Navbar = ({ options }) => {
   const mainCategories = options.filter((c) => !c.parent);
@@ -81,14 +91,15 @@ const Navbar = ({ options }) => {
                 {subcategories
                   .filter((c) => c?.parent._id === category._id)
                   .map((s) => (
-                    <DropdownMenu key={s._id}>
-                      <NavItem>
-                        <Link href={`/category/${s._id}`}>{s.name}</Link>
-                        
-                        
-                      </NavItem>
-                    </DropdownMenu>
+                    <SubCategory key={s._id}>
+                      <Link href={`/category/${s._id}`}>{s.name}</Link>
+                      <DropdownSubMenu>
+                  <a class="test" href="#">Another dropdown <span class="caret"></span></a>
+                  </DropdownSubMenu>
+                    </SubCategory>
+                    
                   ))}
+                 
               </DropdownSubMenu>
             )}
           </NavItem>

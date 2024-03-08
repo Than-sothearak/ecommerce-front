@@ -276,7 +276,7 @@ const NavButton = styled.button`
 `;
 const NavAccountBox = styled.div`
   position: relative;
-
+  border: 1px solid #f1f1f1;
   bottom: 0;
   align-items: center;
   gap: 20px;
@@ -296,7 +296,6 @@ const NavCart = styled(Link)`
   position: relative;
 `;
 const NavAcc = styled(Link)`
-  border: 1px solid #f1f1f1;
   display: none;
   text-decoration: none;
 

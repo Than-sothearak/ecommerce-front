@@ -14,6 +14,7 @@ export const DropDownButton = styled.button`
   justify-content: center;
   align-items: center;
   gap: 10px;
+  align-items: first baseline;
   width: 100%;
   background-color: white;
   --tw-border-opacity: 1;

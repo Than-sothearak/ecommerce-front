@@ -84,8 +84,16 @@ const Navbar = ({ options }) => {
                     <DropdownMenu key={s._id}>
                       <NavItem>
                         <Link href={`/category/${s._id}`}>{s.name}</Link>
-                        
-                        
+                        {subcategories.filter(
+                          (c) => c?.parent._id === category._id
+                        )[0]?.name && (
+                          <Icon>
+                            <MdArrowForwardIos />
+                          </Icon>
+                        )}
+                        <DropdownSub>
+                        <Link href={`/category/${s._id}`}>ssdsdsd</Link>
+                        </DropdownSub>
                       </NavItem>
                     </DropdownMenu>
                   ))}

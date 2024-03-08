@@ -11,9 +11,10 @@ export const SubDropDownWrapper = styled.div`
 
 export const DropDownButton = styled.button`
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   gap: 10px;
+  align-items: first baseline;
   width: 100%;
   background-color: white;
   --tw-border-opacity: 1;

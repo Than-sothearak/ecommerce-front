@@ -55,8 +55,17 @@ const DropdownSubMenu = styled.li`
   background-color: #f9f9f9;
 `;
 
+const SubCategory = styled.li`
+  padding: 20px;
+  min-width: 140px;
 
-
+  &:hover {
+    background-color: #f1f1f1;
+    .dropdown-menu {
+      display: block;
+    }
+  }
+`;
 
 const Navbar = ({ options }) => {
   const mainCategories = options.filter((c) => !c.parent);
@@ -81,13 +90,17 @@ const Navbar = ({ options }) => {
                 {subcategories
                   .filter((c) => c?.parent._id === category._id)
                   .map((s) => (
-                    <DropdownMenu key={s._id}>
-                      <NavItem>
-                        <Link href={`/category/${s._id}`}>{s.name}</Link>
-                        
-                        
-                      </NavItem>
-                    </DropdownMenu>
+                    <NavItem key={s._id}>
+                      <Link href={`/category/${s._id}`}>{s.name}</Link>
+                      {subcategories.filter(
+                        (c) => c?.parent._id === category._id
+                      )[0]?.name && (
+                        <Icon>
+                          <MdArrowForwardIos />
+                        </Icon>
+                       
+                      )}
+                    </NavItem>
                   ))}
               </DropdownSubMenu>
             )}

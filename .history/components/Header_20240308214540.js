@@ -296,7 +296,6 @@ const NavCart = styled(Link)`
   position: relative;
 `;
 const NavAcc = styled(Link)`
-  border: 1px solid #f1f1f1;
   display: none;
   text-decoration: none;
 
