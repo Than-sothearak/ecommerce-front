@@ -63,32 +63,30 @@ const Navbar = ({ options }) => {
     <NavbarContainer>
       <DropdownMenu>
         {mainCategories.map((category) => (
-          <Link key={category.name} href={`/category/${category._id}`}>
-            <NavItem>
-              {category.name}
-              {subcategories.filter((c) => c?.parent._id === category._id)[0]
-                ?.name && (
-                <Icon>
-                  <MdArrowForwardIos />
-                </Icon>
-              )}
+          <NavItem key={category.name}>
+            <Link href={`/category/${category._id}`}>{category.name}</Link>
+            {subcategories.filter((c) => c?.parent._id === category._id)[0]
+              ?.name && (
+              <Icon>
+                <MdArrowForwardIos />
+              </Icon>
+            )}
 
-              {subcategories.filter((c) => c?.parent._id === category._id)[0]
-                ?.name && (
-                <DropdownSubMenu className="dropdown-menu " tabindex="-1">
-                  {subcategories
-                    .filter((c) => c?.parent._id === category._id)
-                    .map((s) => (
-                      <DropdownMenu key={s._id}>
-                        <Link href={`/category/${s._id}`}>
-                          <NavItem> {s.name}</NavItem>
-                        </Link>
-                      </DropdownMenu>
-                    ))}
-                </DropdownSubMenu>
-              )}
-            </NavItem>
-          </Link>
+            {subcategories.filter((c) => c?.parent._id === category._id)[0]
+              ?.name && (
+              <DropdownSubMenu className="dropdown-menu " tabindex="-1">
+                {subcategories
+                  .filter((c) => c?.parent._id === category._id)
+                  .map((s) => (
+                    <DropdownMenu key={s._id}>
+                      <Link href={`/category/${s._id}`}>
+                        <NavItem> {s.name}</NavItem>
+                      </Link>
+                    </DropdownMenu>
+                  ))}
+              </DropdownSubMenu>
+            )}
+          </NavItem>
         ))}
       </DropdownMenu>
     </NavbarContainer>

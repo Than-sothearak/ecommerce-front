@@ -55,6 +55,9 @@ const DropdownSubMenu = styled.li`
   background-color: #f9f9f9;
 `;
 
+
+
+
 const Navbar = ({ options }) => {
   const mainCategories = options.filter((c) => !c.parent);
   const subcategories = options.filter((c) => c.parent);
@@ -63,31 +66,33 @@ const Navbar = ({ options }) => {
     <NavbarContainer>
       <DropdownMenu>
         {mainCategories.map((category) => (
-          <Link key={category.name} href={`/category/${category._id}`}>
-            <NavItem>
-              {category.name}
-              {subcategories.filter((c) => c?.parent._id === category._id)[0]
-                ?.name && (
-                <Icon>
-                  <MdArrowForwardIos />
-                </Icon>
-              )}
+          <Link href={`/category/${category._id}`}>{category.name}
+          <NavItem key={category.name}>
+           
+            {subcategories.filter((c) => c?.parent._id === category._id)[0]
+              ?.name && (
+              <Icon>
+                <MdArrowForwardIos />
+              </Icon>
+            )}
 
-              {subcategories.filter((c) => c?.parent._id === category._id)[0]
-                ?.name && (
-                <DropdownSubMenu className="dropdown-menu " tabindex="-1">
-                  {subcategories
-                    .filter((c) => c?.parent._id === category._id)
-                    .map((s) => (
-                      <DropdownMenu key={s._id}>
-                        <Link href={`/category/${s._id}`}>
-                          <NavItem> {s.name}</NavItem>
-                        </Link>
-                      </DropdownMenu>
-                    ))}
-                </DropdownSubMenu>
-              )}
-            </NavItem>
+            {subcategories.filter((c) => c?.parent._id === category._id)[0]
+              ?.name && (
+              <DropdownSubMenu className="dropdown-menu " tabindex="-1">
+                {subcategories
+                  .filter((c) => c?.parent._id === category._id)
+                  .map((s) => (
+                    <DropdownMenu key={s._id}>
+                      <NavItem>
+                        <Link href={`/category/${s._id}`}>{s.name}</Link>
+                        
+                        
+                      </NavItem>
+                    </DropdownMenu>
+                  ))}
+              </DropdownSubMenu>
+            )}
+          </NavItem>
           </Link>
         ))}
       </DropdownMenu>

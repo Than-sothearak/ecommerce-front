@@ -28,7 +28,7 @@ const NavItem = styled.li`
   gap: 10px;
   position: relative;
   background-color: #f9f9f9;
-  padding: 12px;
+  padding: 20px;
   width: 100%;
   cursor: pointer;
   &:hover {
@@ -48,12 +48,15 @@ const DropdownMenu = styled.ul`
 const DropdownSubMenu = styled.li`
   display: none;
   position: absolute;
-  top: 2px;
+  top: 1px;
   left: 100%;
   margin-top: -1px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   background-color: #f9f9f9;
 `;
+
+
+
 
 const Navbar = ({ options }) => {
   const mainCategories = options.filter((c) => !c.parent);
@@ -63,32 +66,32 @@ const Navbar = ({ options }) => {
     <NavbarContainer>
       <DropdownMenu>
         {mainCategories.map((category) => (
-          <Link key={category.name} href={`/category/${category._id}`}>
-            <NavItem>
-              {category.name}
-              {subcategories.filter((c) => c?.parent._id === category._id)[0]
-                ?.name && (
-                <Icon>
-                  <MdArrowForwardIos />
-                </Icon>
-              )}
+          <NavItem key={category.name}>
+            <Link href={`/category/${category._id}`}>{category.name}</Link>
+            {subcategories.filter((c) => c?.parent._id === category._id)[0]
+              ?.name && (
+              <Icon>
+                <MdArrowForwardIos />
+              </Icon>
+            )}
 
-              {subcategories.filter((c) => c?.parent._id === category._id)[0]
-                ?.name && (
-                <DropdownSubMenu className="dropdown-menu " tabindex="-1">
-                  {subcategories
-                    .filter((c) => c?.parent._id === category._id)
-                    .map((s) => (
-                      <DropdownMenu key={s._id}>
-                        <Link href={`/category/${s._id}`}>
-                          <NavItem> {s.name}</NavItem>
-                        </Link>
-                      </DropdownMenu>
-                    ))}
-                </DropdownSubMenu>
-              )}
-            </NavItem>
-          </Link>
+            {subcategories.filter((c) => c?.parent._id === category._id)[0]
+              ?.name && (
+              <DropdownSubMenu className="dropdown-menu " tabindex="-1">
+                {subcategories
+                  .filter((c) => c?.parent._id === category._id)
+                  .map((s) => (
+                    <DropdownMenu key={s._id}>
+                      <NavItem>
+                        <Link href={`/category/${s._id}`}>{s.name}</Link>
+                        
+                        
+                      </NavItem>
+                    </DropdownMenu>
+                  ))}
+              </DropdownSubMenu>
+            )}
+          </NavItem>
         ))}
       </DropdownMenu>
     </NavbarContainer>
