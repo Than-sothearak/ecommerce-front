@@ -1,5 +1,4 @@
 import { styled } from "styled-components";
-import ProductBox from "./ProductBox";
 import { RevealWrapper } from "next-reveal";
 import PcBox from "./PcBox";
 

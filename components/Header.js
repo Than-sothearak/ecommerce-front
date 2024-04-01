@@ -15,7 +15,6 @@ import { Fragment } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import DropDownNew from "./DropDown";
 import axios from "axios";
-import Navbar from "./Navbar2";
 
 
 

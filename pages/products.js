@@ -107,7 +107,16 @@ const CategoryGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
-  @media screen and (min-width: 768px) {
+   @media screen and (min-width: 740px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+   @media screen and (min-width: 1024px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+
+  @media screen and (min-width: 1280px) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 `;

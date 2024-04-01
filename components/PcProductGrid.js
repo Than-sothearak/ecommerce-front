@@ -148,16 +148,13 @@ const StyledProductGrid = styled.div`
   gap: 30px;
   margin-bottom: 20px;
   background-color: transparent;
-
   transition: visibility 1s linear;
-  @media screen and (max-width: 280px) {
-    grid-template-columns: 1fr;
-  }
+ 
 
   @media screen and (min-width: 768px) {
     grid-template-columns: 1fr 1fr;
   }
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: 1280px) {
     grid-template-columns: 1fr 1fr 1fr;
   }
 `;
