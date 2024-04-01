@@ -8,8 +8,9 @@ export default async function handler (req, res) {
     const productQuery = {};
     if (phrase) {
       productQuery['$or'] = [
-        {title:{$regex:phrase,$options:'i'}},
-        {desciption:{$regex:phrase,$options:'i'}}
+        {title:{$regex:phrase,$options:'i'}, status: 1},
+        {desciption:{$regex:phrase,$options:'i'}, status: 1},
+       
       ]
     }
   

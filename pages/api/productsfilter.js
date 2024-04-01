@@ -7,6 +7,7 @@ export default async function handler (req, res) {
     const [sortOrder] = sort.split();
     const productsQuery = {
       category:categories.split(','),
+      status: 1
     };
     
     if (Object.keys(filtersValues).length > 0) {
@@ -15,6 +16,7 @@ export default async function handler (req, res) {
       })
    
     }
+
   
     const itemPerPage = 9;
     let sorted

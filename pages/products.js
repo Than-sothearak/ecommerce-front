@@ -72,7 +72,7 @@ export async function getServerSideProps(context) {
     const childIds = categoriesHaveParent.map((c) => c._id.toString());
     const categoriesIds = [mainCatId, ...childIds];
     
-    const products = await Product.find({ category: categoriesIds }, null, {
+    const products = await Product.find({ category: categoriesIds, status:1 }, null, {
       limit: 3,
       sort: { _id: -1 },
     });
