@@ -91,7 +91,7 @@ const Featured = ({ products, featuredProductId }) => {
   const { addProduct } = useContext(CartContext);
   
   const featuredProducts = products.filter(p => {
-    return  p._id === featuredProductId[0].value
+    return  p._id === featuredProductId[1].value
   });
   
   const featuredProduct = featuredProducts[0]

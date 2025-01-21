@@ -173,12 +173,12 @@ const CartPage = (shippingFee) => {
     }
   }, []);
 
-  function increaseProduct(id) {
-    addProduct(id);
+  function increaseProduct(id, title) {
+    addProduct(id, title);
   }
 
-  function decreaseProduct(id) {
-    removeProduct(id);
+  function decreaseProduct(id, title) {
+    removeProduct(id, title);
   }
 
 
@@ -206,7 +206,7 @@ const CartPage = (shippingFee) => {
     
     }
   
-
+    console.log(cartProducts)
   let subtotal = 0;
   for (const productId of cartProducts) {
     const price = products.find((p) => p._id == productId)?.price || 0;
@@ -273,7 +273,7 @@ const CartPage = (shippingFee) => {
                       </ProductInfoCell>
                       <td>
                         <ButtonStylePlus
-                          onClick={() => decreaseProduct(product._id)}
+                          onClick={() => decreaseProduct(product._id, product.title)}
                         >
                           -
                         </ButtonStylePlus>
@@ -284,7 +284,7 @@ const CartPage = (shippingFee) => {
                           }
                         </QuantityLabel>
                         <ButtonStylePlus
-                          onClick={() => increaseProduct(product._id)}
+                          onClick={() => increaseProduct(product._id, product.title)}
                         >
                           +
                         </ButtonStylePlus>

@@ -13,6 +13,8 @@ export function CartContextProvider({ children }) {
       ls?.setItem("cart", JSON.stringify(cartProducts));
     }
   }, [cartProducts]);
+
+ 
   
   useEffect(() => {
     if (ls && ls.getItem("cart")) {
