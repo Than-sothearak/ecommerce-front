@@ -27,7 +27,8 @@ const ColumnsWrapper = styled.div`
 `;
 
 const Box = styled.div`
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   border-radius: 10px;
   padding: 30px;
 `;
@@ -141,9 +142,9 @@ const Button = styled(Link)`
 `;
 
 const CartPage = (shippingFee) => {
-  const { cartProducts, addProduct, removeProduct, clearCart,  } =
-    useContext(CartContext);
-  const [products, setProducts] = useState([]);
+  const {cartProducts,addProduct,removeProduct,clearCart} = useContext(CartContext);
+
+  const [products, setProducts] = useState();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
@@ -151,23 +152,23 @@ const CartPage = (shippingFee) => {
   const [streetAddress, setStreetAddress] = useState("");
   const [country, setCountry] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
-  const {data: session} = useSession();
-  
+  const { data: session } = useSession();
+
   useEffect(() => {
-    if (cartProducts?.length > 0) {
-      axios.post("/api/cart", { ids: cartProducts }).then((res) => {
-        setProducts(res.data);
-      });
+    if (cartProducts.length > 0) {
+      axios.post('/api/cart', {ids:cartProducts})
+        .then(response => {
+          setProducts(response.data);
+        })
     } else {
       setProducts([]);
     }
   }, [cartProducts]);
-
   useEffect(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return;
     }
-    if (window?.location.href.includes("success")) {
+    if (window?.location.href.includes('success')) {
       setIsSuccess(true);
       clearCart();
     }
@@ -181,40 +182,39 @@ const CartPage = (shippingFee) => {
     removeProduct(id, title);
   }
 
-
-    async function goToPayment() {
-      if (session) {
-        if (name == "" || email == "" || city == "" || country == "") {
-          alert("Please fill in the field");
-        } else {
-          const response = await axios.post("/api/checkout", {
-            name,
-            email,
-            city,
-            postalCode,
-            streetAddress,
-            country,
-            cartProducts,
-          });
-          if (response.data.url) {
-            window.location = response.data.url;
-          }
-        }
+  async function goToPayment() {
+    if (session) {
+      if (name == "" || email == "" || city == "" || country == "") {
+        alert("Please fill in the field");
       } else {
-        alert('You must sign in first!')
+        const response = await axios.post("/api/checkout", {
+          name,
+          email,
+          city,
+          postalCode,
+          streetAddress,
+          country,
+          cartProducts,
+        });
+        if (response.data.url) {
+          window.location = response.data.url;
+        }
       }
-    
+    } else {
+      alert("You must sign in first!");
     }
-  
-    console.log(cartProducts)
+  }
+  console.log(cartProducts);
+
   let subtotal = 0;
+
   for (const productId of cartProducts) {
-    const price = products.find((p) => p._id == productId)?.price || 0;
+    const price = products?.find((p) => p._id == productId)?.price || 0;
     subtotal += price;
   }
-  
+
   const total = subtotal + parseInt(shippingFee.shippingFee.value || 0);
- 
+
   if (isSuccess) {
     return (
       <>
@@ -240,8 +240,8 @@ const CartPage = (shippingFee) => {
       <Center>
         <ColumnsWrapper>
           <Box>
-           <Title>Cart</Title>
-            {!cartProducts?.length > 0 && (
+            <Title>Cart</Title>
+            {!cartProducts?.length > 0 ? (
               <CartEmptyConatainer>
                 <div>
                   <h1> Your cart is empty</h1>
@@ -252,8 +252,7 @@ const CartPage = (shippingFee) => {
                   </ButtonDiv>
                 </div>
               </CartEmptyConatainer>
-            )}
-            {products?.length > 0 && (
+            ) : (
               <Table>
                 <thead>
                   <tr>
@@ -263,62 +262,51 @@ const CartPage = (shippingFee) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product) => (
-                    <tr key={product._id}>
-                      <ProductInfoCell>
-                        <ProductImageBox>
-                          <img src={product.images[0]} alt={product.title} />
-                        </ProductImageBox>
-                        <td>{product.title}:</td>
-                      </ProductInfoCell>
-                      <td>
-                        <ButtonStylePlus
-                          onClick={() => decreaseProduct(product._id, product.title)}
-                        >
-                          -
-                        </ButtonStylePlus>
-                        <QuantityLabel>
-                          {
-                            cartProducts?.filter((id) => id === product._id)
-                              .length
-                          }
+                  {products?.map((cartItem) => {
+                    return (
+                      <tr key={cartItem._id}>
+                        <ProductInfoCell>
+                          <ProductImageBox>
+                            <img
+                              src={cartItem?.images[0]}
+                              alt={cartItem?.title}
+                            />
+                          </ProductImageBox>
+                          <td>{cartItem?.title}</td>
+                        </ProductInfoCell>
+                        <td>
+                          <ButtonStylePlus
+                            onClick={() =>
+                              decreaseProduct(
+                                cartItem._id,
+                                cartItem?.title
+                              )
+                            }
+                          >
+                            -
+                          </ButtonStylePlus>
+                          <QuantityLabel>
+                          {cartProducts.filter(id => id === cartItem._id).length}
                         </QuantityLabel>
-                        <ButtonStylePlus
-                          onClick={() => increaseProduct(product._id, product.title)}
-                        >
-                          +
-                        </ButtonStylePlus>
-                      </td>
-                      <td>
-                        $
-                        {cartProducts.filter((id) => id === product._id)
-                          .length * product.price}
-                      </td>
-                    </tr>
-                  ))}
-                  <tr>
-                    
-                    <td>Subtotal</td>
-                    <td></td>
-                    <td>
-                      <h2>${subtotal}</h2>
-                    </td>
-                    
-                  </tr>
-                  <tr>
-                 
-                  <td>Shipping fee</td>
-                  <td></td>
-                  <td>
-                   ${shippingFee.shippingFee.value}
-                  </td>
-                  </tr>
-                  <tr></tr>
-              
-                  <tr className="text-xl font-bold">
+                          <ButtonStylePlus
+                            onClick={() =>
+                              increaseProduct(
+                                cartItem._id,
+                                cartItem.title
+                              )
+                            }
+                          >
+                            +
+                          </ButtonStylePlus>
+                        </td>
+                        ${cartProducts.filter(id => id === cartItem._id).length * cartItem.price}
+                      </tr>
+                    );
+                  })}
+                    <tr>
                     <td>Total</td>
                     <td></td>
-                    <td>${total}</td>
+                    <td className="font-bold text-2xl">${total}</td>
                   </tr>
                 </tbody>
               </Table>
@@ -392,12 +380,10 @@ export default CartPage;
 
 export async function getServerSideProps() {
   await mongooseConnect();
-  const shippingFee = await Setting.findOne({name: 'shippingFee'})
+  const shippingFee = await Setting.findOne({ name: "shippingFee" });
   return {
     props: {
-      shippingFee: JSON.parse(JSON.stringify(shippingFee))
-      }
-  }
- 
+      shippingFee: JSON.parse(JSON.stringify(shippingFee)),
+    },
+  };
 }
-
