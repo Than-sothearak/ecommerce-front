@@ -1,19 +1,18 @@
 import { styled } from "styled-components";
 import Link from "next/link";
 import Button from "./Button";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "./CartContext";
-import { AiOutlineHeart } from "react-icons/ai";
-import { AiFillHeart } from "react-icons/ai";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useRouter } from 'next/navigation';
-import { WrenchIcon } from "@heroicons/react/24/outline";
 import WishlistIcon from "./WishlisIcon";
+import Image from "next/image"; // ✅ Next.js optimized image
 
 const ProductWrapper = styled.div`
   width: 100%;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  border-radius: 12px;
+  overflow: hidden;
 `;
 
 const WhiteBox = styled(Link)`
@@ -24,20 +23,23 @@ const WhiteBox = styled(Link)`
   align-items: center;
   justify-content: center;
   border-radius: 12px 12px 0 0;
-
   cursor: pointer;
+
   img {
-    max-width: 100%;
-    max-height: 140px;
+    object-fit: contain;
   }
 `;
-const Title = styled.div`
+
+const Title = styled(Link)`
   color: inherit;
   text-decoration: none;
   font-weight: normal;
   font-size: 0.9rem;
   margin: 0;
+  display: block;
+  margin-bottom: 6px;
 `;
+
 const ProductInfoBox = styled.div`
   color: #2d3436;
   padding: 10px;
@@ -50,72 +52,77 @@ const PriceRow = styled.div`
 `;
 
 const Price = styled.div`
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: bold;
   @media screen and (max-width: 438px) {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 `;
-
-const TextBtn = styled.div`
-  font-size: 16px;
-  font-weight: 400;
-
-  @media screen and (max-width: 1024px) {
-    display: block;
-    text-align: center;
-    display: none;
-  }
-`;
-
 
 const WishlistBox = ({
-   _id, title, description, price, images, 
-   wished=false,
-  }) => {
+  _id,
+  title,
+  description,
+  price,
+  images,
+  wished = false,
+}) => {
   const { addProduct } = useContext(CartContext);
-  const [isWish, setIsWhish] = useState(wished);
+  const [isWish, setIsWish] = useState(wished);
   const url = "/product/" + _id;
-  const {data: session} = useSession();
+  const { data: session } = useSession();
 
-  function addWishlist(e) {
+  async function addWishlist(e) {
     e.preventDefault();
     e.stopPropagation();
-  if (session) {
-    const nextValue = !isWish;
-    try {
-      axios.post('/api/wishlist', {
-        product: _id
-      }).then(() => {});
-    } catch (err) {
-    console.log(err)
+    if (session) {
+      const nextValue = !isWish;
+      try {
+        await axios.post("/api/wishlist", {
+          product: _id,
+        });
+        setIsWish(nextValue);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      alert("You must login first");
     }
-    setIsWhish(nextValue)
-  } else {
-    alert('You must login first')
   }
-    
-  }
+
   return (
-    <>
-      <ProductWrapper>
-         <WishlistIcon addWishlist={addWishlist} wished={isWish}/>
-        <WhiteBox href={url}>
-          <img src={images?.[0]} />
-          
-        </WhiteBox>
-        
-        <ProductInfoBox>
-          <Title href={url}>{title}</Title>
-          <PriceRow>
-            <Price>${price}</Price>
-            <Button onClick={() => addProduct(_id, title)}>
-        
-            </Button>
-          </PriceRow>
-        </ProductInfoBox>
-      </ProductWrapper>
-    </>
+    <ProductWrapper>
+      {/* Heart / Wishlist icon */}
+      <WishlistIcon addWishlist={addWishlist} wished={isWish} />
+
+      <WhiteBox href={url}>
+        {images?.[0] ? (
+          <Image
+            src={images[0]}
+            alt={title}
+            width={200}
+            height={140}
+            style={{ objectFit: "contain" }}
+          />
+        ) : (
+          <Image
+            src="/placeholder.png"
+            alt="No image"
+            width={200}
+            height={140}
+            style={{ objectFit: "contain" }}
+          />
+        )}
+      </WhiteBox>
+
+      <ProductInfoBox>
+        <Title href={url}>{title}</Title>
+        <PriceRow>
+          <Price>${price}</Price>
+          <Button onClick={() => addProduct(_id, title)}>Add to cart</Button>
+        </PriceRow>
+      </ProductInfoBox>
+    </ProductWrapper>
   );
 };
 

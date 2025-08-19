@@ -3,16 +3,9 @@ import {
   DropDownWrapper,
   DropDownButton,
   SVG,
-  OptionMenu,
-  OptionRow,
-  SvgTest,
-  Label,
-  SubDropDownWrapper,
-  SubOptionMenu,
 } from "./DropDownNew.styles";
 
 import styled from "styled-components";
-import Link from "next/link";
 import Navbar from "./Navbar2";
 
 function DropDownTitle({ defaultText = "Categories", options, subCategory }) {

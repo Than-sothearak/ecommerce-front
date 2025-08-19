@@ -1,48 +1,50 @@
 import { styled } from "styled-components";
 import Link from "next/link";
+import Image from "next/image";  // ✅ Next.js optimized image
 import Button from "./Button";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "./CartContext";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useRouter } from 'next/navigation';
 import WishlistIcon from "./WishlisIcon";
 
 const ProductWrapper = styled.div`
   width: 100%;
   background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px,
+    rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  border-radius: 12px;
+  overflow: hidden;
 `;
 
 const WhiteBox = styled(Link)`
   background-color: white;
   height: 160px;
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 12px 12px 0 0;
-
   cursor: pointer;
-  img {
-    max-width: 100%;
-    max-height: 140px;
-  }
+  position: relative; /* ✅ needed for next/image layout */
 `;
-const Title = styled.div`
+
+const Title = styled(Link)`
   color: inherit;
   text-decoration: none;
-  font-weight: normal;
-  white-space: nowrap; 
-  width: 240px; 
-  text-overflow: ellipsis; 
+  font-weight: 500;
+  white-space: nowrap;
+  width: 240px;
+  text-overflow: ellipsis;
   overflow: hidden;
   font-size: 0.9rem;
+  display: block;
   margin: 0;
+
   @media screen and (max-width: 868px) {
-    width: 200px; 
+    width: 200px;
   }
 `;
+
 const ProductInfoBox = styled.div`
   color: #2d3436;
   padding: 10px;
@@ -55,65 +57,73 @@ const PriceRow = styled.div`
 `;
 
 const Price = styled.div`
-  font-size: 2rem;
+  font-size: 1.2rem;
   font-weight: bold;
+
   @media screen and (max-width: 438px) {
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
 `;
 
 const TextBtn = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
 
   @media screen and (max-width: 1024px) {
-    display: block;
-    text-align: center;
     display: none;
   }
 `;
 
 const Container = styled.div`
-background-color: black;
+  background-color: black;
+  padding: 10px;
 `;
 
 const ProductBox = ({
-   _id, title, description, price, images, 
-   wished=false
-  }) => {
+  _id,
+  title,
+  description,
+  price,
+  images,
+  wished = false,
+}) => {
   const { addProduct } = useContext(CartContext);
-  const [isWish, setIsWhish] = useState(wished);
-  const { push } = useRouter();
-  const {data: session} = useSession();
+  const [isWish, setIsWish] = useState(wished);
+  const { data: session } = useSession();
   const url = "/store/" + _id;
- 
-  function addWishlist(e) {
+
+  async function addWishlist(e) {
     e.preventDefault();
     e.stopPropagation();
-    if (session) {
-      const nextValue = !isWish;
-      try {
-        axios.post('/api/wishlist', {
-          product: _id
-        }).then(() => {});
-      } catch (err) {
-      console.log(err)
-      }
-      setIsWhish(nextValue)
-    } else {
-      alert('You must login first')
+
+    if (!session) {
+      alert("You must login first");
+      return;
     }
- 
+
+    try {
+      await axios.post("/api/wishlist", { product: _id });
+      setIsWish(!isWish);
+    } catch (err) {
+      console.error(err);
+    }
   }
+
   return (
     <Container>
       <ProductWrapper>
-         <WishlistIcon addWishlist={addWishlist} wished={isWish}/>
+        <WishlistIcon addWishlist={addWishlist} wished={isWish} />
+
         <WhiteBox href={url}>
-          <img src={images?.[0]} />
-          
+          <Image
+            src={images?.[0] || "/placeholder.png"} // ✅ fallback
+            alt={title}
+            width={200}   // ✅ control sizes
+            height={160}
+            style={{ objectFit: "contain" }}
+          />
         </WhiteBox>
-        
+
         <ProductInfoBox>
           <Title href={url}>{title}</Title>
           <PriceRow>

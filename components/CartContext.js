@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useSession } from "next-auth/react";
 import { createContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -7,6 +6,7 @@ export const CartContext = createContext({});
 
 export function CartContextProvider({ children }) {
   const [cartProducts, setCartProducts] = useState([]);
+    const [inputs, setInput] = useState("");
   const ls = typeof window !== "undefined" ? window.localStorage : null;
   const { data: session } = useSession();
 
@@ -42,6 +42,10 @@ export function CartContextProvider({ children }) {
     setCartProducts([]);
   }
 
+    const inputSearch = (value) => {
+    setInput(value);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -49,6 +53,8 @@ export function CartContextProvider({ children }) {
         addProduct,
         removeProduct,
         clearCart,
+         inputSearch,
+        inputs,
       }}
     >
       {children}

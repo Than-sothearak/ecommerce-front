@@ -1,5 +1,4 @@
 import Center from "@/components/Center";
-import ProductGrid from "@/components/ProductGrid";
 import Title from "@/components/Title";
 import { mongooseConnect } from "@/lib/mongoose";
 import axios from "axios";
@@ -12,7 +11,6 @@ import { WishedProduct } from "@/models/WishedProduct";
 import { authOptions } from "../api/auth/[...nextauth]";
 import PcProductGrid from "@/components/PcProductGrid";
 import { Review } from "@/models/Review";
-import { useRouter } from "next/navigation";
 
 export default function CategoryPage({
   category,
@@ -71,27 +69,26 @@ export default function CategoryPage({
     setFiltersChanged(true);
     setCurrentPage(0);
   }
+useEffect(() => {
+  const catName = [category._id, ...(childCategory?.map((c) => c._id) || [])];
 
-  useEffect(() => {
-    const catName = [category._id, ...(childCategory?.map((c) => c._id) || [])];
-   
-    const params = new URLSearchParams();
+  const params = new URLSearchParams();
+  params.set("categories", catName.join(","));
+  params.set("sort", sort);
+  params.set("page", currentPage);
 
-    params.set("categories", catName.join(","));
-    params.set("sort", sort);
-    params.set("page", currentPage);
-    filtersValues.forEach((f) => {
-      if (f.value !== "all") {
-        params.set(f.name, f.value);
-      }
-    });
-    const url = `/api/productsfilter?` + params.toString();
-    axios.get(url).then((res) => {
-      setProductsFilter(res.data.products);
-      setItems(res.data.pagination?.items);
-      setPageSize(res.data.pagination?.itemPerPage)
-    });
-  }, [filtersValues, sort, currentPage, products]);
+  filtersValues.forEach((f) => {
+    if (f.value !== "all") {
+      params.set(f.name, f.value);
+    }
+  });
+
+  axios.get(`/api/productsfilter?${params.toString()}`).then((res) => {
+    setProductsFilter(res.data.products);
+    setItems(res.data.pagination?.items);
+    setPageSize(res.data.pagination?.itemPerPage);
+  });
+}, [filtersValues, sort, currentPage, category._id, childCategory]);
 
   return (
     <>

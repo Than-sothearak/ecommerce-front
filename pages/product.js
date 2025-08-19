@@ -1,14 +1,14 @@
 import Center from "@/components/Center";
-import HeaderNew from "@/components/DropdownMenu";
 import ProductGrid from "@/components/ProductGrid";
 import Title from "@/components/Title";
 import { mongooseConnect } from "@/lib/mongoose";
-import { Product } from "@/models/Products";
+
 import { styled } from "styled-components";
 import { Category } from "@/models/Category";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { WishedProduct } from "@/models/WishedProduct";
 import { getServerSession } from "next-auth";
+import { Product } from "@/models/Product";
 
 const CategoryTitle = styled.div`
   margin-top: 14px;

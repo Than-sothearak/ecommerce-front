@@ -6,7 +6,7 @@ import Link from "next/link";
 import { CartContext } from "@/components/CartContext";
 import Button from "./Button";
 import { RevealWrapper } from "next-reveal";
-import { RevealList } from "next-reveal";
+import Image from "next/image"; // ✅ optimized images
 
 const Background = styled.div`
   background-color: #222;
@@ -29,22 +29,15 @@ const ColumnsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 40px;
-  img {
-    max-width: 100%;
-    max-height: 340px;
-    display: block;
-    margin: 0 auto;
-  }
+
   div:nth-child(1) {
     order: 2;
   }
+
   @media screen and (min-width: 768px) {
     grid-template-columns: 1.1fr 0.9fr;
     div:nth-child(1) {
       order: 0;
-    }
-    img {
-      max-width: 100%;
     }
   }
 `;
@@ -54,7 +47,6 @@ const Column = styled.div`
 `;
 const ButtonWrapper = styled.div`
   display: flex;
-
   gap: 10px;
   padding-top: 10px;
   font-family: "Poppins", sans-serif;
@@ -69,9 +61,10 @@ const ButtonLink = styled(Link)`
   text-decoration: none;
   color: white;
   background-color: transparent;
+
   @media screen and (max-width: 678px) {
     font-size: 12px;
-    padding: 0 10px;
+    padding: 6px 12px;
     text-align: center;
     display: flex;
   }
@@ -82,51 +75,69 @@ const TextBtn = styled.div`
   font-weight: normal;
 
   @media screen and (max-width: 678px) {
-    display: block;
-    text-align: center;
     display: none;
   }
 `;
+
 const Featured = ({ products, featuredProductId }) => {
   const { addProduct } = useContext(CartContext);
-  
-  const featuredProducts = products.filter(p => {
-    return  p._id === featuredProductId[1].value
-  });
-  
-  const featuredProduct = featuredProducts[0]
 
-  function addToCart() {
-    addProduct(featuredProduct._id, featuredProduct.title);
-  }
+  // ✅ safer lookup
+  const featuredId =
+    Array.isArray(featuredProductId) && featuredProductId.length > 0
+      ? featuredProductId[0].value
+      : null;
+
+  const featuredProduct = products.find((p) => p._id === featuredId);
+
+  const addToCart = () => {
+    if (featuredProduct) {
+      addProduct(featuredProduct._id, featuredProduct.title);
+    }
+  };
+
   return (
     <Background>
       <Center>
-        <ColumnsWrapper>
-          <Column>
-            <div>
-              <RevealWrapper delay={20}  duration={3000}>
-                <Title>{featuredProduct?.title}</Title>
-                <Desc>{featuredProduct?.description}</Desc>
-              </RevealWrapper>
-              <RevealWrapper delay={80} duration={3000}>
-                <ButtonWrapper>
-                  <ButtonLink href={"/store/" + featuredProduct?._id}>
-                    Read more
-                  </ButtonLink>
-                  <Button onClick={addToCart}>
-                    <TextBtn type="button">Add to cart</TextBtn>
-                  </Button>
-                </ButtonWrapper>
-              </RevealWrapper>
-            </div>
-          </Column>
-          <RevealWrapper delay={80} duration={3000}>
+        {featuredProduct ? (
+          <ColumnsWrapper>
             <Column>
-              <img src={featuredProduct?.images?.[0]} />
+              <div>
+                <RevealWrapper delay={20} duration={3000}>
+                  <Title>{featuredProduct.title}</Title>
+                  <Desc>{featuredProduct.description}</Desc>
+                </RevealWrapper>
+                <RevealWrapper delay={80} duration={3000}>
+                  <ButtonWrapper>
+                    <ButtonLink href={`/store/${featuredProduct._id}`}>
+                      Read more
+                    </ButtonLink>
+                    <Button onClick={addToCart}>
+                      <TextBtn>Add to cart</TextBtn>
+                    </Button>
+                  </ButtonWrapper>
+                </RevealWrapper>
+              </div>
             </Column>
-          </RevealWrapper>
-        </ColumnsWrapper>
+            <RevealWrapper delay={80} duration={3000}>
+              <Column>
+                {featuredProduct.images?.[0] ? (
+                  <Image
+                    src={featuredProduct.images[0]}
+                    alt={featuredProduct.title}
+                    width={500}
+                    height={340}
+                    style={{ objectFit: "contain", margin: "0 auto" }}
+                  />
+                ) : (
+                  <div>No image</div>
+                )}
+              </Column>
+            </RevealWrapper>
+          </ColumnsWrapper>
+        ) : (
+          <div>No featured product found</div>
+        )}
       </Center>
     </Background>
   );

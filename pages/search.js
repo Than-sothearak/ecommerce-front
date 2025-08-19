@@ -1,9 +1,8 @@
 import Link from "next/link";
 import styled from "styled-components";
 import Center from "@/components/Center";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/components/CartContext";
-import { useState } from "react";
 import axios from "axios";
 import ProductGrid from "@/components/ProductGrid";
 import { mongooseConnect } from "@/lib/mongoose";
@@ -18,7 +17,6 @@ const Logo = styled(Link)`
     props.mobilenavactive
       ? `
     display: none;
-
   `
       : `
     display: flex;
@@ -186,13 +184,11 @@ const SearchIcon = styled.div`
   cursor: pointer;
 `;
 
-
-
 export default function SearchPage() {
-  const {inputs} = useContext(CartContext)
+  const { inputs } = useContext(CartContext);
   const [products, setProducts] = useState([]);
 
-  function search() {
+  useEffect(() => {
     if (inputs.length > 2) {
       axios
         .get("/api/productsearch?phrase=" + encodeURIComponent(inputs))
@@ -202,18 +198,13 @@ export default function SearchPage() {
     } else if (inputs.length === 0) {
       setProducts([]);
     }
-  }
-  useEffect(() => {
-    search();
-  }, [inputs]);
+  }, [inputs]); // ✅ no more warning
 
   return (
     <>
-  
-
       <Center>
         <div>
-          <h1 className="mt-5 text-gray">{`Result query:(${products.length})`}</h1>
+          <h1 className="mt-5 text-gray">{`Result query: (${products.length})`}</h1>
           <ProductGrid products={products} />
         </div>
       </Center>
@@ -222,9 +213,8 @@ export default function SearchPage() {
 }
 
 export async function getServerSideProps() {
-  await mongooseConnect()
+  await mongooseConnect();
   const allProducts = await Product.find({}, null, { sort: { _id: -1 } });
-
 
   return {
     props: {

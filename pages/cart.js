@@ -14,6 +14,7 @@ import Title from "@/components/Title";
 import { useSession } from "next-auth/react";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Setting } from "@/models/Setting";
+import Image from "next/image";
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -47,18 +48,10 @@ const ProductImageBox = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  img {
-    max-width: 60px;
-    max-height: 60px;
-  }
   @media screen and (min-width: 768px) {
     padding: 10px;
     width: 100px;
     height: 100px;
-    img {
-      max-width: 80px;
-      max-height: 80px;
-    }
   }
 `;
 
@@ -76,6 +69,7 @@ const CityHolder = styled.div`
   display: flex;
   gap: 5px;
 `;
+
 const ButtonStyle = styled.button`
   border: 0;
   padding: 8px 40px;
@@ -93,14 +87,13 @@ const ButtonStyle = styled.button`
 `;
 
 const ButtonStylePlus = styled.button`
-  border: 1 solid gray;
+  border: 1px solid gray;
   padding: 8px 8px;
   border-radius: 5px;
   cursor: pointer;
   align-items: center;
   text-decoration: none;
   font-size: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
   margin: 10px;
   background-color: transparent;
 `;
@@ -126,14 +119,17 @@ const Icon = styled.div`
   background-color: green;
   border-radius: 100%;
 `;
+
 const CartEmptyConatainer = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
 `;
+
 const ButtonDiv = styled.div`
   margin: 20px;
 `;
+
 const Button = styled(Link)`
   background-color: ${primary};
   color: white;
@@ -141,8 +137,9 @@ const Button = styled(Link)`
   border-radius: 20px;
 `;
 
-const CartPage = (shippingFee) => {
-  const {cartProducts,addProduct,removeProduct,clearCart} = useContext(CartContext);
+const CartPage = ({ shippingFee }) => {
+  const { cartProducts, addProduct, removeProduct, clearCart } =
+    useContext(CartContext);
 
   const [products, setProducts] = useState();
   const [name, setName] = useState("");
@@ -156,23 +153,21 @@ const CartPage = (shippingFee) => {
 
   useEffect(() => {
     if (cartProducts.length > 0) {
-      axios.post('/api/cart', {ids:cartProducts})
-        .then(response => {
-          setProducts(response.data);
-        })
+      axios.post("/api/cart", { ids: cartProducts }).then((response) => {
+        setProducts(response.data);
+      });
     } else {
       setProducts([]);
     }
   }, [cartProducts]);
+
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    if (window?.location.href.includes('success')) {
+    if (typeof window === "undefined") return;
+    if (window?.location.href.includes("success")) {
       setIsSuccess(true);
       clearCart();
     }
-  }, []);
+  }, [clearCart]); // ✅ added dependency
 
   function increaseProduct(id, title) {
     addProduct(id, title);
@@ -204,16 +199,13 @@ const CartPage = (shippingFee) => {
       alert("You must sign in first!");
     }
   }
-  console.log(cartProducts);
 
   let subtotal = 0;
-
   for (const productId of cartProducts) {
     const price = products?.find((p) => p._id == productId)?.price || 0;
     subtotal += price;
   }
-
-  const total = subtotal + parseInt(shippingFee.shippingFee.value || 0);
+  const total = subtotal + parseInt(shippingFee?.value || 0);
 
   if (isSuccess) {
     return (
@@ -224,7 +216,7 @@ const CartPage = (shippingFee) => {
               <Icon>
                 <MdDone />
               </Icon>
-              <TextOrderH1>ORDERED SUCCUSSFULLY</TextOrderH1>
+              <TextOrderH1>ORDERED SUCCESSFULLY</TextOrderH1>
               <TextOrderP>
                 We will email you when your order will be sent.
               </TextOrderP>
@@ -235,6 +227,7 @@ const CartPage = (shippingFee) => {
       </>
     );
   }
+
   return (
     <>
       <Center>
@@ -244,9 +237,8 @@ const CartPage = (shippingFee) => {
             {!cartProducts?.length > 0 ? (
               <CartEmptyConatainer>
                 <div>
-                  <h1> Your cart is empty</h1>
+                  <h1>Your cart is empty</h1>
                   <MdOutlineShoppingCartCheckout size={200} />
-
                   <ButtonDiv>
                     <Button href={"/products"}>Continue shopping</Button>
                   </ButtonDiv>
@@ -267,9 +259,12 @@ const CartPage = (shippingFee) => {
                       <tr key={cartItem._id}>
                         <ProductInfoCell>
                           <ProductImageBox>
-                            <img
+                            <Image
                               src={cartItem?.images[0]}
                               alt={cartItem?.title}
+                              width={80}
+                              height={80}
+                              style={{ objectFit: "contain" }}
                             />
                           </ProductImageBox>
                           <td>{cartItem?.title}</td>
@@ -277,33 +272,34 @@ const CartPage = (shippingFee) => {
                         <td>
                           <ButtonStylePlus
                             onClick={() =>
-                              decreaseProduct(
-                                cartItem._id,
-                                cartItem?.title
-                              )
+                              decreaseProduct(cartItem._id, cartItem?.title)
                             }
                           >
                             -
                           </ButtonStylePlus>
                           <QuantityLabel>
-                          {cartProducts.filter(id => id === cartItem._id).length}
-                        </QuantityLabel>
+                            {
+                              cartProducts.filter((id) => id === cartItem._id)
+                                .length
+                            }
+                          </QuantityLabel>
                           <ButtonStylePlus
                             onClick={() =>
-                              increaseProduct(
-                                cartItem._id,
-                                cartItem.title
-                              )
+                              increaseProduct(cartItem._id, cartItem.title)
                             }
                           >
                             +
                           </ButtonStylePlus>
                         </td>
-                        ${cartProducts.filter(id => id === cartItem._id).length * cartItem.price}
+                        <td>
+                          $
+                          {cartProducts.filter((id) => id === cartItem._id)
+                            .length * cartItem.price}
+                        </td>
                       </tr>
                     );
                   })}
-                    <tr>
+                  <tr>
                     <td>Total</td>
                     <td></td>
                     <td className="font-bold text-2xl">${total}</td>
@@ -325,7 +321,7 @@ const CartPage = (shippingFee) => {
               />
               <Input
                 required
-                type="te xt"
+                type="text"
                 placeholder="Email"
                 value={email}
                 name="email"

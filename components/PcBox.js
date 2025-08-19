@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import WishlistIcon from "./WishlisIcon";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { grayBorder } from "@/lib/colors";
+import Image from "next/image";
 
 const PcBox = ({
   _id,
@@ -70,7 +71,18 @@ const PcBox = ({
        <ImageBox>
        <WishlistIcon addWishlist={addWishlist} wished={isWish} />
         <WhiteBox href={url}>
-          <img src={images?.[0]} />
+          <Image
+            src={images?.[0] || "/placeholder.png"}
+            alt={title}
+            width={240}
+            height={200}
+            style={{
+              objectFit: "contain",
+              maxHeight: "200px",
+              width: "auto",
+            }}
+            priority={false}
+          />
         </WhiteBox>
        </ImageBox>
 
@@ -276,3 +288,5 @@ margin-top: 5px;
   white-space: nowrap;
 
 `;
+
+ 
