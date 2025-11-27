@@ -82,13 +82,8 @@ const TextBtn = styled.div`
 const Featured = ({ products, featuredProductId }) => {
   const { addProduct } = useContext(CartContext);
 
-  // ✅ safer lookup
-  const featuredId =
-    Array.isArray(featuredProductId) && featuredProductId.length > 0
-      ? featuredProductId[0].value
-      : null;
 
-  const featuredProduct = products.find((p) => p._id === featuredId);
+  const featuredProduct = products.find((p) => p._id === featuredProductId);
 
   const addToCart = () => {
     if (featuredProduct) {
