@@ -32,7 +32,7 @@ const nextConfig = {
       },
          {
         protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
+        hostname: 'https://lh3.googleusercontent.com',
       
       },
       {

@@ -30,11 +30,6 @@ const nextConfig = {
         hostname: 'thearak-next-ecommerce.s3.amazonaws.com',
       
       },
-         {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-      
-      },
       {
         protocol: 'https',
         hostname: 'upload.wikimedia.org',

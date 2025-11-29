@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Textarea from "./Textarea";
 import axios from "axios";
 import Table from "./Table";
+import { getServerSession } from "next-auth";
 
 const ReviewProduct = ({ product, session }) => {
   const [stars, setStars] = useState(0);
@@ -19,18 +20,6 @@ const ReviewProduct = ({ product, session }) => {
     try {
       const res = await axios.get(`/api/reviews?product=${product._id}`);
       setReviews(res.data);
-
-      if (session) {
-        const result = res.data.find(item => item.userEmail === session.user.email);
-        if (result) {
-          setStars(result.stars);
-          setDescription(result.description);
-        } else {
-          setStars(0);
-          console.log("User has no review yet");
-        }
-      }
-
     } catch (error) {
       console.error("Error loading reviews:", error);
     }
@@ -94,47 +83,47 @@ const ReviewProduct = ({ product, session }) => {
         </TotalReview>
 
         {/* Review list */}
-        <div className="h-96 overflow-auto pr-10">
-          <Table>
-            <thead>
-              <tr>
-                <th>Showing reviews</th>
-              </tr>
-            </thead>
-            <tbody className="">
-              {getLimitReviews.map((review) => (
-                <tr key={review._id}>
-                  <td>
-                    <div className="flex justify-between">
-                      <div className="text-lg">
-                        <div className="flex">
-                          {starCount.map((star) => (
-                            <span key={star} className="flex">
-                              {review.stars >= star ? (
-                                <AiFillStar color="#2f3640" />
-                              ) : (
-                                <AiOutlineStar />
-                              )}
-                            </span>
-                          ))}
-                        </div>
-                        <p className="text-sm text-gray-400">
-                          {review.userName || "Anonymous"}
-                        </p>
-                      </div>
-                      <h1 className="text-md text-gray-400 font-bold">
-                        {review.date
-                          ? new Date(review.date).toLocaleDateString("sv-SE")
-                          : ""}
-                      </h1>
+     <div className="h-96 overflow-auto pr-10">
+         <Table>
+          <thead>
+            <tr>
+              <th>Showing reviews</th>
+            </tr>
+          </thead>
+          <tbody className="">
+            {getLimitReviews.map((review) => (
+              <tr key={review._id}>
+                <td>
+                  <div className="flex justify-between">
+                    <div className="text-lg">
+                  <div className="flex">
+                        {starCount.map((star) => (
+                        <span key={star} className="flex">
+                          {review.stars >= star ? (
+                            <AiFillStar color="#2f3640" />
+                          ) : (
+                            <AiOutlineStar />
+                          )}
+                        </span>
+                      ))}
+                  </div>
+                      <p className="text-sm text-gray-400">
+                        {review.userName || "Anonymous"}
+                      </p>
                     </div>
-                    <p className="mt-2">{review.description}</p>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
+                    <h1 className="text-md text-gray-400 font-bold">
+                      {review.date
+                        ? new Date(review.date).toLocaleDateString("sv-SE")
+                        : ""}
+                    </h1>
+                  </div>
+                  <p className="mt-2">{review.description}</p>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+     </div>
       </OverallReview>
 
       {/* Review submission */}
@@ -203,7 +192,7 @@ const ButtonSubmit = styled.button`
   margin: 20px auto;
   cursor: pointer;
   width: 100%;
-  background-color: #d63031;
+  background-color: red;
   color: white;
   border-radius: 18px;
   padding: 10px;

@@ -22,14 +22,11 @@ const ReviewProduct = ({ product, session }) => {
 
       if (session) {
         const result = res.data.find(item => item.userEmail === session.user.email);
-        if (result) {
-          setStars(result.stars);
-          setDescription(result.description);
-        } else {
-          setStars(0);
-          console.log("User has no review yet");
-        }
+
+        console.log(result);
+
       }
+
 
     } catch (error) {
       console.error("Error loading reviews:", error);
@@ -203,7 +200,7 @@ const ButtonSubmit = styled.button`
   margin: 20px auto;
   cursor: pointer;
   width: 100%;
-  background-color: #d63031;
+  background-color: red;
   color: white;
   border-radius: 18px;
   padding: 10px;

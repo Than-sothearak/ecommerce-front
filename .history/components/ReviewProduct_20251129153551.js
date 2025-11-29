@@ -203,7 +203,7 @@ const ButtonSubmit = styled.button`
   margin: 20px auto;
   cursor: pointer;
   width: 100%;
-  background-color: #d63031;
+  background-color: red;
   color: white;
   border-radius: 18px;
   padding: 10px;

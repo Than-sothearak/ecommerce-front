@@ -19,17 +19,12 @@ const ReviewProduct = ({ product, session }) => {
     try {
       const res = await axios.get(`/api/reviews?product=${product._id}`);
       setReviews(res.data);
-
+      
       if (session) {
-        const result = res.data.find(item => item.userEmail === session.user.email);
-        if (result) {
-          setStars(result.stars);
-          setDescription(result.description);
-        } else {
-          setStars(0);
-          console.log("User has no review yet");
-        }
+      const emails = res.data.map(d => d.userEmail);
+      const isExist = emails.includes(session.user.email);
       }
+    
 
     } catch (error) {
       console.error("Error loading reviews:", error);
@@ -203,7 +198,7 @@ const ButtonSubmit = styled.button`
   margin: 20px auto;
   cursor: pointer;
   width: 100%;
-  background-color: #d63031;
+  background-color: red;
   color: white;
   border-radius: 18px;
   padding: 10px;
