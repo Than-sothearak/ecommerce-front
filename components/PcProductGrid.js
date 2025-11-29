@@ -25,7 +25,7 @@ export default function PcProductGrid({
   return (
     <Container>
       {products.length <= 0 ? <NoProducts><p>No product found</p></NoProducts>:<>
-        <FilterWrapper>
+        {/* <FilterWrapper>
         <FilterHeader>
           <h1>Filter</h1>
           <button onClick={handleReset}>Reset All</button>
@@ -55,7 +55,7 @@ export default function PcProductGrid({
             </Filter>
           ))}
         </FilterInput>
-      </FilterWrapper>
+      </FilterWrapper> */}
       <ProductContainer>
         <SortFilter>
           <SortBy>
@@ -159,7 +159,6 @@ const StyledProductGrid = styled.div`
   }
 `;
 const Container = styled.div`
-  display: grid;
   grid-template-columns: 1fr;
   @media screen and (min-width: 1240px) {
     grid-template-columns: 0.2fr 1fr;
@@ -184,20 +183,25 @@ const FilterInput = styled.div`
     gap: 0;
   }
 `;
-const ProductContainer = styled.div``;
+const ProductContainer = styled.div`
+ width: 100%;
+ background-color: white;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+`;
 const SortFilter = styled.div`
   display: flex;
+  width: 100%;
   justify-content: end;
-  border: 1px solid #b2b1b1;
-  border-radius: 20px;
 `;
 const SortFilterBottom = styled.div`
   display: flex;
-  margin-top: 40px;
   justify-content: start;
   border: 1px solid #b2b1b1;
   border-radius: 20px;
-  padding-left: 15px;
+  margin-top: 50px;
+
 `
 const Filter = styled.div`
   display: flex;

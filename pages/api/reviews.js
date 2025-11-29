@@ -8,7 +8,7 @@ export default async function handler (req, res) {
   
     if(authOptions) {
         if(req.method === 'POST') {
-            const {description, stars, product} = req.body;
+            const {description, stars, product, date} = req.body;
             const { user } = await getServerSession(req, res, authOptions);
             const info = await Review.findOne({ userEmail: user.email, product: product});
             if (info) {
@@ -19,6 +19,7 @@ export default async function handler (req, res) {
                     userName: user.name,
                     description,
                     stars,
+                    date,
                     product})
             res.json(reviewDoc)
             }
@@ -27,6 +28,6 @@ export default async function handler (req, res) {
    
     if (req.method === 'GET') {
         const {product} = req.query;
-        res.json(await Review.find({product}));
+        res.json(await Review.find({product: product}));
     }
 }

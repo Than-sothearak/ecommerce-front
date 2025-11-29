@@ -152,17 +152,16 @@ export async function getServerSideProps(context) {
 }
 
 const CategoryTitle = styled.div`
-  margin-top: 14px;
+
   text-align: center;
   justify-content: center;
-  margin-bottom: 0;
   align-items: center;
 `;
 const FilterContainer = styled.div`
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+
 `;
 const FilterWrapper = styled.div`
   display: flex;

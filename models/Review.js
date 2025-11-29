@@ -4,6 +4,7 @@ const ReviewSchema = new Schema({
     userName: {type: String, required: true},
     description: String,
     stars: Number,
+    date: {type: Date, default: Date.now},
     product: {type:Schema.Types.ObjectId},
 }, {timestamps: true});
 

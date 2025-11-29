@@ -8,6 +8,7 @@ import Table from "./Table";
 const ReviewProduct = ({ product, session }) => {
   const [stars, setStars] = useState(0);
   const [description, setDescription] = useState("");
+  const [date, setDate] = useState(new Date());
   const [reviews, setReviews] = useState([]);
   const starCount = [1, 2, 3, 4, 5];
 
@@ -32,10 +33,12 @@ const ReviewProduct = ({ product, session }) => {
     try {
       await axios.post("/api/reviews", {
         description,
+        date,
         stars,
         product: product._id,
       });
       setStars(0);
+      setDate(new Date());
       setDescription("");
       loadReview();
     } catch (error) {
@@ -51,7 +54,7 @@ const ReviewProduct = ({ product, session }) => {
   const totalRating = ratings.reduce((acc, val) => acc + val, 0);
   const averageRating = reviews.length > 0 ? totalRating / reviews.length : 0;
 
-  const getLimitReviews = reviews.slice(0, 4);
+  const getLimitReviews = reviews
 
   return (
     <ProductReview>
@@ -79,20 +82,22 @@ const ReviewProduct = ({ product, session }) => {
         </TotalReview>
 
         {/* Review list */}
-        <Table>
+     <div className="h-96 overflow-auto pr-10">
+         <Table>
           <thead>
             <tr>
               <th>Showing reviews</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="">
             {getLimitReviews.map((review) => (
               <tr key={review._id}>
                 <td>
                   <div className="flex justify-between">
                     <div className="text-lg">
-                      {starCount.map((star) => (
-                        <span key={star}>
+                  <div className="flex">
+                        {starCount.map((star) => (
+                        <span key={star} className="flex">
                           {review.stars >= star ? (
                             <AiFillStar color="#2f3640" />
                           ) : (
@@ -100,13 +105,14 @@ const ReviewProduct = ({ product, session }) => {
                           )}
                         </span>
                       ))}
+                  </div>
                       <p className="text-sm text-gray-400">
                         {review.userName || "Anonymous"}
                       </p>
                     </div>
                     <h1 className="text-md text-gray-400 font-bold">
-                      {review.createdAt
-                        ? new Date(review.createdAt).toLocaleDateString("sv-SE")
+                      {review.date
+                        ? new Date(review.date).toLocaleDateString("sv-SE")
                         : ""}
                     </h1>
                   </div>
@@ -116,6 +122,7 @@ const ReviewProduct = ({ product, session }) => {
             ))}
           </tbody>
         </Table>
+     </div>
       </OverallReview>
 
       {/* Review submission */}
