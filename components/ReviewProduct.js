@@ -94,7 +94,7 @@ const ReviewProduct = ({ product, session }) => {
         </TotalReview>
 
         {/* Review list */}
-        <div className="h-96 overflow-auto pr-10">
+        <div className="max-h-96 overflow-auto pr-4 mt-4">
           <Table>
             <thead>
               <tr>

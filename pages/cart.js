@@ -31,12 +31,25 @@ const Box = styled.div`
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   border-radius: 10px;
-  padding: 30px;
+  padding: 20px;
 `;
 
 const ProductInfoCell = styled.td`
+  @media screen and (min-width: 1080px) {
+    display: flex;
+  }
+  gap: 10px;
+  align-items: center;
   padding: 10px 0;
   width: 400px;
+`;
+const ButtonPriceConatiner = styled.td`
+    
+`;
+const ButtonCell = styled.div`
+  display: flex;
+  align-items: center;
+
 `;
 
 const ProductImageBox = styled.div`
@@ -57,6 +70,7 @@ const ProductImageBox = styled.div`
 
 const QuantityLabel = styled.span`
   padding: 0 2px;
+  white-space: nowrap;
   text-align: center;
   display: block;
   @media screen and (min-width: 768px) {
@@ -135,6 +149,15 @@ const Button = styled(Link)`
   color: white;
   padding: 10px 20px;
   border-radius: 20px;
+`;
+const PriceTag = styled.th`
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+`;
+const PriceTag2 = styled.td`
+  text-align: end;
+  vertical-align: middle;
 `;
 
 const CartPage = ({ shippingFee }) => {
@@ -249,8 +272,9 @@ const CartPage = ({ shippingFee }) => {
                 <thead>
                   <tr>
                     <th>Product</th>
+               
                     <th>Quantity</th>
-                    <th>Price</th>
+                    <PriceTag>Price</PriceTag>
                   </tr>
                 </thead>
                 <tbody>
@@ -260,49 +284,55 @@ const CartPage = ({ shippingFee }) => {
                         <ProductInfoCell>
                           <ProductImageBox>
                             <Image
-                              src={cartItem?.images[0]}
-                              alt={cartItem?.title}
+                              src={cartItem.images[0]}
+                              alt={cartItem.title}
                               width={80}
                               height={80}
                               style={{ objectFit: "contain" }}
                             />
                           </ProductImageBox>
-                          <td>{cartItem?.title}</td>
+                          <div className="">{cartItem.title}</div>
                         </ProductInfoCell>
-                        <td>
-                          <ButtonStylePlus
-                            onClick={() =>
-                              decreaseProduct(cartItem._id, cartItem?.title)
-                            }
-                          >
-                            -
-                          </ButtonStylePlus>
-                          <QuantityLabel>
-                            {
-                              cartProducts.filter((id) => id === cartItem._id)
-                                .length
-                            }
-                          </QuantityLabel>
-                          <ButtonStylePlus
-                            onClick={() =>
-                              increaseProduct(cartItem._id, cartItem.title)
-                            }
-                          >
-                            +
-                          </ButtonStylePlus>
-                        </td>
-                        <td>
-                          $
-                          {cartProducts.filter((id) => id === cartItem._id)
-                            .length * cartItem.price}
-                        </td>
+
+                        <ButtonPriceConatiner>
+                          <ButtonCell>
+                            <ButtonStylePlus
+                              onClick={() =>
+                                decreaseProduct(cartItem._id, cartItem.title)
+                              }
+                            >
+                              -
+                            </ButtonStylePlus>
+                            <QuantityLabel>
+                              {
+                                cartProducts.filter((id) => id === cartItem._id)
+                                  .length
+                              }
+                            </QuantityLabel>
+                            <ButtonStylePlus
+                              onClick={() =>
+                                increaseProduct(cartItem._id, cartItem.title)
+                              }
+                            >
+                              +
+                            </ButtonStylePlus>
+                          </ButtonCell>
+                   
+                        </ButtonPriceConatiner>
+                               <PriceTag2>
+                       
+                             $
+                            {cartProducts.filter((id) => id === cartItem._id)
+                              .length * cartItem.price}
+                           
+                          </PriceTag2>
                       </tr>
                     );
                   })}
                   <tr>
                     <td>Total</td>
                     <td></td>
-                    <td className="font-bold text-2xl">${total}</td>
+                    <PriceTag2 className="font-bold text-2xl whitespace-nowrap">${total}</PriceTag2>
                   </tr>
                 </tbody>
               </Table>
