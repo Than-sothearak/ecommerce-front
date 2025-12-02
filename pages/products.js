@@ -104,20 +104,18 @@ const LinkWrapper = styled.div`
   }
 `
 const CategoryGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
+display: grid;
   gap: 20px;
-   @media screen and (min-width: 740px) {
-    grid-template-columns: 1fr 1fr;
-  }
-
-   @media screen and (min-width: 1024px) {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
 
 
-  @media screen and (min-width: 1280px) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+  // @media screen and (min-width: 740px) {
+  //   grid-template-columns: repeat(3, 1fr);
+  // }
+
+  @media screen and (max-width: 740px) {
+   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   }
 `;
 

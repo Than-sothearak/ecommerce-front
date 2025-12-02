@@ -4,20 +4,20 @@ import PcBox from "./PcBox";
 
 const StyledProductGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
   gap: 20px;
 
-  transition: visibility 1s linear;
- 
-  @media screen and (min-width: 740px) {
-    grid-template-columns: 1fr 1fr;
-  }
 
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 
-  @media screen and (min-width: 1280px) {
-    grid-template-columns: 1fr 1fr 1fr;
+  // @media screen and (min-width: 740px) {
+  //   grid-template-columns: repeat(3, 1fr);
+  // }
+
+  @media screen and (max-width: 740px) {
+   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   }
 `;
+
 export default function ProductGrid({ products, wishedProduct = [], reviews }) {
   return (
     <StyledProductGrid>

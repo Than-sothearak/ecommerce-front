@@ -66,7 +66,7 @@ const PcBox = ({
   const totalRaingStar = totalRating / rating?.length
  
   return (
-    <>
+  
       <ProductWrapper>
        <ImageBox>
        <WishlistIcon addWishlist={addWishlist} wished={isWish} />
@@ -134,7 +134,7 @@ const PcBox = ({
           </FooterButton>
         </PriceRow>
       </ProductWrapper>
-    </>
+  
   );
 };
 
@@ -146,17 +146,17 @@ flex-direction: column;
 `
 
 const ProductWrapper = styled.div`
-  margin-top: 20px;
   display: flex;
+  margin-top: 20px;
   flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
-  background-color: black;
   width: 100%;
+  min-width: 170px;   /* prevent shrinking smaller than 170px */
   border-radius: 10px;
   background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  box-shadow: rgba(0,0,0,0.12) 0px 1px 3px,
+              rgba(0,0,0,0.24) 0px 1px 2px;
 `;
+
 
 const WhiteBox = styled(Link)`
   background-color: white;
@@ -176,18 +176,16 @@ const WhiteBox = styled(Link)`
 `;
 const Title = styled.div`
   color: inherit;
+
   text-decoration: none;
   font-weight: normal;
   white-space: nowrap;
-  width: 240px;
   text-overflow: ellipsis;
   overflow: hidden;
   font-size: 1rem;
   font-weight: bold;
   margin: 0;
-  @media screen and (max-width: 868px) {
-    width: 200px;
-  }
+
 `;
 const DescriptionWrapper = styled.div`
 
@@ -267,6 +265,7 @@ const StarIcon = styled.div`
 const FooterButton = styled.div`
   margin: 20px 0;
   display: flex;
+  flex-wrap: wrap;
   gap: 5px;
   justify-content: space-between;`;
 const ShipingText = styled.div`
@@ -280,13 +279,12 @@ h5 {
 `
 const ListItems = styled.ul`
 list-style-type: none;
-font-size: 12px;
-margin-top: 5px;
-  overflow:hidden;
- width:280px;
+  font-size: 12px;
+  margin-top: 5px;
+  overflow: hidden;
+  width: 100%;         /* ⭐ responsive */
   text-overflow: ellipsis;
   white-space: nowrap;
-
 `;
 
  

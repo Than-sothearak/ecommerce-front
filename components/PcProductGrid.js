@@ -144,18 +144,17 @@ const FilterHeader = styled.div`
 `;
 const StyledProductGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 30px;
-  margin-bottom: 20px;
-  background-color: transparent;
-  transition: visibility 1s linear;
- 
+  gap: 20px;
 
-  @media screen and (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
-  }
-  @media screen and (min-width: 1280px) {
-    grid-template-columns: 1fr 1fr 1fr;
+
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+  // @media screen and (min-width: 740px) {
+  //   grid-template-columns: repeat(3, 1fr);
+  // }
+
+  @media screen and (max-width: 740px) {
+   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   }
 `;
 const Container = styled.div`
