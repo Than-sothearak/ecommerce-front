@@ -18,8 +18,9 @@ import Profile from "@/components/Profile";
 const ColumnsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
+  grid-auto-flow: dense;
   @media screen and (min-width: 768px) {
-    grid-template-columns: 1.2fr 0.8fr;
+    grid-template-columns: 0.8fr 1.2fr ;
   }
   gap: 40px;
   margin-top: 40px;
@@ -97,7 +98,17 @@ const Account = ({ wishedProduct }) => {
       <>
         <Center>
           <ColumnsWrapper>
+                  <Profile
+              profileInfo={profileInfo}
+              name={name}
+              email={email}
+              city={city}
+              postalCode={postalCode}
+              streetAddress={streetAddress}
+              country={country}
+            />
             <Box>
+              
               <Taps
                 isLoading={isLoading}
                 taps={["Orders", "Wishlist"]}
@@ -133,15 +144,7 @@ const Account = ({ wishedProduct }) => {
                 )}
               </Table>
             </Box>
-            <Profile
-              profileInfo={profileInfo}
-              name={name}
-              email={email}
-              city={city}
-              postalCode={postalCode}
-              streetAddress={streetAddress}
-              country={country}
-            />
+    
           </ColumnsWrapper>
         </Center>
       </>

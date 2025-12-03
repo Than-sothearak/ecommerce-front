@@ -105,7 +105,7 @@ const LinkWrapper = styled.div`
 `
 const CategoryGrid = styled.div`
 display: grid;
-  gap: 20px;
+  gap: 10px;
 
 
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -122,8 +122,7 @@ display: grid;
 const CategoryTitle = styled.div`
   display: flex;
   align-items: baseline;
-  margin-top: 14px;
-  margin-bottom: 0;
+  margin-bottom: 14px;
   gap: 10px;
   h2 {
     margin-bottom: 10px;
@@ -146,8 +145,7 @@ const ShowAllSquare = styled(Link)`
   display: flex;
   justify-content: center;
   color: #555;
-  text-decoration: none;
-  margin-top: 20px;
+  text-decoration: none
   &:hover {
     text-decoration: underline;
     background-color: ${primary};

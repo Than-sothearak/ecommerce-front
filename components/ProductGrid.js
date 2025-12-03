@@ -4,7 +4,7 @@ import PcBox from "./PcBox";
 
 const StyledProductGrid = styled.div`
   display: grid;
-  gap: 20px;
+  gap: 10px;
 
 
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));

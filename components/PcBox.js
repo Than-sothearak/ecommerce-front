@@ -147,7 +147,6 @@ flex-direction: column;
 
 const ProductWrapper = styled.div`
   display: flex;
-  margin-top: 20px;
   flex-direction: column;
   width: 100%;
   min-width: 170px;   /* prevent shrinking smaller than 170px */

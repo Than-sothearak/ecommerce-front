@@ -6,7 +6,7 @@ import { CartContext } from "./CartContext";
 import BarsIcon from "./icons/Bars";
 import { useState } from "react";
 import { BsCart } from "react-icons/bs";
-import { BiLogOut, BiUser } from "react-icons/bi";
+import { BiCategory, BiHome, BiLogOut, BiUser } from "react-icons/bi";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { Toaster } from "react-hot-toast";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -15,6 +15,10 @@ import { Fragment } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import DropDownNew from "./DropDown";
 import axios from "axios";
+import Image from "next/image";
+import { HomeIcon } from "@heroicons/react/20/solid";
+import { MdProductionQuantityLimits } from "react-icons/md";
+import { FaCartArrowDown } from "react-icons/fa";
 
 
 
@@ -135,35 +139,54 @@ export default function Navbar () {
                         </button>
                       </div>
 
-                      {/* Links */}
+                      {/* Mobile side bar */}
                       <Tab.Group as="div" className="mt-2">
-                        <div className="ml-4 font-semibold text-lg">
+                        <div className="ml-4 text-lg">
                           <Tab.Panels as={Fragment}>
                             <Tab.Panel className="space-y-1 px-4 pb-8 pt-10">
                               <LinkNav>
-                                <Link href={"/"} id={`home-heading-mobile`}>
+                                <Link  className="flex gap-2" href={"/"} id={`home-heading-mobile`}>
+                                  <BiHome size={24} />
                                   Home
                                 </Link>
                               </LinkNav>
                               <LinkNav>
                                 <Link
+                                className="flex gap-2 items-center"
                                   href={"/products"}
                                   id={`home-heading-mobile`}
                                 >
+                                  <FaCartArrowDown />
                                   All products
                                 </Link>
                               </LinkNav>
 
-                              <DropDownNew options={categories} />
+                             <div className="flex gap-2 items-center p-2">
+                              <BiCategory size={24} />
+                               <DropDownNew options={categories} />
+                             </div>
 
-                              <div>
+                              <div className="mt-10">
+                              
                                 {session && (
-                                  <div className="flex flex-col gap-5">
+                                  <div className="flex flex-col gap-5 mt-10">
                                     <Link
                                       href={"/account"}
                                       className="flex items-center gap-2"
                                     >
-                                      <BiUser size={24} />
+                                  
+                                        <ProfileInfo>
+                                        
+                                          
+                                              <Image d
+                                                src={session.user.image}
+                                                alt="Profile Picture"
+                                                width={40}
+                                                height={40}
+                                                style={{ borderRadius: "50%" }}
+                                              />
+                                         
+                                          </ProfileInfo>
                                       <div>
                                         <p className="text-md font-medium">
                                           {session.user.name}
@@ -180,17 +203,15 @@ export default function Navbar () {
                                   </div>
                                 )}
                               </div>
-                              <div>
+                              <div className="mt-10">
                                 {!session && (
-                                  <Link href={"/account"}>
+                                  <Link href={"/account"} className="flex gap-2 items-center p-2">
                                     <BiUser size={24} />
                                     <div>
                                       <button onClick={() => signIn()}>
                                         Sign in
                                       </button>
-                                      <p className="text-md font-medium">
-                                        Account
-                                      </p>
+                                    
                                     </div>{" "}
                                   </Link>
                                 )}
@@ -213,6 +234,33 @@ export default function Navbar () {
     </>
   );
 }
+
+const ProfileInfo = styled.div`
+  padding: 10px 0;
+
+  text-align: start;
+
+  p {
+    font-size: small;
+    color: #999;
+    width: 100%;
+  }
+
+  h3 {
+    margin: 5px 0;
+    font-size: 0.95rem;
+  }
+`;
+const Img = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  p {
+    min-width: 120px;
+    color: #666;
+  }
+`;
 const StyledHeader = styled.header`
   letter-spacing: 0.5px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
@@ -227,7 +275,6 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 0;
 `;
 const StyledNav = styled.nav`
   display: none;
