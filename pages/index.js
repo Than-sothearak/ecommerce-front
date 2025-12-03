@@ -36,7 +36,7 @@ export async function getServerSideProps(context) {
   await mongooseConnect();
   const newProducts = await Product.find({}, null, {
     sort: { _id: -1 },
-    limit: 9,
+    limit: 12,
   });
   const reviews = await Review.find({product: newProducts.map(p => p._id)},)
 

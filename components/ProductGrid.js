@@ -3,20 +3,24 @@ import { RevealWrapper } from "next-reveal";
 import PcBox from "./PcBox";
 
 const StyledProductGrid = styled.div`
-  display: grid;
-  gap: 10px;
+  column-count: 2;
+  column-gap: 10px;
 
+  @media (min-width: 768px) {
+    column-count: 3;
+  }
 
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  @media (min-width: 1280px) {
+    column-count: 4;
+  }
 
-  // @media screen and (min-width: 740px) {
-  //   grid-template-columns: repeat(3, 1fr);
-  // }
-
-  @media screen and (max-width: 740px) {
-   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  /* Every product card */
+  & > * {
+    break-inside: avoid-column;
+    margin-bottom: 10px;
   }
 `;
+
 
 export default function ProductGrid({ products, wishedProduct = [], reviews }) {
   return (
