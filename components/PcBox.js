@@ -64,6 +64,8 @@ const PcBox = ({
   rating?.map(r => r.stars).reduce(function(acc, val) { return acc + val; }, 0)
   // 
   const totalRaingStar = totalRating / rating?.length
+
+  console.log(listItems)
  
   return (
   
@@ -101,19 +103,13 @@ const PcBox = ({
             <div>{`(${rating?.length})`}</div>
           </ReviewWrapper>
           </div>
-          <DescriptionWrapper>
-          <div>
+       
           {listItems.filter(item => {
              if (item) {
-              return (
-                <div>
-                 {item}
-                </div>
-              )
+              return item;
              }
           })}
-          </div>
-          </DescriptionWrapper>
+    
         </ProductInfoBox>
         <PriceRow>
           <Pricetag>
@@ -175,10 +171,9 @@ const WhiteBox = styled(Link)`
 `;
 const Title = styled.div`
   color: inherit;
-
+  
   text-decoration: none;
   font-weight: normal;
-  white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   font-size: 1rem;
@@ -186,7 +181,8 @@ const Title = styled.div`
   margin: 0;
 
 `;
-const DescriptionWrapper = styled.div`
+const DescriptionWrapper = styled.p`
+width: 100%;
 
 `;
 const ProductInfoBox = styled.div`
@@ -277,13 +273,14 @@ h5 {
 }
 `
 const ListItems = styled.ul`
-list-style-type: none;
+list-style-type: disc;
+  padding-left: 20px;
   font-size: 12px;
   margin-top: 5px;
   overflow: hidden;
   width: 100%;         /* ⭐ responsive */
   text-overflow: ellipsis;
-  white-space: nowrap;
+ 
 `;
 
  
