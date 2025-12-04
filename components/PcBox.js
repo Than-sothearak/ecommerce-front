@@ -145,7 +145,7 @@ const ProductWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-width: 170px;   /* prevent shrinking smaller than 170px */
+  min-width: 160px;   /* prevent shrinking smaller than 170px */
   border-radius: 10px;
   background-color: white;
   box-shadow: rgba(0,0,0,0.12) 0px 1px 3px,

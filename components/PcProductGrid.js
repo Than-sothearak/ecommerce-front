@@ -143,7 +143,7 @@ const FilterHeader = styled.div`
   }
 `;
 const StyledProductGrid = styled.div`
-  column-count: 2;
+  column-count: 1;
   column-gap: 10px;
 
   @media (min-width: 768px) {
