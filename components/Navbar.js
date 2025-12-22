@@ -174,10 +174,56 @@ export default function Navbar() {
                       >
                         <div className="ml-4 text-lg ">
                           <Tab.Panels as={Fragment}>
-                            <Tab.Panel className="space-y-1 px-4 pb-8 pt-10">
+                            <Tab.Panel className="space-y-1 px-4 pb-6">
+                              {session && (
+                                <div className="flex flex-col gap-5 border p-4 rounded-md">
+                                  <Link
+                                    href={"/account"}
+                                    className="flex items-center gap-2 hover:bg-gray-100 rounded-md"
+                                  >
+                                    <ProfileInfo>
+                                      <Image
+                                        src={session.user.image}
+                                        alt="Profile Picture"
+                                        width={40}
+                                        height={40}
+                                        style={{ borderRadius: "50%" }}
+                                      />
+                                    </ProfileInfo>
+                                    <div>
+                                      <p className="text-md font-medium">
+                                        {session.user.name}
+                                      </p>
+                                    </div>
+                                  </Link>
+
+                                  <div className="flex items-center gap-2 border rounded-md p-2 hover:bg-gray-100">
+                                    <BiLogOut size={24} />
+                                    <button onClick={() => signOut()}>
+                                      Sign out
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+
+                              <div className="">
+                                {!session && (
+                                  <Link
+                                    href={"/account"}
+                                    className="flex gap-2 items-center p-2 border rounded-md hover:bg-gray-100"
+                                  >
+                                    <BiUser size={24} />
+                                    <div>
+                                      <button onClick={() => signIn()}>
+                                        Sign in
+                                      </button>
+                                    </div>{" "}
+                                  </Link>
+                                )}
+                              </div>
                               <LinkNav>
                                 <Link
-                                  className="flex gap-2"
+                                  className="flex gap-2 mt-4"
                                   href={"/"}
                                   id={`home-heading-mobile`}
                                 >
@@ -196,7 +242,7 @@ export default function Navbar() {
                                 </Link>
                               </LinkNav>
 
-                              <div className="border border-gray-200 w-full">
+                              <div className="w-full">
                                 <LinkNav>
                                   <Link
                                     className="flex gap-2 items-center"
@@ -210,7 +256,10 @@ export default function Navbar() {
 
                                 <div className="flex flex-col gap-2 items-center p-2">
                                   {categoryTree.map((parent) => (
-                                    <div key={parent._id} className="w-full">
+                                    <div
+                                      key={parent._id}
+                                      className="w-full underline"
+                                    >
                                       {/* Parent */}
                                       <LinkNav>
                                         <Link
@@ -231,7 +280,8 @@ export default function Navbar() {
                                                 href={`/category/${child._id}`}
                                                 className="flex gap-2 items-center text-gray-600"
                                               >
-                                                ▸ {child.name}
+                                                <BiCategory size={24} />{" "}
+                                                {child.name}
                                               </Link>
                                             </LinkNav>
                                           ))}
@@ -240,54 +290,6 @@ export default function Navbar() {
                                     </div>
                                   ))}
                                 </div>
-                              </div>
-
-                              <div className="mt-10">
-                                {session && (
-                                  <div className="flex flex-col gap-5 mt-10">
-                                    <Link
-                                      href={"/account"}
-                                      className="flex items-center gap-2"
-                                    >
-                                      <ProfileInfo>
-                                        <Image
-                                          src={session.user.image}
-                                          alt="Profile Picture"
-                                          width={40}
-                                          height={40}
-                                          style={{ borderRadius: "50%" }}
-                                        />
-                                      </ProfileInfo>
-                                      <div>
-                                        <p className="text-md font-medium">
-                                          {session.user.name}
-                                        </p>
-                                      </div>
-                                    </Link>
-
-                                    <div className="flex items-center gap-2">
-                                      <BiLogOut size={24} />
-                                      <button onClick={() => signOut()}>
-                                        Sign out
-                                      </button>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                              <div className="mt-10">
-                                {!session && (
-                                  <Link
-                                    href={"/account"}
-                                    className="flex gap-2 items-center p-2"
-                                  >
-                                    <BiUser size={24} />
-                                    <div>
-                                      <button onClick={() => signIn()}>
-                                        Sign in
-                                      </button>
-                                    </div>{" "}
-                                  </Link>
-                                )}
                               </div>
                             </Tab.Panel>
                           </Tab.Panels>
@@ -336,6 +338,11 @@ const Img = styled.div`
 `;
 const StyledHeader = styled.header`
   letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: white;
+  border-bottom: 1px solid #e2e8f0;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   font-size: 0.9rem;
   color: rgba(55, 65, 81, var(--tw-text-opacity));
@@ -474,7 +481,7 @@ const SearchBox = styled.div`
   justify-content: space-between;
 `;
 const SearchInput = styled.input`
-  margin-left: 20px;
+  margin-left: 5px;
   width: 100%;
   outline: none;
   color: black;

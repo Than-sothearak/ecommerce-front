@@ -1,32 +1,27 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useContext,
-} from "react";
+import React, { useState, useRef, useEffect, useCallback, useContext } from "react";
 import { ShoppingCart, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { CartContext } from "./CartContext";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import Button from "./Button";
+import styled from "styled-components";
 import { primary } from "@/lib/colors";
+import Button from "./Button";
 
 const Featured = ({ products, autoPlayInterval = 5000 }) => {
   const items = [
-    products[products.length - 1], // Clone of last
+    products[products.length - 1],
     ...products,
-    products[0], // Clone of first
+    products[0],
   ];
 
   const { addProduct } = useContext(CartContext);
-
   const [currentIndex, setCurrentIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(true);
-  const [isPaused, setIsPaused] = useState(false); // NEW: State for auto-loop control
+  const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef(null);
   const { data: session } = useSession();
+
   const getActiveDot = () => {
     if (currentIndex === 0) return products.length - 1;
     if (currentIndex === items.length - 1) return 0;
@@ -40,7 +35,7 @@ const Featured = ({ products, autoPlayInterval = 5000 }) => {
     }
     addProduct(id, title);
   };
-  // Logic to handle the infinite loop jump
+
   useEffect(() => {
     if (currentIndex === items.length - 1) {
       setTimeout(() => {
@@ -48,7 +43,6 @@ const Featured = ({ products, autoPlayInterval = 5000 }) => {
         setCurrentIndex(1);
       }, 500);
     }
-
     if (currentIndex === 0) {
       setTimeout(() => {
         setIsTransitioning(false);
@@ -72,188 +66,201 @@ const Featured = ({ products, autoPlayInterval = 5000 }) => {
     setCurrentIndex(index + 1);
   };
 
-  // --- NEW: AUTO LOOP EFFECT ---
   useEffect(() => {
     if (!isPaused) {
-      timerRef.current = setInterval(() => {
-        next();
-      }, autoPlayInterval);
+      timerRef.current = setInterval(() => next(), autoPlayInterval);
     }
-
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [next, isPaused, autoPlayInterval]);
 
-  const styles = {
-    container: {
-      position: "relative",
-      width: "100%",
-      maxWidth: "1200px",
-
-      margin: "0 auto",
-      backgroundColor: "#1e272e",
-      overflow: "hidden",
-      border: "1px solid rgba(59, 130, 246, 0.2)",
-      fontFamily: "sans-serif",
-    },
-    track: {
-      display: "flex",
-      transform: `translateX(-${currentIndex * 100}%)`,
-      transition: isTransitioning
-        ? "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)"
-        : "none",
-    },
-    slide: {
-      minWidth: "100%",
-      display: "flex",
-      flexWrap: "wrap",
-      alignItems: "center",
-      padding: "60px",
-      boxSizing: "border-box",
-    },
-    imageSection: {
-      flex: "1 1 400px",
-      display: "flex",
-      justifyContent: "center",
-      position: "relative",
-    },
-    productImg: {
-      width: "100%",
-      maxWidth: "380px",
-      borderRadius: "12px",
-      zIndex: 2,
-    },
-    contentSection: { flex: "1 1 400px", color: "white", paddingLeft: "40px" },
-    title: {
-    fontSize: "clamp(1.5rem, 2vw, 3rem)", // min 1.5rem, preferred 2vw, max 3rem
-    margin: "0 0 15px 0",
-    fontWeight: 800,
-  },
-    price: {
-      fontSize: "2rem",
-      fontWeight: "700",
-      color: "#3b82f6",
-      marginBottom: "30px",
-    },
-    btnPrimary: {
-      border:  "1px solid #3b82f6",
-      backgroundColor: "transparent",
-      color: "white",
-      padding: "14px 28px",
-      hover: {
-        backgroundColor: `${primary}`,
-      },
-      fontSize: "14px",
-      borderRadius: "10px",
-      cursor: "pointer",
-      display: "flex",
-      alignItems: "center",
-      gap: "8px",
-    },
-    navBtn: {
-      position: "absolute",
-      top: "50%",
-      transform: "translateY(-50%)",
-      background: "rgba(255,255,255,0.05)",
-      border: "none",
-      color: "white",
-      padding: "15px",
-      borderRadius: "50%",
-      cursor: "pointer",
-      zIndex: 10,
-      backdropFilter: "blur(5px)",
-    },
-    pagination: {
-      position: "absolute",
-      bottom: "25px",
-      left: "50%",
-      transform: "translateX(-50%)",
-      display: "flex",
-      gap: "12px",
-      zIndex: 10,
-    },
-    dot: {
-      height: "8px",
-      borderRadius: "10px",
-      cursor: "pointer",
-      transition: "all 0.3s ease",
-    },
-  };
-
   return (
-    <div
-      style={styles.container}
-      // NEW: Stop auto-loop when user mouse is over the slide
+    <Container
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <button style={{ ...styles.navBtn, left: "20px" }} onClick={prev}>
+      <NavBtnLeft onClick={prev}>
         <ChevronLeft />
-      </button>
-      <button style={{ ...styles.navBtn, right: "20px" }} onClick={next}>
+      </NavBtnLeft>
+      <NavBtnRight onClick={next}>
         <ChevronRight />
-      </button>
+      </NavBtnRight>
 
-      <div style={styles.track}>
+      <Track style={{ transform: `translateX(-${currentIndex * 100}%)`, transition: isTransitioning ? "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)" : "none" }}>
         {items.map((product, index) => (
-          <div key={`${product.id}-${index}`} style={styles.slide}>
-            <div style={styles.imageSection}>
-              <Image
+          <Slide key={`${product.id}-${index}`}>
+            <ImageSection>
+              <StyledImage
                 width={500}
                 height={500}
                 src={product.images[0]}
                 alt={product.title}
-                style={styles.productImg}
               />
-            </div>
-            <div style={styles.contentSection}>
-              <span
-                style={{
-                  color: "#60a5fa",
-                  fontSize: "12px",
-                  fontWeight: "bold",
-                  letterSpacing: "2px",
-                }}
-              >
-                GAMING PERFORMANCE
-              </span>
-              <h2 style={styles.title}>{product.title}</h2>
-              <div style={styles.price}>${product.price}</div>
-              <div style={{ display: "flex", gap: "10px" }}>
+            </ImageSection>
+            <ContentSection>
+              <Category>GAMING PERFORMANCE</Category>
+              <Title>{product.title}</Title>
+              <Price>${product.price}</Price>
+              <ButtonsWrapper>
                 <Button onClick={() => handleClick(product._id, product.title)}>
-                  <p type="button">Add to cart</p>
+                  Add to cart
                 </Button>
-                <Link
-                  href={`/store/${product._id}`}
-                  style={{ ...styles.btnPrimary}}
-                >
+                <DetailsLink href={`/store/${product._id}`}>
                   <Eye size={18} /> Details
-                </Link>
-              </div>
-            </div>
-          </div>
+                </DetailsLink>
+              </ButtonsWrapper>
+            </ContentSection>
+          </Slide>
         ))}
-      </div>
+      </Track>
 
-      <div style={styles.pagination}>
+      <Pagination>
         {products.map((_, i) => {
           const isActive = i === getActiveDot();
-          return (
-            <div
-              key={i}
-              onClick={() => jumpToDot(i)}
-              style={{
-                ...styles.dot,
-                width: isActive ? "30px" : "8px",
-                backgroundColor: isActive ? "#3b82f6" : "#475569",
-              }}
-            />
-          );
+          return <Dot key={i} active={isActive} onClick={() => jumpToDot(i)} />;
         })}
-      </div>
-    </div>
+      </Pagination>
+    </Container>
   );
 };
 
 export default Featured;
+
+// --- Styled Components ---
+const Container = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #1e272e;
+  overflow: hidden;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  font-family: sans-serif;
+`;
+
+const Track = styled.div`
+  display: flex;
+`;
+
+const Slide = styled.div`
+  min-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 60px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 60px 10px;
+  }
+`;
+
+const ImageSection = styled.div`
+  flex: 1 1 400px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+`;
+
+const StyledImage = styled(Image)`
+  width: 100%;
+  max-width: 380px;
+  border-radius: 12px;
+  z-index: 2;
+`;
+
+const ContentSection = styled.div`
+  flex: 1 1 400px;
+  color: white;
+  padding-left: 40px;
+
+  @media (max-width: 768px) {
+    padding-left: 0;
+    margin-top: 20px;
+  }
+`;
+
+const Category = styled.span`
+  color: #60a5fa;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 2px;
+`;
+
+const Title = styled.h2`
+  font-size: clamp(1.5rem, 2vw, 3rem);
+  margin: 0 0 15px 0;
+  font-weight: 800;
+`;
+
+const Price = styled.div`
+  font-size: 2rem;
+  font-weight: 700;
+  color: #3b82f6;
+  margin-bottom: 30px;
+`;
+
+const ButtonsWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const DetailsLink = styled(Link)`
+  border: 1px solid #3b82f6;
+  background-color: transparent;
+  color: white;
+  padding: 14px 28px;
+  font-size: 14px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background-color: ${primary};
+  }
+`;
+
+const NavBtn = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  backdrop-filter: blur(5px);
+`;
+
+const NavBtnLeft = styled(NavBtn)`
+  left: 20px;
+`;
+
+const NavBtnRight = styled(NavBtn)`
+  right: 20px;
+`;
+
+const Pagination = styled.div`
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 5;
+`;
+
+const Dot = styled.div`
+  height: 8px;
+  width: ${(props) => (props.active ? "30px" : "8px")};
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: ${(props) => (props.active ? "#3b82f6" : "#475569")};
+`;

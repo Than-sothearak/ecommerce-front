@@ -10,7 +10,6 @@ const SearchBox = styled.div`
    justify-content: space-between;
 `
 const SearchInput = styled.input`
-margin-left: 20px;
 width: 100%;
   outline: none;
   color: black;
