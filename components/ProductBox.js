@@ -109,6 +109,14 @@ const ProductBox = ({
     }
   }
 
+  const handleClick = (id, title) => {
+    if (!session) {
+      alert("You must login first");
+      return;
+    }
+    addProduct(id, title);
+  }
+
   return (
     <Container>
       <ProductWrapper>
@@ -128,7 +136,7 @@ const ProductBox = ({
           <Title href={url}>{title}</Title>
           <PriceRow>
             <Price>${price}</Price>
-            <Button onClick={() => addProduct(_id, title)}>
+            <Button onClick={() => handleClick(_id, title)}>
               <TextBtn type="button">Add to cart</TextBtn>
             </Button>
           </PriceRow>

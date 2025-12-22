@@ -16,18 +16,48 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import DropDownNew from "./DropDown";
 import axios from "axios";
 import Image from "next/image";
-import { HomeIcon } from "@heroicons/react/20/solid";
-import { MdProductionQuantityLimits } from "react-icons/md";
 import { FaCartArrowDown } from "react-icons/fa";
+import { MdOutlineDevices, MdPlayArrow } from "react-icons/md";
+import { root } from "postcss";
 
-
-
-export default function Navbar () {
+export default function Navbar() {
   const { cartProducts } = useContext(CartContext);
   const [open, setOpen] = useState(false);
   const { inputSearch } = useContext(CartContext);
   const [categories, setCategories] = useState([]);
   const { data: session } = useSession();
+
+  function buildCategoryTree(categories) {
+    const map = {};
+    const roots = [];
+
+    // Create lookup map
+    categories.forEach((cat) => {
+      map[cat._id.toString()] = {
+        ...cat,
+        children: [],
+      };
+    });
+
+    // Build relations
+    categories.forEach((cat) => {
+      const id = cat._id.toString();
+
+      const parentId =
+        typeof cat.parent === "object"
+          ? cat.parent?._id?.toString()
+          : cat.parent?.toString();
+      if (parentId && map[parentId]) {
+        map[parentId].children.push(map[id]);
+      } else {
+        roots.push(map[id]);
+      }
+    });
+
+    return roots;
+  }
+
+  const categoryTree = buildCategoryTree(categories);
 
   function handleChange(e) {
     inputSearch(e);
@@ -63,8 +93,6 @@ export default function Navbar () {
               <NavLink href={"/products"}>All products</NavLink>
               <NavLink href={"/gear-store"}>Gear Store</NavLink>
               <DropDownNew options={categories} />
-            
-          
             </StyledNav>
 
             {session && (
@@ -140,19 +168,26 @@ export default function Navbar () {
                       </div>
 
                       {/* Mobile side bar */}
-                      <Tab.Group as="div" className="mt-2">
-                        <div className="ml-4 text-lg">
+                      <Tab.Group
+                        as="div"
+                        className="mt-2 overflow-scroll max-h-screen"
+                      >
+                        <div className="ml-4 text-lg ">
                           <Tab.Panels as={Fragment}>
                             <Tab.Panel className="space-y-1 px-4 pb-8 pt-10">
                               <LinkNav>
-                                <Link  className="flex gap-2" href={"/"} id={`home-heading-mobile`}>
+                                <Link
+                                  className="flex gap-2"
+                                  href={"/"}
+                                  id={`home-heading-mobile`}
+                                >
                                   <BiHome size={24} />
                                   Home
                                 </Link>
                               </LinkNav>
                               <LinkNav>
                                 <Link
-                                className="flex gap-2 items-center"
+                                  className="flex gap-2 items-center"
                                   href={"/products"}
                                   id={`home-heading-mobile`}
                                 >
@@ -161,32 +196,68 @@ export default function Navbar () {
                                 </Link>
                               </LinkNav>
 
-                             <div className="flex gap-2 items-center p-2">
-                              <BiCategory size={24} />
-                               <DropDownNew options={categories} />
-                             </div>
+                              <div className="border border-gray-200 w-full">
+                                <LinkNav>
+                                  <Link
+                                    className="flex gap-2 items-center"
+                                    href={"/categories"}
+                                    id={`home-heading-mobile`}
+                                  >
+                                    <BiCategory size={24} />
+                                    Categories
+                                  </Link>
+                                </LinkNav>
+
+                                <div className="flex flex-col gap-2 items-center p-2">
+                                  {categoryTree.map((parent) => (
+                                    <div key={parent._id} className="w-full">
+                                      {/* Parent */}
+                                      <LinkNav>
+                                        <Link
+                                          href={`/category/${parent._id}`}
+                                          className="flex gap-2 items-center"
+                                        >
+                                          <MdOutlineDevices size={24} />
+                                          {parent.name}
+                                        </Link>
+                                      </LinkNav>
+
+                                      {/* Children */}
+                                      {parent.children.length > 0 && (
+                                        <div className="ml-6 mt-1 flex flex-col gap-1">
+                                          {parent.children.map((child) => (
+                                            <LinkNav key={child._id}>
+                                              <Link
+                                                href={`/category/${child._id}`}
+                                                className="flex gap-2 items-center text-gray-600"
+                                              >
+                                                ▸ {child.name}
+                                              </Link>
+                                            </LinkNav>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
 
                               <div className="mt-10">
-                              
                                 {session && (
                                   <div className="flex flex-col gap-5 mt-10">
                                     <Link
                                       href={"/account"}
                                       className="flex items-center gap-2"
                                     >
-                                  
-                                        <ProfileInfo>
-                                        
-                                          
-                                              <Image d
-                                                src={session.user.image}
-                                                alt="Profile Picture"
-                                                width={40}
-                                                height={40}
-                                                style={{ borderRadius: "50%" }}
-                                              />
-                                         
-                                          </ProfileInfo>
+                                      <ProfileInfo>
+                                        <Image
+                                          src={session.user.image}
+                                          alt="Profile Picture"
+                                          width={40}
+                                          height={40}
+                                          style={{ borderRadius: "50%" }}
+                                        />
+                                      </ProfileInfo>
                                       <div>
                                         <p className="text-md font-medium">
                                           {session.user.name}
@@ -205,13 +276,15 @@ export default function Navbar () {
                               </div>
                               <div className="mt-10">
                                 {!session && (
-                                  <Link href={"/account"} className="flex gap-2 items-center p-2">
+                                  <Link
+                                    href={"/account"}
+                                    className="flex gap-2 items-center p-2"
+                                  >
                                     <BiUser size={24} />
                                     <div>
                                       <button onClick={() => signIn()}>
                                         Sign in
                                       </button>
-                                    
                                     </div>{" "}
                                   </Link>
                                 )}
@@ -415,6 +488,7 @@ const SearchIcon = styled(Link)`
 `;
 const LinkNav = styled.div`
   justify-content: start;
+
   gap: 10px;
   align-items: center;
   width: 100%;

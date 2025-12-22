@@ -2,7 +2,7 @@ import Link from "next/link";
 import styled from "styled-components";
 
 export const DropDownWrapper = styled.div`
-  position: relative;
+  // position: relative;
 `;
 
 export const SubDropDownWrapper = styled.div`

@@ -72,7 +72,7 @@ const ReviewProduct = ({ product, session }) => {
     <ProductReview>
       {/* Overall review section */}
       <OverallReview>
-        <h1 className="text-3xl mt-10 text-center">
+        <h1 className="text-3xl text-center">
           Customer reviews & ratings
         </h1>
         <TotalReview>
@@ -139,7 +139,7 @@ const ReviewProduct = ({ product, session }) => {
 
       {/* Review submission */}
       <ReviewSubmit>
-        <h1 className="text-3xl mt-10 text-center">Write your review</h1>
+        <h1 className="text-3xl text-center">Write your review</h1>
         <ReviewWrapper>
           <h1>Overall Rating</h1>
           <StarWrapper>
@@ -182,13 +182,16 @@ const TotalReview = styled.div`
 `;
 
 const ProductReview = styled.div`
+border: 1px solid #dcdde1;
+  padding: 40px;
   margin-top: 40px;
   display: grid;
+  gap: 10px;
   grid-template-columns: 1fr;
-  gap: 80px;
 
   @media screen and (min-width: 768px) {
     grid-template-columns: 1fr 1fr;
+    gap: 40px;
   }
 `;
 
@@ -196,9 +199,11 @@ const ReviewSubmit = styled.div`
   width: 100%;
 `;
 
-const OverallReview = styled.div``;
+const OverallReview = styled.div`
+`;
 
 const ButtonSubmit = styled.button`
+
   display: block;
   margin: 20px auto;
   cursor: pointer;

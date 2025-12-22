@@ -4,11 +4,12 @@ import Button from "./Button";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "./CartContext";
 import axios from "axios";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import WishlistIcon from "./WishlisIcon";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { grayBorder } from "@/lib/colors";
 import Image from "next/image";
+import { Router } from "next/router";
 
 const PcBox = ({
   _id,
@@ -65,7 +66,13 @@ const PcBox = ({
   // 
   const totalRaingStar = totalRating / rating?.length
 
-  console.log(listItems)
+  const handleClick = (id, title) => {
+    if (!session) {
+      signIn();
+      return;
+    }
+    addProduct(id, title);
+  }
  
   return (
   
@@ -124,7 +131,7 @@ const PcBox = ({
             <h4>Free Shipping</h4>
             <h5>Estimate Ship By 09/11/2023</h5>
             </ShipingText>
-            <Button onClick={() => addProduct(_id, title)}>
+            <Button onClick={() => handleClick(_id, title)}>
               <TextBtn type="button">Add to cart</TextBtn>
             </Button>
           </FooterButton>

@@ -53,7 +53,11 @@ const FooterContainer = styled.div`
 
 const LogoWrapper = styled.div`
   text-align: center;
-
+ 
+  h1 {
+   font-weight: bold;
+  font-size: 1.5rem; }
+  color:  ${primary};
   p {
     color: #000;
     margin-top: 20px;
@@ -103,12 +107,7 @@ const Footer = () => {
           <FooterContainer>
             {/* Logo */}
             <LogoWrapper>
-              <Image
-                src={imgUrl}
-                alt="E-commerce logo"
-                width={200}
-                height={180}
-              />
+              <h1> E-Commerce Front</h1>
               <p>WE PROVIDE WHAT WE LOVE</p>
             </LogoWrapper>
 

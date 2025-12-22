@@ -9,8 +9,8 @@ import { Category } from "@/models/Category";
 import { Product } from "@/models/Product";
 import { WishedProduct } from "@/models/WishedProduct";
 import { authOptions } from "../api/auth/[...nextauth]";
-import PcProductGrid from "@/components/PcProductGrid";
 import { Review } from "@/models/Review";
+import ProductGrid from "@/components/ProductGrid";
 
 export default function CategoryPage({
   category,
@@ -97,7 +97,7 @@ useEffect(() => {
           <Title>{category.name}</Title>
         </CategoryTitle>
 
-        <PcProductGrid
+        <ProductGrid
           onPageChange={onPageChange}
           filtersValues={filtersValues}
           handleFilterChange={handleFilterChange}

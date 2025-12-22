@@ -6,7 +6,8 @@ import {
 } from "./DropDownNew.styles";
 
 import styled from "styled-components";
-import Navbar from "./Navbar2";
+import { BiCategory } from "react-icons/bi";
+import DropdownMenu2 from "./DropdownMenu2";
 
 function DropDownTitle({ defaultText = "Categories", options, subCategory }) {
   const [actionDropDown, setActionDropDown] = useState(false);
@@ -44,9 +45,12 @@ function DropDownTitle({ defaultText = "Categories", options, subCategory }) {
   return (
     <>
       <DropDownWrapper>
-        <div ref={dropdownEl}>
+        <div ref={dropdownEl} className="flex items-center">
+              
           <DropDownButton onClick={dropdown}>
+              <BiCategory size={24} />
             {defaultText}
+            
             <SVG>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +72,7 @@ function DropDownTitle({ defaultText = "Categories", options, subCategory }) {
             <DropDownWrapper>
               {actionDropDown && (
                 <>
-                  <Navbar options={options} />
+                  <DropdownMenu2 options={options} />
                 </>
               )}
             </DropDownWrapper>

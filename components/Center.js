@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const StyledDiv = styled.div`
- 
+
   max-width: 1280px;
   letter-spacing: 0.3px;
   margin: 0 auto;

@@ -6,7 +6,8 @@ function DropDownNew({ options }) {
  
   return (
     <>
-      <div className="flex">
+      <div className="flex items-center">
+   
         <DropDownTitle options={options} subCategory={options} />
       </div>
            
@@ -16,10 +17,8 @@ function DropDownNew({ options }) {
 
 export default DropDownNew;
 export const Content = styled.div`
-  position: relative;
-  height: 50px;
-  right: -300px;
-  top: 200px;
-  background-color: blue;
-  z-index: 40;
+  // height: 50px;
+  // top: 200px;
+  // background-color: blue;
+  // z-index: 40;
 `;

@@ -161,7 +161,7 @@ export const Content = styled.div`
 `;
 
 const DropDownButtonMobile  = styled.div`
-display: flex;
+ display: flex;
   justify-content: start;
   gap: 10px;
   margin-top: 15px;

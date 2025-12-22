@@ -3,22 +3,29 @@ import { RevealWrapper } from "next-reveal";
 import PcBox from "./PcBox";
 
 const StyledProductGrid = styled.div`
+
+
+
+  @media (min-width: 368px) {
   column-count: 2;
   column-gap: 10px;
+  column-count: 2;
 
-  @media (min-width: 768px) {
-    column-count: 3;
-  }
-
-  @media (min-width: 1280px) {
-    column-count: 4;
-  }
-
-  /* Every product card */
-  & > * {
+    & > * {
     break-inside: avoid-column;
     margin-bottom: 10px;
   }
+  }
+
+  @media (min-width: 780px) {
+    display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 20px;
+
+  }
+
+  /* Every product card */
+
 `;
 
 
