@@ -1,22 +1,25 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Review } from "@/models/Review";
 import { authOptions } from "./auth/[...nextauth]";
+import { getServerSession } from "next-auth";
 
 export default async function handler (req, res) {
     await mongooseConnect();
-    
+  
     if(authOptions) {
         if(req.method === 'POST') {
-            const {description, stars, product} = req.body;
+            const {description, stars, product, date} = req.body;
             const { user } = await getServerSession(req, res, authOptions);
-            const info = await Review.findOne({ userEmail: user.email });
+            const info = await Review.findOne({ userEmail: user.email, product: product});
             if (info) {
                 res.json(await Review.findByIdAndUpdate(info._id, req.body));
             } else {
                 const reviewDoc = await Review.create({
                     userEmail: user.email,
+                    userName: user.name,
                     description,
                     stars,
+                    date,
                     product})
             res.json(reviewDoc)
             }
@@ -25,6 +28,6 @@ export default async function handler (req, res) {
    
     if (req.method === 'GET') {
         const {product} = req.query;
-        res.json(await Review.find({product}));
+        res.json(await Review.find({product: product}));
     }
 }
