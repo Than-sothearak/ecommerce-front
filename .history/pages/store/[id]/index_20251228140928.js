@@ -1,0 +1,239 @@
+import Center from "@/components/Center";
+import { mongooseConnect } from "@/lib/mongoose";
+import { Product } from "@/models/Product";
+import styled from "styled-components";
+import WhiteBox from "@/components/WhiteBox";
+import ProductImages from "@/components/ProductImages";
+import Button from "@/components/Button";
+import { useContext, useEffect, useState } from "react";
+import { CartContext } from "@/components/CartContext";
+import { AiOutlineHeart } from "react-icons/ai";
+import { LiaWarehouseSolid } from "react-icons/lia";
+import { AiFillGift } from "react-icons/ai";
+import Link from "next/link";
+import { Category } from "@/models/Category";
+import { WishedProduct } from "@/models/WishedProduct";
+import { getServerSession } from "next-auth";
+import axios from "axios";
+import WishlistIcon from "@/components/WishlisIcon";
+import { useSession } from "next-auth/react";
+import ReviewProduct from "@/components/ReviewProduct";
+import { Review } from "@/models/Review";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+
+
+export default function SingleProductPage({ product, wishedProduct, reviews }) {
+  const wished = wishedProduct[0]?.product.includes(product._id);
+  
+  const [isWish, setIsWhish] = useState(wished);
+  const { addProduct } = useContext(CartContext);
+  const { data: session } = useSession();
+
+  function addWishlist(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (session) {
+    
+      const nextValue = !isWish;
+      try {
+        axios
+          .post("/api/wishlist", {
+            product: product._id,
+          })
+          .then(() => {});
+      } catch (err) {
+        console.log(err);
+      }
+      setIsWhish(nextValue);
+    } else {
+      alert("You must login first");
+    }
+  }
+  let USDollar = new Intl.NumberFormat();
+  const productProperty = Object.entries(product.properties);
+
+  return (
+    <>
+      <Center>
+        <ColWrapper>
+          <WhiteBox>
+            <ProductImages images={product.images} />
+          </WhiteBox>
+          <Container>
+            <ProductDetial>
+              <WishlistIcon wished={isWish} addWishlist={addWishlist} />
+              <h1>{product.title}</h1>
+              <p className="mt-5">{product.description}</p>
+              <Hr>
+                <hr></hr>
+              </Hr>
+              <div className="flex gap-2 items-center ">
+                <LiaWarehouseSolid size={22} />
+                <p>Currently out of stock</p>
+              </div>
+              <Hr>
+                <hr></hr>
+              </Hr>
+              <div className="flex justify-center my-5">
+                <AddToList className="flex items-center gap-5">
+                  <AiOutlineHeart size={22} />
+                  <LinkText href={"/"}>Add to list</LinkText>
+                </AddToList>
+                <div className="flex items-center gap-5">
+                  <AiFillGift size={22} />
+                  <LinkText href={"/"}>Add to registry</LinkText>
+                </div>
+              </div>
+              <PriceRow>
+                <div>
+                  <Price>${USDollar.format(parseInt(product.price))}</Price>
+                </div>
+                <div>
+                  <Button
+                    primary
+                    onClick={() => addProduct(product._id, product.title)}
+                  >
+                    Add to cart
+                  </Button>
+                </div>
+              </PriceRow>
+            </ProductDetial>
+          </Container>
+        </ColWrapper>
+        <div>
+          <h1 className="text-3xl mb-5 text-center">Specifications</h1>
+          {productProperty.map((data, index) => (
+            <Table key={index}>
+              <tbody>
+              <ListItems>
+                <td>
+                  <strong> {data[0]}</strong>
+                </td>
+                <td>
+                  <span> {data[1]}</span>
+                </td>
+              </ListItems>
+              </tbody>
+            </Table>
+          ))}
+        </div>
+        <ReviewProduct
+        session={session} 
+        product={product} />
+      </Center>
+    </>
+  );
+}
+
+export async function getServerSideProps(context) {
+  await mongooseConnect();
+  const categories = await Category.find();
+  const product = await Product.findById(context.query.id);
+
+  const reviews = await Review.find({product: product._id}, null, {sort: {_id: 1}})
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const wishedProduct = session?.user
+    ? await WishedProduct.find({
+        userEmail: session.user.email,
+        product: product._id,
+      })
+    : [];
+  return {
+    props: {
+      product: JSON.parse(JSON.stringify(product)),
+      categories: JSON.parse(JSON.stringify(categories)),
+      wishedProduct: JSON.parse(JSON.stringify(wishedProduct)),
+      reviews: JSON.parse(JSON.stringify(reviews))
+    },
+  };
+}
+
+const Table = styled.table`
+  border: 1px solid #ddd;
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  &:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  &:hover {
+    background-color: #ddd;
+  }
+  td {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    padding: 2px 10px;
+  }
+  @media screen and (min-width: 768px) {
+    td {
+      padding: 5px 80px;
+    }
+  }
+`;
+
+const ColWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  @media screen and (min-width: 768px) {
+    grid-template-columns: 0.8fr 1fr;
+
+      margin: 40px 0;
+  }
+  gap: 40px;
+    margin: 0;
+`;
+const PriceRow = styled.div`
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  align-items: center;
+`;
+const Price = styled.span`
+  font-size: 1.8rem;
+  font-weight: bold;
+`;
+
+const ListItems = styled.tr`
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+`;
+const Container = styled.div`
+  font-family: "Open Sans", sans-serif;
+`;
+const ProductDetial = styled.div`
+  color: #474746;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  p {
+    font-size: 14px;
+  }
+`;
+
+const Hr = styled.div`
+  margin: 20px 0;
+  width: 100%;
+`;
+const LinkText = styled(Link)`
+  text-decoration-line: underline;
+  font-size: 14px;
+`;
+const AddToList = styled.div`
+  width: 50%;
+  text-align: center;
+  border-color: #f1f1f2;
+  text-align: center;
+  border-right-style: solid;
+  border-right-width: 1px;
+  @media screen and (min-width: 768px) {
+    flex: 0.5;
+  }
+`;
