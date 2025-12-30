@@ -134,6 +134,7 @@ const Container = styled.div`
   height: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 30px 0;
   background-color: #1e272e;
   overflow: hidden;
   border: 1px solid rgba(59, 130, 246, 0.2);
@@ -143,6 +144,7 @@ const Container = styled.div`
   @media (max-width: 768px) {
     transform: scale(0.96);
     border-radius: 10px ;
+    padding: 10px 0;
   }
 
 `;
@@ -195,7 +197,7 @@ const Category = styled.span`
 `;
 
 const Title = styled.h2`
-  font-size: clamp(1rem, 2vw, 3rem);
+  font-size: clamp(1rem, 2vw, 2rem);
   margin-bottom: 12px;
   font-weight: 800;
 `;

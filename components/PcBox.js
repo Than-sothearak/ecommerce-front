@@ -88,7 +88,7 @@ const PcBox = ({
             height={200}
             style={{
               objectFit: "contain",
-              maxHeight: "300px",
+              maxHeight: "180px",
               width: "auto",
             }}
             priority={false}
